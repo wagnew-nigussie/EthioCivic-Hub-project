@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: ethiocivic_app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://gondar_admin:SmartCivic2026@postgis:5432/ethiocivic_db
+    depends_on:
+      - postgis
+
+  postgis:
+    image: postgis/postgis:16-3.4-alpine
+    container_name: ethiocivic_postgis
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ethiocivic_db
+      POSTGRES_USER: gondar_admin
+      POSTGRES_PASSWORD: SmartCivic2026
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+
+volumes:
+  postgis_data:

@@ -1,0 +1,25 @@
+{
+  "name": "ethiocivic-hub",
+  "version": "1.0.0",
+  "description": "Gondar SmartCivic (EthioCivic-Hub) Omnichannel Municipal Dispatch System",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node test_omnichannel_lifecycle.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "gondar",
+    "ethiopia",
+    "smartcivic",
+    "postgis",
+    "ussd",
+    "sms",
+    "ivr",
+    "capstone"
+  ],
+  "author": "Wagnew Nigussie",
+  "license": "MIT"
+}
