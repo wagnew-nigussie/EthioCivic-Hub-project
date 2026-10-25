@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" width="100%" height="100%">
+  <defs>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="400" height="280" fill="url(#waterGrad)"/>
+  <!-- Ripple rings -->
+  <circle cx="200" cy="140" r="100" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="200" cy="140" r="70" fill="none" stroke="#7dd3fc" stroke-width="2" opacity="0.4"/>
+  <circle cx="200" cy="140" r="45" fill="none" stroke="#bae6fd" stroke-width="2.5" opacity="0.5"/>
+  <!-- Pipe silhouette -->
+  <rect x="70" y="85" width="260" height="24" rx="4" fill="#0c4a6e" opacity="0.6"/>
+  <rect x="180" y="85" width="40" height="36" rx="3" fill="#38bdf8" opacity="0.8"/>
+  <!-- Water burst droplet -->
+  <path d="M200 65 C200 65 160 120 160 145 C160 168 178 185 200 185 C222 185 240 168 240 145 C240 120 200 65 200 65 Z" fill="#ffffff" filter="url(#shadow)"/>
+  <path d="M190 135 C190 120 200 100 200 100 C200 100 178 135 178 145 C178 155 184 162 192 165 C190 160 190 145 190 135 Z" fill="#bae6fd"/>
+  <!-- Splash droplets -->
+  <circle cx="150" cy="115" r="7" fill="#7dd3fc"/>
+  <circle cx="250" cy="110" r="8" fill="#7dd3fc"/>
+  <circle cx="235" cy="80" r="5" fill="#bae6fd"/>
+  <circle cx="165" cy="85" r="6" fill="#bae6fd"/>
+  <!-- Text badge -->
+  <rect x="110" y="220" width="180" height="34" rx="17" fill="#082f49" opacity="0.85"/>
+  <text x="200" y="242" text-anchor="middle" fill="#f0f9ff" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="13" letter-spacing="0.5">WATER SUPPLY / LEAK</text>
+</svg>

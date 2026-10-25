@@ -1,0 +1,30 @@
+{
+  "name": "gondar-smartcivic-backend",
+  "version": "1.0.0",
+  "description": "Gondar SmartCivic (EthioCivic-Hub) Omnichannel Municipal Dispatch API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "keywords": [
+    "gondar",
+    "ethiopia",
+    "smartcivic",
+    "postgis",
+    "ussd",
+    "sms",
+    "ivr",
+    "capstone"
+  ],
+  "author": "Gondar SmartCivic Capstone Team",
+  "license": "MIT"
+}

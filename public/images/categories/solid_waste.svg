@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" width="100%" height="100%">
+  <defs>
+    <linearGradient id="wasteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <filter id="shadowW" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="400" height="280" fill="url(#wasteGrad)"/>
+  <!-- Circular eco background motif -->
+  <circle cx="200" cy="130" r="85" fill="#065f46" opacity="0.6"/>
+  <!-- Municipal bin silhouette -->
+  <g filter="url(#shadowW)">
+    <!-- Bin lid -->
+    <rect x="150" y="70" width="100" height="12" rx="4" fill="#ecfdf5"/>
+    <rect x="180" y="60" width="40" height="12" rx="3" fill="#ecfdf5"/>
+    <!-- Bin body -->
+    <polygon points="158,86 168,185 232,185 242,86" fill="#ecfdf5"/>
+    <!-- Bin vertical ribs -->
+    <line x1="185" y1="96" x2="188" y2="175" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+    <line x1="200" y1="96" x2="200" y2="175" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+    <line x1="215" y1="96" x2="212" y2="175" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+    <!-- Wheels -->
+    <circle cx="166" cy="188" r="9" fill="#064e3b"/>
+    <circle cx="166" cy="188" r="4" fill="#a7f3d0"/>
+    <circle cx="234" cy="188" r="9" fill="#064e3b"/>
+    <circle cx="234" cy="188" r="4" fill="#a7f3d0"/>
+  </g>
+  <!-- Recycling symbol overlay in center -->
+  <path d="M192 115 L200 105 L208 115 M200 107 L200 125" stroke="#047857" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Text badge -->
+  <rect x="100" y="220" width="200" height="34" rx="17" fill="#022c22" opacity="0.85"/>
+  <text x="200" y="242" text-anchor="middle" fill="#ecfdf5" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="13" letter-spacing="0.5">SOLID WASTE / SANITATION</text>
+</svg>

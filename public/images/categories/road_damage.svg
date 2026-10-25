@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" width="100%" height="100%">
+  <defs>
+    <linearGradient id="roadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="50%" stop-color="#c2410c"/>
+      <stop offset="100%" stop-color="#7c2d12"/>
+    </linearGradient>
+    <filter id="shadowR" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="400" height="280" fill="url(#roadGrad)"/>
+  <!-- Perspective Road -->
+  <polygon points="175,70 225,70 340,210 60,210" fill="#431407" opacity="0.6"/>
+  <!-- Dashed center road markings -->
+  <line x1="200" y1="75" x2="200" y2="95" stroke="#fed7aa" stroke-width="3"/>
+  <line x1="200" y1="110" x2="200" y2="135" stroke="#fed7aa" stroke-width="4"/>
+  <line x1="200" y1="150" x2="200" y2="185" stroke="#fed7aa" stroke-width="5"/>
+  <!-- Pothole / asphalt crack fault -->
+  <ellipse cx="230" cy="165" rx="35" ry="14" fill="#1c1917" stroke="#ea580c" stroke-width="2"/>
+  <path d="M210 162 L220 168 L240 160 L255 166" stroke="#fdba74" stroke-width="2" fill="none"/>
+  <!-- Traffic Warning Cone -->
+  <g filter="url(#shadowR)">
+    <polygon points="150,110 135,175 175,175" fill="#f97316"/>
+    <polygon points="146,128 141,146 168,146 163,128" fill="#ffffff"/>
+    <polygon points="139,155 136,166 173,166 170,155" fill="#ffffff"/>
+    <rect x="130" y="174" width="50" height="7" rx="2" fill="#7c2d12"/>
+  </g>
+  <!-- Text badge -->
+  <rect x="100" y="220" width="200" height="34" rx="17" fill="#431407" opacity="0.85"/>
+  <text x="200" y="242" text-anchor="middle" fill="#ffedd5" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="13" letter-spacing="0.5">ROAD / CULVERT DAMAGE</text>
+</svg>
