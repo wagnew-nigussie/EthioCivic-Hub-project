@@ -3464,6 +3464,397 @@ function alertEmergency(hotline) {
   showToast(`Emergency Contact: ${hotline}`);
 }
 
+// ============================================================================
+// 15B. MUNICIPAL PUBLIC WORKS & UTILITY SERVICES CONTROLLER (GWSA, EEU, RESCUE, WASTE, ROADS)
+// ============================================================================
+const QUICK_SERVICE_METADATA = {
+  WATER_LEAK: {
+    title: 'Water Leak & Main Burst Repair',
+    title_am: 'የመጠጥ ውሃ ቧንቧ መሰበርና ፍሳሽ ጥገና',
+    dept: 'Gondar Water & Sewerage Authority (GWSA)',
+    dept_am: 'የጎንደር ውሃና ፍሳሽ አገልግሎት',
+    dept_badge: 'GWSA UTILITY',
+    sla_badge: 'Avg SLA: 24h',
+    icon: '💧',
+    header_gradient: 'from-sky-700 via-sky-600 to-teal-700',
+    img: '/images/categories/water_leak.svg',
+    dispatch_tag: 'Direct Ingestion to GWSA Zonal Rapid Pipe Squad',
+    chips: [
+      { en: 'High-Pressure Main Pipe Burst', am: 'ዋና የመጠጥ ውሃ ቧንቧ ፈንድቷል' },
+      { en: 'Total Neighborhood Water Outage', am: 'የመጠጥ ውሃ አቅርቦት መቋረጥ' },
+      { en: 'Contaminated / Muddy Tap Water', am: 'የቧንቧ ውሃ መበከል / ደፍራሽ ውሃ' },
+      { en: 'Broken Water Meter & Valve Leak', am: 'የውሃ ቆጣሪ ወይም መቆጣጠሪያ ቫልቭ መሰበር' }
+    ],
+    default_subcity: 'Maraki',
+    default_landmark: 'Near Maraki Campus Main Gate',
+    default_phone: '+251918112233'
+  },
+  POWER_OUTAGE: {
+    title: 'Power Outage & Electrical Hazard',
+    title_am: 'የኤሌክትሪክ ኃይል መቋረጥና የትራንስፎርመር ብልሽት',
+    dept: 'Ethiopian Electric Utility (EEU)',
+    dept_am: 'የኢትዮጵያ ኤሌክትሪክ አገልግሎት - ጎንደር',
+    dept_badge: 'EEU GRID',
+    sla_badge: 'Avg SLA: 12h',
+    icon: '⚡',
+    header_gradient: 'from-amber-600 via-amber-500 to-yellow-600',
+    img: '/images/categories/power_outage.svg',
+    dispatch_tag: 'Direct Ingestion to EEU 24/7 Rapid Transformer Squad',
+    chips: [
+      { en: 'Fallen High-Voltage Cable (Live Wire)', am: 'የተበጠሰ የቀጥታ ኤሌክትሪክ ገመድ (አደገኛ)' },
+      { en: 'Blown Transformer with Smoke & Sparks', am: 'ትራንስፎርመር ፈንድቷል / ጭስና ፍንጣቂ' },
+      { en: 'Entire Sub-City Neighborhood Blackout', am: 'የአካባቢው መብራት ሙሉ በሙሉ ጠፍቷል' },
+      { en: 'Streetlight Cable Fault / Exposed Box', am: 'የመንገድ መብራት መስመር ብልሽት' }
+    ],
+    default_subcity: 'Arada',
+    default_landmark: 'Behind Commercial Bank Branch',
+    default_phone: '+251918445566'
+  },
+  FLOOD_EMERGENCY: {
+    title: 'Flash Flood SOS & Rescue Dispatch',
+    title_am: 'የጎርፍ አደጋ አስቸኳይ የነፍስ አድን ጥሪ',
+    dept: 'Gondar Fire, Flood & Disaster Rescue',
+    dept_am: 'የእሳትና ድንገተኛ አደጋ መከላከያና ነፍስ አድን',
+    dept_badge: 'RESCUE SOS',
+    sla_badge: 'Emergency SLA: < 4h',
+    icon: '🚨',
+    header_gradient: 'from-red-700 via-red-600 to-rose-700',
+    img: '/images/categories/flash_flood.svg',
+    dispatch_tag: 'Tier-1 Emergency Alarms & Rapid Rescue Boats',
+    chips: [
+      { en: 'River Surge Inundated Living Quarters', am: 'ጎርፍ ወደ መኖሪያ ቤት ገብቷል' },
+      { en: 'Residents Trapped by Fast-Flowing Water', am: 'ሰዎች በውሃ ተከበው መውጣት አልቻሉም' },
+      { en: 'Stormwater Canal Breached / Blocked', am: 'የዝናብ መፋሰሻ ቦይ ሞልቶ ፈስሷል' },
+      { en: 'Road / Bridge Submerged & Impassable', am: 'መንገድና ድልድይ በጎርፍ ተዘግቷል' }
+    ],
+    default_subcity: 'Maraki',
+    default_landmark: 'Angereb River lowland residential zone',
+    default_phone: '+251918556677'
+  },
+  SOLID_WASTE: {
+    title: 'Solid Waste & Sanitation Cleanup',
+    title_am: 'የደረቅ ቆሻሻ ማንሳትና የከተማ ፅዳት ጥያቄ',
+    dept: 'Gondar Sanitation & Beautification Agency',
+    dept_am: 'የጎንደር ከተማ ፅዳትና ውበት አስተዳደር',
+    dept_badge: 'SANITATION',
+    sla_badge: 'Daily Route',
+    icon: '🗑️',
+    header_gradient: 'from-emerald-700 via-emerald-600 to-teal-700',
+    img: '/images/categories/solid_waste.svg',
+    dispatch_tag: 'Direct Dispatch to Zonal Compactor Truck Unit',
+    chips: [
+      { en: 'Overflowing Public Market Skip Container', am: 'የገበያ ቦታ የቆሻሻ ማጠራቀሚያ ሞልቶ ፈሷል' },
+      { en: 'Illegal Dumpsite on Pedestrian Walkway', am: 'በእግረኛ መንገድ ላይ ህገ-ወጥ የቆሻሻ ክምር' },
+      { en: 'Trash Choking Stormwater Drainage Ditch', am: 'ቆሻሻ የዝናብ መውረጃ ቦይን ዘግቶታል' },
+      { en: 'Commercial Waste Clearance Request', am: 'የንግድ ድርጅቶች ቆሻሻ ማንሳት ጥያቄ' }
+    ],
+    default_subcity: 'Azezo-Teda',
+    default_landmark: 'Near Azezo Saturday Market North Gate',
+    default_phone: '+251918223344'
+  },
+  ROAD_DAMAGE: {
+    title: 'Road Damage & Drainage Repair',
+    title_am: 'የመንገድና ድልድይ ብልሽት እንዲሁም ቦይ ጥገና',
+    dept: 'Gondar Roads, Bridges & Drainage Agency',
+    dept_am: 'የመንገድና ድልድዮች ግንባታ ኤጀንሲ',
+    dept_badge: 'CIVIL WORKS',
+    sla_badge: 'Avg SLA: 48h',
+    icon: '🚧',
+    header_gradient: 'from-orange-700 via-orange-600 to-amber-700',
+    img: '/images/categories/road_damage.svg',
+    dispatch_tag: 'Direct Allocation to Asphalt & Cobblestone Masons',
+    chips: [
+      { en: 'Deep Asphalt Pothole Damaging Vehicles', am: 'መኪና የሚያበላሽ ጥልቅ የአስፋልት ጉድጓድ' },
+      { en: 'Dislodged Cobblestone Pavement Hazard', am: 'የተነቀለ የኮብልስቶን ንጣፍ' },
+      { en: 'Collapsed Stormwater Culvert / Bridge Erosion', am: 'የተደረመሰ የመንገድ ቦይ / የድልድይ መሸርሸር' },
+      { en: 'Blocked Drainage Causing Road Inundation', am: 'የተዘጋ የቦይ መውረጃ መንገድን አጥለቅልቆታል' }
+    ],
+    default_subcity: 'Fasil',
+    default_landmark: 'Castle Wall Perimeter Avenue',
+    default_phone: '+251918667788'
+  }
+};
+
+function openQuickReportModal(category = 'WATER_LEAK') {
+  const catMap = {
+    'WATER': 'WATER_LEAK',
+    'WATER_LEAK': 'WATER_LEAK',
+    'POWER': 'POWER_OUTAGE',
+    'POWER_OUTAGE': 'POWER_OUTAGE',
+    'FLOOD': 'FLOOD_EMERGENCY',
+    'FLOOD_SOS': 'FLOOD_EMERGENCY',
+    'FLOOD_EMERGENCY': 'FLOOD_EMERGENCY',
+    'WASTE': 'SOLID_WASTE',
+    'SOLID_WASTE': 'SOLID_WASTE',
+    'ROAD': 'ROAD_DAMAGE',
+    'ROAD_DAMAGE': 'ROAD_DAMAGE'
+  };
+  const normalizedCat = catMap[category] || category;
+
+  if (normalizedCat === 'FLOOD_EMERGENCY') {
+    openFloodSosModal();
+    return;
+  }
+
+  const meta = QUICK_SERVICE_METADATA[normalizedCat] || QUICK_SERVICE_METADATA.WATER_LEAK;
+  const modal = document.getElementById('quick-report-modal');
+  if (!modal) return;
+
+  const header = document.getElementById('quick-modal-header');
+  if (header) {
+    header.className = `relative bg-gradient-to-r ${meta.header_gradient} p-5 text-white flex items-center justify-between overflow-hidden`;
+  }
+  const icon = document.getElementById('quick-modal-icon');
+  if (icon) icon.innerText = meta.icon;
+
+  const deptBadge = document.getElementById('quick-modal-dept-badge');
+  if (deptBadge) deptBadge.innerText = meta.dept_badge;
+
+  const slaBadge = document.getElementById('quick-modal-sla-badge');
+  if (slaBadge) slaBadge.innerText = meta.sla_badge;
+
+  const titleEl = document.getElementById('quick-modal-title');
+  if (titleEl) titleEl.innerText = currentLang === 'am' ? meta.title_am : meta.title;
+
+  const subEl = document.getElementById('quick-modal-sub');
+  if (subEl) subEl.innerText = currentLang === 'am' ? meta.dept_am : meta.dept;
+
+  const imgEl = document.getElementById('quick-modal-img');
+  if (imgEl) imgEl.src = meta.img;
+
+  const dispatchTag = document.getElementById('quick-modal-dispatch-tag');
+  if (dispatchTag) dispatchTag.innerText = meta.dispatch_tag;
+
+  const catInput = document.getElementById('quick-cat-input');
+  if (catInput) catInput.value = normalizedCat;
+
+  // Sub-city dropdown
+  const subcitySelect = document.getElementById('quick-subcity-select');
+  if (subcitySelect) {
+    subcitySelect.innerHTML = SUB_CITIES.map(sc => `
+      <option value="${sc.name}" ${sc.name === meta.default_subcity ? 'selected' : ''}>
+        ${currentLang === 'am' ? sc.name_am + ' (' + sc.name + ')' : sc.name + ' (' + sc.name_am + ')'}
+      </option>
+    `).join('');
+  }
+
+  // Chips
+  const chipsContainer = document.getElementById('quick-issue-chips');
+  if (chipsContainer) {
+    chipsContainer.innerHTML = meta.chips.map((chip, idx) => `
+      <button type="button" onclick="selectQuickChip('${chip.en.replace(/'/g, "\\'")}', this)" class="quick-chip-btn px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold transition ${idx === 0 ? 'bg-emerald-50 border-emerald-400 text-emerald-800' : ''}">
+        ${currentLang === 'am' ? chip.am : chip.en}
+      </button>
+    `).join('');
+  }
+
+  const customInput = document.getElementById('quick-issue-custom');
+  if (customInput) customInput.value = currentLang === 'am' ? meta.chips[0].am : meta.chips[0].en;
+
+  const landmarkInput = document.getElementById('quick-landmark-input');
+  if (landmarkInput) landmarkInput.value = meta.default_landmark;
+
+  const phoneInput = document.getElementById('quick-phone-input');
+  if (phoneInput && !phoneInput.value) phoneInput.value = meta.default_phone;
+
+  modal.classList.remove('hidden');
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
+}
+
+function selectQuickChip(text, btn) {
+  const customInput = document.getElementById('quick-issue-custom');
+  if (customInput) customInput.value = text;
+  document.querySelectorAll('.quick-chip-btn').forEach(b => {
+    b.classList.remove('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+    b.classList.add('bg-slate-50', 'border-slate-200', 'text-slate-700');
+  });
+  if (btn) {
+    btn.classList.remove('bg-slate-50', 'border-slate-200', 'text-slate-700');
+    btn.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+  }
+}
+
+function closeQuickReportModal() {
+  const modal = document.getElementById('quick-report-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function switchToFullMapReport() {
+  const category = document.getElementById('quick-cat-input')?.value || 'WATER_LEAK';
+  closeQuickReportModal();
+  quickReportCategory(category);
+}
+
+async function handleQuickReportSubmit(e) {
+  e.preventDefault();
+  const category = document.getElementById('quick-cat-input')?.value || 'WATER_LEAK';
+  const subcity = document.getElementById('quick-subcity-select')?.value || 'Maraki';
+  const issue = document.getElementById('quick-issue-custom')?.value?.trim() || 'Municipal utility report';
+  const landmark = document.getElementById('quick-landmark-input')?.value?.trim() || `${subcity} neighborhood`;
+  const phone = document.getElementById('quick-phone-input')?.value?.trim() || '+251918112233';
+
+  const submitBtn = document.getElementById('quick-submit-btn');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> <span>Transmitting report...</span>`;
+    if (window.lucide) { try { lucide.createIcons(); } catch(e) {} }
+  }
+
+  const scObj = SUB_CITIES.find(s => s.name === subcity) || SUB_CITIES[0];
+  const meta = QUICK_SERVICE_METADATA[category] || QUICK_SERVICE_METADATA.WATER_LEAK;
+
+  const payload = {
+    title: issue,
+    description: `${issue} at ${landmark}, ${subcity}. Priority municipal dispatch requested.`,
+    category,
+    sub_city: subcity,
+    latitude: scObj.lat,
+    longitude: scObj.lon,
+    accuracy: 5,
+    phone,
+    isAnonymous: 'false',
+    landmark_description: landmark,
+    channel_origin: 'WEB_QUICK_TAP'
+  };
+
+  try {
+    const res = await fetch('/api/v1/incidents', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    let newTicket = null;
+    if (res.ok) {
+      const data = await res.json();
+      newTicket = data.ticket;
+    }
+
+    if (!newTicket) {
+      const randomId = Math.floor(1000 + Math.random() * 9000);
+      newTicket = {
+        id: String(Date.now()),
+        ticket_code: `GDR-${randomId}`,
+        title: issue,
+        description: payload.description,
+        category,
+        sub_city: subcity,
+        latitude: scObj.lat,
+        longitude: scObj.lon,
+        landmark_description: landmark,
+        caller_phone: phone,
+        channel_origin: 'WEB_QUICK_TAP',
+        status: 'RECEIVED',
+        created_at: new Date().toISOString(),
+        department: meta.dept,
+        sla_deadline: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+        is_sla_breached: false
+      };
+    }
+
+    allIncidents.unshift(newTicket);
+    closeQuickReportModal();
+    showToast(`✓ Ticket #${newTicket.ticket_code} created successfully! Dispatched to ${meta.dept_badge}`);
+    
+    try { renderPublicFeed(); } catch (e) {}
+    try { renderActionsPage(); } catch (e) {}
+    try { updateLiveMetrics(); } catch (e) {}
+    if (adminAuthenticated) {
+      try { renderAdminDashboard(); } catch (e) {}
+    }
+
+    trackSpecificTicket(newTicket.ticket_code);
+  } catch (err) {
+    const randomId = Math.floor(1000 + Math.random() * 9000);
+    const offlineTicket = {
+      id: String(Date.now()),
+      ticket_code: `GDR-${randomId}`,
+      title: issue,
+      description: payload.description,
+      category,
+      sub_city: subcity,
+      latitude: scObj.lat,
+      longitude: scObj.lon,
+      landmark_description: landmark,
+      caller_phone: phone,
+      channel_origin: 'OFFLINE_LOCAL',
+      status: 'RECEIVED',
+      created_at: new Date().toISOString(),
+      department: meta.dept,
+      sla_deadline: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+      is_sla_breached: false
+    };
+
+    allIncidents.unshift(offlineTicket);
+    closeQuickReportModal();
+    showToast(`✓ Offline Mode: Ticket #${offlineTicket.ticket_code} recorded locally and queued!`);
+    
+    try { renderPublicFeed(); } catch (e) {}
+    try { renderActionsPage(); } catch (e) {}
+    try { updateLiveMetrics(); } catch (e) {}
+    if (adminAuthenticated) {
+      try { renderAdminDashboard(); } catch (e) {}
+    }
+    trackSpecificTicket(offlineTicket.ticket_code);
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> <span>Submit Incident & Generate Ticket</span>`;
+      if (window.lucide) { try { lucide.createIcons(); } catch(e) {} }
+    }
+  }
+}
+
+function loadAngerebKehaRivers() {
+  navigateTo('dispatch');
+  setTimeout(() => {
+    if (mapDispatch) {
+      mapDispatch.setView([12.6215, 37.4720], 14);
+      if (typeof toggleRiverBasinLayer === 'function' && !showRivers) {
+        toggleRiverBasinLayer();
+      }
+      if (typeof setQueueTab === 'function') {
+        setQueueTab('emergency');
+      }
+      showToast('🌊 Angereb & Keha River Catchment Basins Focused on GIS Command Map');
+    }
+  }, 400);
+}
+
+function callHotlineDesk(num = '8400') {
+  if (num === '8065') {
+    openPhoneSimulator('sms');
+    const smsInput = document.getElementById('sim-sms-body');
+    if (smsInput) smsInput.value = 'WATER';
+    showToast('Connecting to GWSA Water Shortcode (8065)...');
+  } else if (num === '905') {
+    openPhoneSimulator('ivr');
+    const ivrCat = document.getElementById('sim-ivr-category');
+    if (ivrCat) ivrCat.value = 'POWER_OUTAGE';
+    showToast('Connecting to EEU Grid 24/7 Hotline (905)...');
+  } else if (num === '911' || num.includes('8400')) {
+    openPhoneSimulator('ivr');
+    showToast('🚨 Connecting to Gondar Emergency Dispatch (911 / 8400)...');
+  } else if (num.includes('058')) {
+    openPhoneSimulator('ivr');
+    const ivrCat = document.getElementById('sim-ivr-category');
+    if (ivrCat) ivrCat.value = 'SOLID_WASTE';
+    showToast('Connecting to Municipal Sanitation Desk (058-111-0422)...');
+  } else {
+    openPhoneSimulator('ivr');
+    showToast(`Connecting to Municipal Dispatch (${num})...`);
+  }
+}
+
+function openSmsDesk(keyword = 'ROAD') {
+  openPhoneSimulator('sms');
+  const smsInput = document.getElementById('sim-sms-body');
+  if (smsInput) smsInput.value = keyword;
+  showToast(`Opening SMS (8065) Dispatch Terminal [${keyword}]`);
+}
+
 // Low-Vision Text Size Adjuster
 let currentTextSizeLevel = 0; // -1, 0, 1
 function adjustTextSize(delta) {
