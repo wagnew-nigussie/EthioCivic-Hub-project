@@ -3,6 +3,26 @@
  * Omnichannel Frontend Logic, All-Ethiopia Spatial GIS Mapping, and Full Bilingual Translation
  */
 
+// Global Mathematical, Distance and String Sanitization Utilities
+function getDistanceMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371e3;
+  const rad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * rad;
+  const dLon = (lon2 - lon1) * rad;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
+  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // ============================================================================
 // 1. COMPREHENSIVE BILINGUAL TRANSLATION DICTIONARY (ENGLISH & AMHARIC)
 // ============================================================================
@@ -1049,22 +1069,25 @@ let isUssdActive = false;
 // 3. INITIALIZATION & I18N ENGINE
 // ============================================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Check stored language preference
-  const savedLang = localStorage.getItem('smartcivic_lang');
-  if (savedLang === 'am' || savedLang === 'en') {
-    currentLang = savedLang;
-  }
+  try {
+    const savedLang = localStorage.getItem('smartcivic_lang');
+    if (savedLang === 'am' || savedLang === 'en') {
+      currentLang = savedLang;
+    }
+  } catch (e) {}
 
-  applyTranslations();
-  renderLandingSubCities();
-  populateSubCitySelects();
+  try { applyTranslations(); } catch (e) { console.warn('applyTranslations:', e); }
+  try { renderLandingSubCities(); } catch (e) { console.warn('renderLandingSubCities:', e); }
+  try { populateSubCitySelects(); } catch (e) { console.warn('populateSubCitySelects:', e); }
   
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
   
   // Synchronously render seed records immediately
-  renderPublicFeed();
-  renderActionsPage();
-  updateLiveMetrics();
+  try { renderPublicFeed(); } catch (e) { console.warn('renderPublicFeed:', e); }
+  try { renderActionsPage(); } catch (e) { console.warn('renderActionsPage:', e); }
+  try { updateLiveMetrics(); } catch (e) { console.warn('updateLiveMetrics:', e); }
 
   try {
     initReportMap();
@@ -1075,19 +1098,25 @@ document.addEventListener('DOMContentLoaded', () => {
   loadIncidents();
   loadAnalytics();
 
-  window.addEventListener('online', () => updateNetworkStatus(true));
-  window.addEventListener('offline', () => updateNetworkStatus(false));
+  try {
+    window.addEventListener('online', () => updateNetworkStatus(true));
+    window.addEventListener('offline', () => updateNetworkStatus(false));
+  } catch (e) {}
 });
 
 function toggleLanguage() {
   currentLang = currentLang === 'en' ? 'am' : 'en';
-  localStorage.setItem('smartcivic_lang', currentLang);
-  applyTranslations();
-  renderLandingSubCities();
-  populateSubCitySelects();
-  renderPublicFeed();
-  renderAnalyticsCharts();
-  renderCrewTasks();
+  try { localStorage.setItem('smartcivic_lang', currentLang); } catch (e) {}
+  try { applyTranslations(); } catch (e) {}
+  try { renderLandingSubCities(); } catch (e) {}
+  try { populateSubCitySelects(); } catch (e) {}
+  try { renderPublicFeed(); } catch (e) {}
+  try { renderActionsPage(); } catch (e) {}
+  try { renderAnalyticsCharts(); } catch (e) {}
+  try { renderCrewTasks(); } catch (e) {}
+  if (adminAuthenticated) {
+    try { renderAdminDashboard(); } catch (e) {}
+  }
 
   const toggleBtnText = document.getElementById('current-lang-text');
   if (toggleBtnText) {
@@ -1730,31 +1759,38 @@ function renderPublicFeed() {
 // 8B. DEDICATED RECENT PUBLIC MUNICIPAL ACTIONS CONTROLLER
 // ============================================================================
 function renderActionsPage() {
-  const subcitySelect = document.getElementById('actions-subcity-filter');
-  if (subcitySelect && subcitySelect.options.length <= 1) {
-    subcitySelect.innerHTML = `<option value="ALL">${currentLang === 'am' ? 'ሁሉም 12ቱ ክፍለ ከተሞች' : 'All 12 Sub-Cities'}</option>` +
-      SUB_CITIES.map(sc => `<option value="${sc.name}">${sc.name} (${sc.name_am})</option>`).join('');
+  try {
+    const subcitySelect = document.getElementById('actions-subcity-filter');
+    if (subcitySelect && subcitySelect.options.length <= 1) {
+      subcitySelect.innerHTML = `<option value="ALL">${currentLang === 'am' ? 'ሁሉም 12ቱ ክፍለ ከተሞች' : 'All 12 Sub-Cities'}</option>` +
+        SUB_CITIES.map(sc => `<option value="${sc.name}">${sc.name} (${sc.name_am})</option>`).join('');
+    }
+
+    const total = allIncidents.length;
+    const resolved = allIncidents.filter(i => i.status === 'RESOLVED').length;
+    const active = allIncidents.filter(i => i.status === 'IN_PROGRESS' || i.status === 'DISPATCHED' || i.status === 'ASSIGNED').length;
+    const emergency = allIncidents.filter(i => i.is_emergency || i.urgency === 'CRITICAL' || i.category === 'FLOOD_EMERGENCY').length;
+    const rate = total ? Math.round((resolved / total) * 100) : 0;
+
+    const totalEl = document.getElementById('actions-stat-total');
+    const resolvedEl = document.getElementById('actions-stat-resolved');
+    const rateEl = document.getElementById('actions-stat-rate');
+    const activeEl = document.getElementById('actions-stat-active');
+    const emergencyEl = document.getElementById('actions-stat-emergency');
+
+    if (totalEl) totalEl.innerText = total;
+    if (resolvedEl) resolvedEl.innerText = resolved;
+    if (rateEl) rateEl.innerHTML = `<i data-lucide="check" class="w-3 h-3"></i> <span>${rate}% Resolution Rate</span>`;
+    if (activeEl) activeEl.innerText = active;
+    if (emergencyEl) emergencyEl.innerText = emergency;
+
+    applyActionsFilters();
+    if (window.lucide) {
+      try { lucide.createIcons(); } catch (e) {}
+    }
+  } catch (err) {
+    console.warn('renderActionsPage error:', err);
   }
-
-  const total = allIncidents.length;
-  const resolved = allIncidents.filter(i => i.status === 'RESOLVED').length;
-  const active = allIncidents.filter(i => i.status === 'IN_PROGRESS' || i.status === 'DISPATCHED' || i.status === 'ASSIGNED').length;
-  const emergency = allIncidents.filter(i => i.is_emergency || i.urgency === 'CRITICAL' || i.category === 'FLOOD_EMERGENCY').length;
-  const rate = total ? Math.round((resolved / total) * 100) : 0;
-
-  const totalEl = document.getElementById('actions-stat-total');
-  const resolvedEl = document.getElementById('actions-stat-resolved');
-  const rateEl = document.getElementById('actions-stat-rate');
-  const activeEl = document.getElementById('actions-stat-active');
-  const emergencyEl = document.getElementById('actions-stat-emergency');
-
-  if (totalEl) totalEl.innerText = total;
-  if (resolvedEl) resolvedEl.innerText = resolved;
-  if (rateEl) rateEl.innerHTML = `<i data-lucide="check" class="w-3 h-3"></i> <span>${rate}% Resolution Rate</span>`;
-  if (activeEl) activeEl.innerText = active;
-  if (emergencyEl) emergencyEl.innerText = emergency;
-
-  applyActionsFilters();
 }
 
 function applyActionsFilters() {
@@ -3809,10 +3845,10 @@ function closeAdminSecurityModal() {
 
 async function handleAdminChangePassword(e) {
   e.preventDefault();
-  const current = document.getElementById('admin-change-current').value;
-  const next = document.getElementById('admin-change-new').value;
-  const confirm = document.getElementById('admin-change-confirm').value;
-  const errorBox = document.getElementById('admin-change-error');
+  const current = (document.getElementById('admin-change-current') || document.getElementById('admin-pwd-current'))?.value || '';
+  const next = (document.getElementById('admin-change-new') || document.getElementById('admin-pwd-new'))?.value || '';
+  const confirm = (document.getElementById('admin-change-confirm') || document.getElementById('admin-pwd-confirm'))?.value || '';
+  const errorBox = document.getElementById('admin-change-error') || document.getElementById('admin-security-error');
 
   if (next !== confirm) {
     if (errorBox) {
@@ -3884,42 +3920,54 @@ function switchAdminTab(tabName) {
 }
 
 function renderAdminDashboard() {
-  const total = allIncidents.length;
-  const solved = allIncidents.filter(i => i.status === 'RESOLVED').length;
-  const inProgress = allIncidents.filter(i => i.status === 'IN_PROGRESS' || i.status === 'DISPATCHED' || i.status === 'ASSIGNED').length;
-  const newReports = allIncidents.filter(i => i.status === 'RECEIVED' || i.status === 'SUBMITTED' || i.status === 'TRIAGED').length;
-  const duplicates = detectClientDuplicates(allIncidents);
-  const dupCount = duplicates.reduce((acc, c) => acc + c.repetition_count, 0);
-  const rate = total ? Math.round((solved / total) * 100) : 0;
+  try {
+    const total = allIncidents.length;
+    const solved = allIncidents.filter(i => i.status === 'RESOLVED').length;
+    const inProgress = allIncidents.filter(i => i.status === 'IN_PROGRESS' || i.status === 'DISPATCHED' || i.status === 'ASSIGNED').length;
+    const newReports = allIncidents.filter(i => i.status === 'RECEIVED' || i.status === 'SUBMITTED' || i.status === 'TRIAGED').length;
+    let duplicates = [];
+    try {
+      duplicates = detectClientDuplicates(allIncidents);
+    } catch (dupErr) {
+      console.warn('detectClientDuplicates error fallback:', dupErr);
+    }
+    const dupCount = duplicates.reduce((acc, c) => acc + (c.repetition_count || 1), 0);
+    const rate = total ? Math.round((solved / total) * 100) : 0;
 
-  const statTotal = document.getElementById('admin-stat-total');
-  const statSolved = document.getElementById('admin-stat-solved');
-  const statSolvedRate = document.getElementById('admin-stat-solved-rate');
-  const statSolvedSub = document.getElementById('admin-stat-solved-sub');
-  const statUnsolved = document.getElementById('admin-stat-unsolved');
-  const statNew = document.getElementById('admin-stat-new');
-  const statDuplicates = document.getElementById('admin-stat-duplicates');
-  const badgeDup = document.getElementById('admin-badge-duplicates-count');
-  const statSla = document.getElementById('admin-stat-sla');
+    const statTotal = document.getElementById('admin-stat-total');
+    const statSolved = document.getElementById('admin-stat-solved');
+    const statSolvedRate = document.getElementById('admin-stat-solved-rate');
+    const statSolvedSub = document.getElementById('admin-stat-solved-sub');
+    const statUnsolved = document.getElementById('admin-stat-unsolved');
+    const statNew = document.getElementById('admin-stat-new');
+    const statDuplicates = document.getElementById('admin-stat-duplicates');
+    const badgeDup = document.getElementById('admin-badge-duplicates-count');
+    const statSla = document.getElementById('admin-stat-sla');
 
-  if (statTotal) statTotal.innerText = total;
-  if (statSolved) statSolved.innerText = solved;
-  if (statSolvedRate) statSolvedRate.innerHTML = `<i data-lucide="check-circle-2" class="w-3 h-3"></i> <span>${rate}% Solved Rate</span>`;
-  if (statSolvedSub) statSolvedSub.innerText = `${rate}% Resolution Velocity`;
-  if (statUnsolved) statUnsolved.innerText = inProgress;
-  if (statNew) statNew.innerText = newReports;
-  if (statDuplicates) statDuplicates.innerText = dupCount;
-  if (badgeDup) badgeDup.innerText = duplicates.length;
-  if (statSla) statSla.innerText = `${Math.min(100, Math.max(78, 100 - (allIncidents.filter(i => i.is_sla_breached).length * 4)))}%`;
+    if (statTotal) statTotal.innerText = total;
+    if (statSolved) statSolved.innerText = solved;
+    if (statSolvedRate) statSolvedRate.innerHTML = `<i data-lucide="check-circle-2" class="w-3 h-3"></i> <span>${rate}% Solved Rate</span>`;
+    if (statSolvedSub) statSolvedSub.innerText = `${rate}% Resolution Velocity`;
+    if (statUnsolved) statUnsolved.innerText = inProgress;
+    if (statNew) statNew.innerText = newReports;
+    if (statDuplicates) statDuplicates.innerText = dupCount;
+    if (badgeDup) badgeDup.innerText = duplicates.length;
+    if (statSla) statSla.innerText = `${Math.min(100, Math.max(78, 100 - (allIncidents.filter(i => i.is_sla_breached).length * 4)))}%`;
 
-  // Populate sub-city filter dropdown if needed
-  const subcityFilter = document.getElementById('admin-filter-subcity');
-  if (subcityFilter && subcityFilter.options.length <= 1) {
-    subcityFilter.innerHTML = `<option value="ALL">All 12 Sub-Cities</option>` +
-      SUB_CITIES.map(sc => `<option value="${sc.name}">${sc.name} (${sc.name_am})</option>`).join('');
+    // Populate sub-city filter dropdown if needed
+    const subcityFilter = document.getElementById('admin-filter-subcity');
+    if (subcityFilter && subcityFilter.options.length <= 1) {
+      subcityFilter.innerHTML = `<option value="ALL">All 12 Sub-Cities</option>` +
+        SUB_CITIES.map(sc => `<option value="${sc.name}">${sc.name} (${sc.name_am})</option>`).join('');
+    }
+
+    switchAdminTab(adminActiveTab);
+    if (window.lucide) {
+      try { lucide.createIcons(); } catch (e) {}
+    }
+  } catch (err) {
+    console.error('renderAdminDashboard error:', err);
   }
-
-  switchAdminTab(adminActiveTab);
 }
 
 function renderAdminProblemsTable() {
@@ -4166,10 +4214,16 @@ function detectClientDuplicates(incidentsList) {
 }
 
 function renderAdminDuplicatesSentinel() {
-  const container = document.getElementById('admin-duplicates-list');
+  const container = document.getElementById('admin-duplicates-list') || document.getElementById('admin-duplicates-container');
   if (!container) return;
 
-  const clusters = detectClientDuplicates(allIncidents);
+  let clusters = [];
+  try {
+    clusters = detectClientDuplicates(allIncidents);
+  } catch (err) {
+    console.warn('detectClientDuplicates error in sentinel:', err);
+  }
+
   if (clusters.length === 0) {
     container.innerHTML = `
       <div class="p-8 text-center bg-white rounded-3xl border border-slate-200">
@@ -4302,7 +4356,7 @@ async function mergeDuplicatesCluster(masterCode, dupCodes) {
 function setAdminReportPeriod(period) {
   adminReportPeriod = period;
   ['daily', 'weekly', 'monthly', 'yearly'].forEach(p => {
-    const btn = document.getElementById(`btn-report-${p}`);
+    const btn = document.getElementById(`btn-report-${p}`) || document.getElementById(`btn-period-${p}`);
     if (btn) {
       if (p === period) {
         btn.className = 'px-3 py-1.5 rounded-xl font-bold bg-emerald-600 text-white shadow-sm transition';
@@ -4316,8 +4370,7 @@ function setAdminReportPeriod(period) {
 }
 
 function renderAdminPeriodicReports(period = 'weekly') {
-  const container = document.getElementById('admin-report-container');
-  if (!container) return;
+  const container = document.getElementById('admin-report-container') || document.getElementById('admin-duplicates-container')?.parentElement?.querySelector('#admin-panel-reports') || document.getElementById('admin-panel-reports');
 
   const now = new Date();
   let startTime;
@@ -4370,67 +4423,128 @@ function renderAdminPeriodicReports(period = 'weekly') {
     `;
   }).join('');
 
-  container.innerHTML = `
-    <div class="space-y-6">
-      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-          <div>
-            <span class="text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
-              Official Periodic Report
-            </span>
-            <h3 class="text-xl font-black text-slate-900 mt-1">${label}</h3>
-            <p class="text-xs text-slate-500">Authorized by Municipal Director Wagnew Nigussie (wagnewnigussie569@gmail.com)</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="exportAdminReportCSV()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i> <span>Export CSV</span>
-            </button>
-            <button onclick="exportAdminReportPDF()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
-              <i data-lucide="printer" class="w-3.5 h-3.5"></i> <span>Export PDF</span>
-            </button>
-          </div>
-        </div>
+  // If specific IDs exist in index.html, update them directly
+  const titleEl = document.getElementById('admin-report-title');
+  const subEl = document.getElementById('admin-report-sub');
+  const kpisEl = document.getElementById('admin-report-kpis');
+  const tbodyEl = document.getElementById('admin-report-dept-tbody');
+  const subcitiesGrid = document.getElementById('admin-report-subcities-grid');
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="p-4 bg-slate-50 rounded-2xl">
-            <p class="text-[10px] font-bold text-slate-400 uppercase">Total Incidents</p>
-            <p class="text-2xl font-black text-slate-900 mt-0.5">${total}</p>
-          </div>
-          <div class="p-4 bg-emerald-50 rounded-2xl">
-            <p class="text-[10px] font-bold text-emerald-700 uppercase">Fixed (Solved)</p>
-            <p class="text-2xl font-black text-emerald-700 mt-0.5">${solved}</p>
-            <span class="text-[10px] text-emerald-800 font-semibold">${rate}% Resolution Rate</span>
-          </div>
-          <div class="p-4 bg-amber-50 rounded-2xl">
-            <p class="text-[10px] font-bold text-amber-700 uppercase">In Progress</p>
-            <p class="text-2xl font-black text-amber-700 mt-0.5">${inProgress}</p>
-          </div>
-          <div class="p-4 bg-red-50 rounded-2xl">
-            <p class="text-[10px] font-bold text-red-700 uppercase">Critical SOS</p>
-            <p class="text-2xl font-black text-red-700 mt-0.5">${emergency}</p>
-          </div>
-        </div>
+  if (titleEl) titleEl.innerText = label;
+  if (subEl) subEl.innerText = `Authorized audit generated by Administrator Wagnew Nigussie (wagnewnigussie569@gmail.com) • Period: ${period.toUpperCase()}`;
 
-        <div class="overflow-x-auto mt-4">
-          <h4 class="font-extrabold text-sm text-slate-900 mb-2">Departmental Resolution & SLA Performance</h4>
-          <table class="w-full text-left text-xs">
-            <thead class="bg-slate-100 text-slate-500 font-bold uppercase text-[10px]">
-              <tr>
-                <th class="py-2.5 px-3">Municipal Agency / Authority</th>
-                <th class="py-2.5 px-3">Total Influx</th>
-                <th class="py-2.5 px-3">Solved</th>
-                <th class="py-2.5 px-3">Under Repair</th>
-                <th class="py-2.5 px-3">SLA Compliance</th>
-              </tr>
-            </thead>
-            <tbody>${deptRows}</tbody>
-          </table>
+  if (kpisEl) {
+    kpisEl.innerHTML = `
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Total Incidents</p>
+          <p class="text-2xl font-black text-slate-900 mt-0.5">${total}</p>
+          <span class="text-[10px] text-slate-500 font-medium">${period.toUpperCase()} Influx</span>
+        </div>
+        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+          <i data-lucide="clipboard-list" class="w-5 h-5"></i>
         </div>
       </div>
-    </div>
-  `;
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between border-t-4 border-t-emerald-500">
+        <div>
+          <p class="text-[10px] font-bold text-emerald-700 uppercase">Fixed (Solved)</p>
+          <p class="text-2xl font-black text-emerald-600 mt-0.5">${solved}</p>
+          <span class="text-[10px] text-emerald-800 font-semibold">${rate}% Resolution Velocity</span>
+        </div>
+        <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between border-t-4 border-t-amber-500">
+        <div>
+          <p class="text-[10px] font-bold text-amber-700 uppercase">Under Maintenance</p>
+          <p class="text-2xl font-black text-amber-600 mt-0.5">${inProgress}</p>
+          <span class="text-[10px] text-amber-800 font-semibold">Active Crew Deployment</span>
+        </div>
+        <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+          <i data-lucide="clock" class="w-5 h-5"></i>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between border-t-4 border-t-red-500">
+        <div>
+          <p class="text-[10px] font-bold text-red-700 uppercase">Critical SOS</p>
+          <p class="text-2xl font-black text-red-600 mt-0.5">${emergency}</p>
+          <span class="text-[10px] text-red-800 font-semibold">Emergency Priority</span>
+        </div>
+        <div class="w-10 h-10 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-bold">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+      </div>
+    `;
+  }
 
-  if (window.lucide) lucide.createIcons();
+  if (tbodyEl) {
+    tbodyEl.innerHTML = deptRows;
+  }
+
+  if (subcitiesGrid) {
+    subcitiesGrid.innerHTML = SUB_CITIES.map(sc => {
+      const scList = periodIncidents.filter(t => t.sub_city === sc.name);
+      const scSolved = scList.filter(t => t.status === 'RESOLVED').length;
+      return `
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+          <p class="font-bold text-slate-800 text-xs">${sc.name}</p>
+          <p class="text-[10px] text-slate-500">${sc.name_am}</p>
+          <div class="mt-2 flex items-center justify-between text-xs">
+            <span class="font-mono font-bold">${scList.length} cases</span>
+            <span class="text-emerald-600 font-bold">${scSolved} fixed</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // If a unified container exists, also inject complete report
+  const repContainer = document.getElementById('admin-report-container');
+  if (repContainer) {
+    repContainer.innerHTML = `
+      <div class="space-y-6">
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+                Official Periodic Report
+              </span>
+              <h3 class="text-xl font-black text-slate-900 mt-1">${label}</h3>
+              <p class="text-xs text-slate-500">Authorized by Municipal Director Wagnew Nigussie (wagnewnigussie569@gmail.com)</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="exportAdminReportCSV()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i> <span>Export CSV</span>
+              </button>
+              <button onclick="exportAdminReportPDF()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+                <i data-lucide="printer" class="w-3.5 h-3.5"></i> <span>Export PDF</span>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto mt-4">
+            <h4 class="font-extrabold text-sm text-slate-900 mb-2">Departmental Resolution & SLA Performance</h4>
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-500 font-bold uppercase text-[10px]">
+                <tr>
+                  <th class="py-2.5 px-3">Municipal Agency / Authority</th>
+                  <th class="py-2.5 px-3">Total Influx</th>
+                  <th class="py-2.5 px-3">Solved</th>
+                  <th class="py-2.5 px-3">Under Repair</th>
+                  <th class="py-2.5 px-3">SLA Compliance</th>
+                </tr>
+              </thead>
+              <tbody>${deptRows}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 function exportAdminReportCSV() {
@@ -4628,7 +4742,7 @@ function renderAdminCharts() {
   }
 
   // Chart 3: SLA Horizontal Bar
-  const ctxSla = document.getElementById('admin-chart-sla')?.getContext('2d');
+  const ctxSla = (document.getElementById('admin-chart-sla') || document.getElementById('admin-chart-departments'))?.getContext('2d');
   if (ctxSla) {
     if (adminCharts.sla) adminCharts.sla.destroy();
     adminCharts.sla = new Chart(ctxSla, {
@@ -4845,9 +4959,9 @@ function openAdminIncidentDossier(code) {
   const landmarkEl = document.getElementById('dossier-landmark');
   const callerEl = document.getElementById('dossier-caller');
   const channelEl = document.getElementById('dossier-channel');
-  const statusSelect = document.getElementById('dossier-status-select');
-  const crewInput = document.getElementById('dossier-crew-input');
-  const notesArea = document.getElementById('dossier-notes');
+  const statusSelect = document.getElementById('dossier-status-select') || document.getElementById('dossier-edit-status');
+  const crewInput = document.getElementById('dossier-crew-input') || document.getElementById('dossier-edit-crew');
+  const notesArea = document.getElementById('dossier-notes') || document.getElementById('dossier-edit-notes');
 
   if (codeEl) codeEl.innerText = `#${ticket.ticket_code}`;
   if (titleEl) titleEl.innerText = ticket.title;
@@ -4871,9 +4985,9 @@ function closeAdminDossierModal() {
 
 async function saveAdminDossierChanges() {
   if (!adminSelectedTicketCode) return;
-  const status = document.getElementById('dossier-status-select')?.value;
-  const crew = document.getElementById('dossier-crew-input')?.value;
-  const notes = document.getElementById('dossier-notes')?.value;
+  const status = (document.getElementById('dossier-status-select') || document.getElementById('dossier-edit-status'))?.value;
+  const crew = (document.getElementById('dossier-crew-input') || document.getElementById('dossier-edit-crew'))?.value;
+  const notes = (document.getElementById('dossier-notes') || document.getElementById('dossier-edit-notes'))?.value;
 
   try {
     const res = await fetch(`/api/v1/admin/incidents/${adminSelectedTicketCode}/investigate`, {
