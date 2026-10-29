@@ -235,65 +235,173 @@
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
 
   <!-- ======================================================================= -->
-  <!-- TOP GLOBAL HEADER & BRANDING                                            -->
+  <!-- 1. TOP OFFICIAL GOVERNMENT CIVIC UTILITY BAR                            -->
   <!-- ======================================================================= -->
-  <header class="bg-slate-950/95 backdrop-blur-md text-white border-b border-slate-800/80 sticky top-0 z-50 shadow-xl">
+  <div class="bg-slate-950 text-slate-300 text-xs border-b border-slate-800 px-4 sm:px-6 lg:px-8 py-1.5 flex flex-wrap items-center justify-between gap-2 z-50">
+    <div class="flex items-center space-x-2 text-[11px]">
+      <span class="inline-flex items-center gap-1.5 font-semibold text-slate-200">
+        <span class="text-sm">🇪🇹</span>
+        <span class="hidden sm:inline text-slate-400">Federal Democratic Republic of Ethiopia • </span>
+        <span class="text-amber-400 font-bold">Gondar City Administration</span>
+        <span class="text-slate-400 hidden md:inline">(የጎንደር ከተማ አስተዳደር)</span>
+      </span>
+      <span class="text-slate-700 hidden lg:inline">|</span>
+      <span class="hidden lg:inline-flex items-center gap-1.5 text-emerald-400 font-medium bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span>12 Zonal Grid: OPERATIONAL</span>
+      </span>
+    </div>
+
+    <!-- Accessibility & Quick Civic Shortcuts -->
+    <div class="flex items-center space-x-3 text-[11px]">
+      <!-- Text Size Adjuster for Low-Vision Accessibility -->
+      <div class="hidden sm:flex items-center space-x-1 bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-800 text-slate-300" title="Text Size Accessibility">
+        <span class="text-[10px] text-slate-400 font-bold">Zoom:</span>
+        <button onclick="adjustTextSize(-1)" class="px-1 hover:text-white font-bold" aria-label="Decrease text size">A-</button>
+        <span class="text-slate-700">|</span>
+        <button onclick="adjustTextSize(0)" class="px-1 hover:text-white font-bold" aria-label="Reset text size">A</button>
+        <span class="text-slate-700">|</span>
+        <button onclick="adjustTextSize(1)" class="px-1 hover:text-white font-bold" aria-label="Increase text size">A+</button>
+      </div>
+
+      <!-- Quick Sitemap / Directory Link -->
+      <button onclick="openSitemapModal()" class="hover:text-amber-300 flex items-center gap-1 font-semibold transition" title="Civic Directory & Sitemap">
+        <i data-lucide="sitemap" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span data-i18n="top_sitemap">Sitemap & Services</span>
+      </button>
+
+      <!-- Language Switcher -->
+      <button onclick="toggleLanguage()" id="lang-toggle-btn" class="hover:text-emerald-300 flex items-center gap-1 font-bold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-lg border border-emerald-500/40 transition">
+        <i data-lucide="languages" class="w-3 h-3"></i>
+        <span id="current-lang-text">አማርኛ</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- 2. PRIMARY GLOBAL HEADER WITH OMNISEARCH & SERVICES MEGA-MENU            -->
+  <!-- ======================================================================= -->
+  <header class="bg-slate-950/98 backdrop-blur-md text-white border-b border-slate-800/80 sticky top-0 z-50 shadow-xl">
     <!-- Ethiopian National Tricolor Accent Ribbon -->
     <div class="ethio-ribbon"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-2.5 flex items-center justify-between gap-3">
       <!-- Brand Logo -->
-      <div class="flex items-center space-x-3 cursor-pointer group" onclick="navigateTo('landing')">
-        <div class="relative w-11 h-11 rounded-xl bg-slate-800 p-0.5 ring-2 ring-amber-400/50 shadow-lg shadow-emerald-950/40 overflow-hidden">
+      <div class="flex items-center space-x-3 cursor-pointer group shrink-0" onclick="navigateTo('landing')">
+        <div class="relative w-11 h-11 rounded-xl bg-slate-800 p-0.5 ring-2 ring-amber-400/60 shadow-lg shadow-emerald-950/40 overflow-hidden">
           <img src="/images/gondar_fasiledes_castle.jpg" alt="Fasilides Castle" class="w-full h-full object-cover rounded-lg group-hover:scale-110 transition duration-500">
         </div>
         <div>
-          <div class="font-black text-lg tracking-tight flex items-center space-x-1.5">
+          <div class="font-black text-base sm:text-lg tracking-tight flex items-center space-x-1.5">
             <span data-i18n="brand_title" class="bg-gradient-to-r from-white via-slate-100 to-amber-200 bg-clip-text text-transparent">Gondar SmartCivic</span>
-            <span class="text-[11px] bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black px-2 py-0.5 rounded-full shadow-sm" data-i18n="brand_badge">ጎንደር</span>
+            <span class="text-[10px] bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black px-2 py-0.5 rounded-full shadow-sm" data-i18n="brand_badge">ጎንደር</span>
           </div>
-          <p class="text-[11px] text-slate-400 font-medium" data-i18n="brand_subtitle">EthioCivic-Hub • All-Ethiopia Municipal Dispatch</p>
+          <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium" data-i18n="brand_subtitle">EthioCivic-Hub • All-Ethiopia Municipal Dispatch</p>
+        </div>
+      </div>
+
+      <!-- Center: Global Header Omnisearch Bar with Quick Shortcut -->
+      <div class="hidden xl:flex flex-1 max-w-sm mx-3 relative">
+        <div class="w-full relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input type="text" id="global-search-input" oninput="handleOmnisearchInput(this.value, 'global')" onfocus="handleOmnisearchInput(this.value, 'global')" placeholder="Search services, sub-cities, tickets..." class="w-full bg-slate-900/90 text-slate-100 placeholder-slate-400 text-xs rounded-xl pl-9 pr-14 py-2 border border-slate-700/80 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition shadow-inner">
+          <kbd class="absolute right-2 top-1/2 -translate-y-1/2 bg-slate-800 text-slate-400 border border-slate-700 px-1.5 py-0.5 rounded text-[10px] font-mono pointer-events-none">Ctrl+K</kbd>
+        </div>
+        <!-- Live Omnisearch Dropdown -->
+        <div id="global-omnisearch-dropdown" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden z-50 text-xs divide-y divide-slate-800 max-h-96 overflow-y-auto custom-scroll">
+          <!-- Populated dynamically via handleOmnisearchInput -->
         </div>
       </div>
 
       <!-- Navigation Links -->
-      <nav class="hidden md:flex items-center space-x-1 text-sm font-semibold">
-        <button onclick="navigateTo('landing')" id="nav-landing" class="nav-btn px-3.5 py-2 rounded-xl text-emerald-400 bg-slate-800/90 shadow-inner transition" data-i18n="nav_overview">Overview</button>
-        <button onclick="navigateTo('report')" id="nav-report" class="nav-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 transition" data-i18n="nav_report">Report Issue</button>
-        <button onclick="navigateTo('track')" id="nav-track" class="nav-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 transition" data-i18n="nav_track">Track Ticket</button>
-        <button onclick="navigateTo('dispatch')" id="nav-dispatch" class="nav-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
-          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> <span data-i18n="nav_dispatch">Dispatch Command</span>
+      <nav class="hidden lg:flex items-center space-x-1 text-xs font-semibold">
+        <button onclick="navigateTo('landing')" id="nav-landing" class="nav-btn px-3 py-2 rounded-xl text-emerald-400 bg-slate-800/90 shadow-inner transition" data-i18n="nav_overview">Overview</button>
+        
+        <!-- Services Mega Dropdown Trigger -->
+        <div class="relative group">
+          <button class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1 transition">
+            <span data-i18n="nav_services">Services</span>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform"></i>
+          </button>
+          <!-- Mega Menu Dropdown -->
+          <div class="hidden group-hover:block absolute left-0 top-full mt-1 w-72 bg-slate-900/98 backdrop-blur-2xl border border-slate-700/90 rounded-2xl shadow-2xl p-2.5 space-y-1.5 z-50">
+            <button onclick="quickReportCategory('WATER_LEAK')" class="w-full text-left p-2 rounded-xl hover:bg-slate-800 flex items-center gap-2.5 transition">
+              <span class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm shrink-0">💧</span>
+              <div>
+                <p class="font-bold text-slate-200">Water Network (GWSA)</p>
+                <p class="text-[10px] text-slate-400">Burst pipes, outages, leaks</p>
+              </div>
+            </button>
+            <button onclick="quickReportCategory('POWER_OUTAGE')" class="w-full text-left p-2 rounded-xl hover:bg-slate-800 flex items-center gap-2.5 transition">
+              <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0">⚡</span>
+              <div>
+                <p class="font-bold text-slate-200">Electrical Grid (EEU)</p>
+                <p class="text-[10px] text-slate-400">Transformers, wires, blackouts</p>
+              </div>
+            </button>
+            <button onclick="openFloodSosModal()" class="w-full text-left p-2 rounded-xl hover:bg-red-950/60 border border-red-500/30 flex items-center gap-2.5 transition">
+              <span class="w-7 h-7 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center font-bold text-sm shrink-0">🚨</span>
+              <div>
+                <p class="font-bold text-red-300">Flash Flood SOS</p>
+                <p class="text-[10px] text-red-400">Angereb/Keha rescue</p>
+              </div>
+            </button>
+            <button onclick="quickReportCategory('SOLID_WASTE')" class="w-full text-left p-2 rounded-xl hover:bg-slate-800 flex items-center gap-2.5 transition">
+              <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">🗑️</span>
+              <div>
+                <p class="font-bold text-slate-200">Solid Waste & Sanitation</p>
+                <p class="text-[10px] text-slate-400">Dumps, overflowing skips</p>
+              </div>
+            </button>
+            <button onclick="quickReportCategory('ROAD_DAMAGE')" class="w-full text-left p-2 rounded-xl hover:bg-slate-800 flex items-center gap-2.5 transition">
+              <span class="w-7 h-7 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm shrink-0">🚧</span>
+              <div>
+                <p class="font-bold text-slate-200">Roads & Culverts</p>
+                <p class="text-[10px] text-slate-400">Potholes, blocked drainage</p>
+              </div>
+            </button>
+            <div class="pt-1 border-t border-slate-800">
+              <button onclick="openSitemapModal()" class="w-full text-center py-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition">
+                View All Municipal Services &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="navigateTo('report')" id="nav-report" class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 transition" data-i18n="nav_report">Report Issue</button>
+        <button onclick="navigateTo('track')" id="nav-track" class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 transition" data-i18n="nav_track">Track Ticket</button>
+        <button onclick="navigateTo('dispatch')" id="nav-dispatch" class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> <span data-i18n="nav_dispatch">Dispatch Command</span>
         </button>
-        <button onclick="navigateTo('analytics')" id="nav-analytics" class="nav-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
-          <i data-lucide="bar-chart-3" class="w-4 h-4"></i> <span data-i18n="nav_analytics">Analytics</span>
+        <button onclick="navigateTo('analytics')" id="nav-analytics" class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+          <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i> <span data-i18n="nav_analytics">Analytics</span>
         </button>
-        <button onclick="navigateTo('crew')" id="nav-crew" class="nav-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
-          <i data-lucide="wrench" class="w-4 h-4"></i> <span data-i18n="nav_crew">Field Crew</span>
+        <button onclick="navigateTo('crew')" id="nav-crew" class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+          <i data-lucide="wrench" class="w-3.5 h-3.5"></i> <span data-i18n="nav_crew">Crew</span>
         </button>
       </nav>
 
       <!-- Right Action Tools -->
-      <div class="flex items-center space-x-2 sm:space-x-3">
+      <div class="flex items-center space-x-2 shrink-0">
+        <!-- Quick Search Modal Trigger for Mobile & Tablet -->
+        <button onclick="openOmnisearchModal()" class="xl:hidden p-2 rounded-xl bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white transition" aria-label="Search Municipal Services">
+          <i data-lucide="search" class="w-4 h-4"></i>
+        </button>
+
         <!-- Prominent Flash Flood & Disaster SOS Button -->
-        <button onclick="openFloodSosModal()" class="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black px-3.5 py-2 rounded-xl text-xs sm:text-sm flex items-center space-x-1.5 shadow-lg shadow-red-900/60 border border-red-400/40 animate-pulse transition btn-press">
-          <i data-lucide="shield-alert" class="w-4 h-4 text-amber-300"></i>
-          <span data-i18n="header_flood_sos">🚨 FLOOD SOS</span>
+        <button onclick="openFloodSosModal()" class="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black px-3.5 py-2 rounded-xl text-xs flex items-center space-x-1.5 shadow-lg shadow-red-900/60 border border-red-400/40 animate-pulse transition btn-press">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span data-i18n="header_flood_sos">🚨 SOS</span>
         </button>
 
         <!-- Interactive Telecom Simulator Modal Button -->
-        <button onclick="toggleSimulator(true)" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold px-3.5 py-2 rounded-xl text-xs sm:text-sm flex items-center space-x-1.5 shadow-md shadow-amber-950/30 transition btn-press">
-          <i data-lucide="phone-call" class="w-4 h-4"></i>
-          <span data-i18n="simulator_btn">Telecom Simulator (*840#)</span>
+        <button onclick="toggleSimulator(true)" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 shadow-md shadow-amber-950/30 transition btn-press hidden sm:flex">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+          <span>*840# Sim</span>
         </button>
 
-        <!-- Interactive Language Switcher (Amharic <-> English) -->
-        <button onclick="toggleLanguage()" id="lang-toggle-btn" class="border border-emerald-500/50 bg-emerald-950/70 hover:bg-emerald-900/90 text-xs text-emerald-300 font-extrabold px-3.5 py-2 rounded-xl flex items-center space-x-1.5 transition shadow-sm btn-press">
-          <i data-lucide="languages" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span id="current-lang-text">አማርኛ</span>
-        </button>
-
-        <!-- Mobile Hamburger Menu Button (Rule 2: Responsive Phone/Tablet) -->
-        <button onclick="toggleMobileMenu()" id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700/80 transition btn-press flex items-center justify-center" aria-label="Toggle Navigation Menu">
+        <!-- Mobile Navigation Menu Toggle Button -->
+        <button onclick="toggleMobileMenu()" id="mobile-menu-btn" class="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700/80 transition btn-press flex items-center justify-center" aria-label="Toggle Navigation Menu">
           <i data-lucide="menu" id="mobile-menu-icon" class="w-5 h-5"></i>
         </button>
       </div>
@@ -363,7 +471,34 @@
             Bridging the digital divide across Gondar City and Ethiopia. Every resident has equal power to report water leaks, electrical blackouts, solid waste, and road hazards—whether using 4G smartphones, basic 2G feature phones (*840#), SMS, or voice calls.
           </p>
 
-          <div class="pt-2 flex flex-wrap gap-3.5">
+          <!-- Real Municipal Portal Hero Omnisearch Console -->
+          <div class="pt-2 max-w-2xl relative">
+            <div class="relative bg-slate-900/90 p-1.5 rounded-2xl border-2 border-emerald-500/60 shadow-2xl backdrop-blur-xl flex items-center gap-2">
+              <i data-lucide="search" class="w-5 h-5 text-emerald-400 ml-3 pointer-events-none shrink-0"></i>
+              <input type="text" id="hero-search-input" oninput="handleOmnisearchInput(this.value, 'hero')" onfocus="handleOmnisearchInput(this.value, 'hero')" placeholder="Search municipal services (e.g. water leak, blackout, flood SOS, ticket #GDR-4821)..." class="flex-1 bg-transparent text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none py-2 px-1 font-medium">
+              <button onclick="executeHeroSearch(document.getElementById('hero-search-input').value)" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5 shrink-0">
+                <span data-i18n="hero_search_btn">Find Service</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            
+            <!-- Live Hero Dropdown Results -->
+            <div id="hero-omnisearch-dropdown" class="hidden absolute left-0 right-0 top-full mt-2 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden z-50 text-xs divide-y divide-slate-800 max-h-96 overflow-y-auto custom-scroll text-slate-100">
+              <!-- Populated dynamically via handleOmnisearchInput -->
+            </div>
+            
+            <!-- Trending Quick Tags for 1-Click Access -->
+            <div class="flex items-center gap-2 mt-3 flex-wrap text-[11px]">
+              <span class="text-slate-400 font-semibold" data-i18n="hero_popular_label">Popular:</span>
+              <button onclick="quickReportCategory('WATER_LEAK')" class="bg-slate-800/80 hover:bg-slate-700 text-sky-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">💧 Water Leak (GWSA)</button>
+              <button onclick="quickReportCategory('POWER_OUTAGE')" class="bg-slate-800/80 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">⚡ Power Blackout (EEU)</button>
+              <button onclick="openFloodSosModal()" class="bg-red-950/80 hover:bg-red-900 text-red-300 px-2.5 py-1 rounded-lg border border-red-800 transition">🚨 Flood SOS</button>
+              <button onclick="quickReportCategory('SOLID_WASTE')" class="bg-slate-800/80 hover:bg-slate-700 text-emerald-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">🗑️ Waste Dump</button>
+              <button onclick="quickTrackSampleTicket('GDR-4821')" class="bg-slate-800/80 hover:bg-slate-700 text-purple-300 px-2.5 py-1 rounded-lg border border-slate-700 transition font-mono">🔍 #GDR-4821</button>
+            </div>
+          </div>
+
+          <div class="pt-4 flex flex-wrap gap-3.5">
             <button onclick="openFloodSosModal()" class="bg-gradient-to-r from-red-600 via-red-500 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black px-6 py-3.5 rounded-2xl shadow-xl shadow-red-950/60 flex items-center space-x-2.5 transition border border-red-400/50 animate-pulse btn-press">
               <i data-lucide="shield-alert" class="w-5 h-5 text-amber-300"></i>
               <span data-i18n="hero_btn_flood_sos">🚨 Flood Emergency SOS</span>
@@ -441,6 +576,160 @@
           <span class="text-[11px] text-purple-300 font-medium flex items-center gap-1 mt-1">
             <i data-lucide="trending-up" class="w-3 h-3"></i> <span data-i18n="stat_kpi_tag">Municipal KPI Target</span>
           </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- MUNICIPAL PUBLIC WORKS & UTILITY SERVICE DIRECTORY                      -->
+    <!-- ======================================================================= -->
+    <div id="service-directory" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+        <div>
+          <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider" data-i18n="services_dir_tag">Official Municipal Department Directory</span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5 tracking-tight" data-i18n="services_dir_title">Municipal Public Works & Utility Services</h2>
+          <p class="text-xs sm:text-sm text-slate-500" data-i18n="services_dir_sub">Direct dispatch to municipal authorities, emergency services, and field maintenance teams</p>
+        </div>
+        <button onclick="openSitemapModal()" class="text-xs font-bold text-slate-600 hover:text-emerald-700 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm self-start sm:self-auto flex items-center gap-1.5 transition">
+          <i data-lucide="sitemap" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Full Service Catalog &rarr;</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Service 1: Water GWSA -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-500 transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <span class="text-2xl">💧</span>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300 px-2.5 py-0.5 rounded-full">GWSA Utility</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900">Gondar Water & Sewerage Authority</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5">የጎንደር ከተማ ውሃና ፍሳሽ አገልግሎት</p>
+            <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+              Maintains clean municipal drinking water pipes, resolves main bursts, restores water pressure, and sanitizes urban drainage across all 12 zones.
+            </p>
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-sky-50/70 p-2 rounded-xl border border-sky-100">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-600"></i>
+              <span>Avg SLA: 24h • 1,240 Repairs This Year</span>
+            </div>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="quickReportCategory('WATER_LEAK')" class="text-xs font-bold text-white bg-sky-600 hover:bg-sky-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Report Water Outage</span>
+            </button>
+            <span class="font-mono text-xs font-bold text-slate-600">Tel: 8065</span>
+          </div>
+        </div>
+
+        <!-- Service 2: Electric EEU -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-500 transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <span class="text-2xl">⚡</span>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-0.5 rounded-full">EEU Grid</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900">Ethiopian Electric Utility (EEU)</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5">የኢትዮጵያ ኤሌክትሪክ አገልግሎት - የጎንደር ዲስትሪክት</p>
+            <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+              Manages the high-voltage municipal grid, transformer maintenance, fallen cable hazards, and neighborhood blackout restorations.
+            </p>
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-amber-50/70 p-2 rounded-xl border border-amber-100">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>Avg SLA: 12h • 24/7 Rapid Transformer Squads</span>
+            </div>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="quickReportCategory('POWER_OUTAGE')" class="text-xs font-bold text-slate-950 bg-amber-500 hover:bg-amber-400 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1 font-extrabold">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Report Power Fault</span>
+            </button>
+            <span class="font-mono text-xs font-bold text-slate-600">Tel: 905</span>
+          </div>
+        </div>
+
+        <!-- Service 3: Fire & Flood Rescue -->
+        <div class="bg-white rounded-3xl p-6 border-2 border-red-500 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <span class="text-2xl">🚨</span>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-red-600 text-white px-2.5 py-0.5 rounded-full shadow animate-pulse">Emergency Tier-1</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900">Gondar Fire, Rescue & Disaster Prevention</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5">የእሳትና ድንገተኛ አደጋ መከላከልና መቆጣጠሪያ</p>
+            <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+              Immediate life-safety rescue squad for Angereb and Keha river flash floods, trapped residents, structural collapses, and fire containment.
+            </p>
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-red-700 bg-red-50 p-2 rounded-xl border border-red-200">
+              <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-600"></i>
+              <span>Emergency SLA: < 4h • Sub-Minute Alarm Bell</span>
+            </div>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="openFloodSosModal()" class="text-xs font-black text-white bg-red-600 hover:bg-red-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> <span>Trigger Flood SOS</span>
+            </button>
+            <span class="font-mono text-xs font-bold text-red-600">Hotline: 939 / 8400</span>
+          </div>
+        </div>
+
+        <!-- Service 4: Solid Waste Sanitation -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-emerald-500 transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <span class="text-2xl">🗑️</span>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-0.5 rounded-full">Sanitation Dept</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900">Solid Waste Management & Sanitation</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5">የደረቅ ቆሻሻ አወጋገድ እና የከተማ ፅዳት አስተዳደር</p>
+            <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+              Operates municipal compactor trucks, clears illegal dumpsites, empties public bins, and keeps commercial marketplaces hygienic.
+            </p>
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-emerald-50/70 p-2 rounded-xl border border-emerald-100">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>12 Zonal Transfer Stations • Daily Compactor Routes</span>
+            </div>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="quickReportCategory('SOLID_WASTE')" class="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Request Waste Pickup</span>
+            </button>
+            <span class="font-mono text-xs font-bold text-slate-600">City Hall: 058-111-0422</span>
+          </div>
+        </div>
+
+        <!-- Service 5: Roads & Civil Works -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-orange-500 transition-all duration-300 flex flex-col justify-between group md:col-span-2 lg:col-span-2">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <span class="text-2xl">🚧</span>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-orange-100 text-orange-800 border border-orange-300 px-2.5 py-0.5 rounded-full">Civil Works</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900">Roads, Bridges & Stormwater Drainage Agency</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5">የመንገድና ድልድዮች ግንባታ እንዲሁም የዝናብ ውሃ መፋሰሻ ቦይ ልማት</p>
+            <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+              Maintains cobblestone access ways, repairs asphalt potholes, clears blocked storm canals, and stabilizes bridge footings across the mountainous terrain.
+            </p>
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-orange-50/70 p-2 rounded-xl border border-orange-100">
+              <i data-lucide="wrench" class="w-3.5 h-3.5 text-orange-600"></i>
+              <span>18km Pothole & Drainage Upgrades Completed Across Gondar Sub-Cities</span>
+            </div>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="quickReportCategory('ROAD_DAMAGE')" class="text-xs font-bold text-white bg-orange-600 hover:bg-orange-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Report Damaged Culvert / Road</span>
+            </button>
+            <span class="font-mono text-xs font-bold text-slate-600">Tel: 8065 (SMS)</span>
+          </div>
         </div>
       </div>
     </div>
@@ -772,6 +1061,88 @@
       <div id="landing-recent-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <!-- Populated via JavaScript -->
         <div class="text-center py-8 text-slate-400 col-span-full">Loading community reports...</div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- INTERACTIVE VISUAL CIVIC SITEMAP & SERVICE DIRECTORY                    -->
+    <!-- ======================================================================= -->
+    <div id="sitemap-section" class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-2xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold text-amber-400 uppercase tracking-wider" data-i18n="sitemap_tag">Platform Architecture & Civic Directory</span>
+          <h2 class="text-2xl font-black text-white mt-1" data-i18n="sitemap_header">Official Gondar SmartCivic Sitemap</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1" data-i18n="sitemap_sub">
+            Comprehensive navigational blueprint connecting citizens, municipal authorities, and field crews across all 12 zones.
+          </p>
+        </div>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center gap-1 transition self-start sm:self-auto">
+          <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> <span>Back to Top</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
+        <!-- Pillar 1 -->
+        <div class="space-y-3">
+          <h4 class="font-extrabold text-sm text-amber-400 flex items-center gap-2">
+            <i data-lucide="phone-call" class="w-4 h-4 text-amber-400"></i>
+            <span>1. Citizen Ingestion</span>
+          </h4>
+          <ul class="space-y-2 text-slate-300">
+            <li><button onclick="toggleSimulator(true)" class="hover:text-emerald-400 transition text-left">• USSD (*840#) 2G Menu</button></li>
+            <li><button onclick="toggleSimulator(true); setSimTab('sms');" class="hover:text-emerald-400 transition text-left">• SMS 8065 Two-Way Engine</button></li>
+            <li><button onclick="toggleSimulator(true); setSimTab('ivr');" class="hover:text-emerald-400 transition text-left">• Voice Hotline (8400) IVR</button></li>
+            <li><button onclick="navigateTo('report')" class="hover:text-emerald-400 transition text-left">• Spatial Web GIS Form</button></li>
+            <li><button onclick="openFloodSosModal()" class="text-red-400 hover:text-red-300 font-bold transition text-left">• 🚨 Flash Flood SOS Direct</button></li>
+          </ul>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="space-y-3">
+          <h4 class="font-extrabold text-sm text-sky-400 flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-sky-400"></i>
+            <span>2. 12 Sub-City Zones</span>
+          </h4>
+          <ul class="space-y-1.5 text-slate-300">
+            <li><button onclick="jumpToSubCity('Fasil')" class="hover:text-sky-300 transition text-left">• Zone 01: Fasil (ፋሲል)</button></li>
+            <li><button onclick="jumpToSubCity('Maraki')" class="hover:text-sky-300 transition text-left">• Zone 02: Maraki (ማራኪ)</button></li>
+            <li><button onclick="jumpToSubCity('Arada')" class="hover:text-sky-300 transition text-left">• Zone 03: Arada (አራዳ)</button></li>
+            <li><button onclick="jumpToSubCity('Azezo-Teda')" class="hover:text-sky-300 transition text-left">• Zone 04: Azezo-Teda (አዘዞ)</button></li>
+            <li><button onclick="jumpToSubCity('Zobel')" class="hover:text-sky-300 transition text-left">• Zone 05: Zobel (ዞበል)</button></li>
+            <li><button onclick="jumpToSubCity('Jantekel')" class="hover:text-sky-300 transition text-left">• Zone 06: Jantekel (ጃንተከል)</button></li>
+            <li><button onclick="jumpToSubCity('Bilajig')" class="hover:text-sky-300 transition text-left">• Zones 07-12: Bilajig to Abraj</button></li>
+          </ul>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="space-y-3">
+          <h4 class="font-extrabold text-sm text-emerald-400 flex items-center gap-2">
+            <i data-lucide="layout-dashboard" class="w-4 h-4 text-emerald-400"></i>
+            <span>3. Municipal Command</span>
+          </h4>
+          <ul class="space-y-2 text-slate-300">
+            <li><button onclick="navigateTo('dispatch')" class="hover:text-emerald-400 transition text-left">• GIS Spatial Control Center</button></li>
+            <li><button onclick="navigateTo('dispatch'); setQueueTab('emergency');" class="hover:text-emerald-400 transition text-left">• 5-Tier Triage Queues</button></li>
+            <li><button onclick="openEarlyWarningModal()" class="hover:text-emerald-400 transition text-left">• Geofenced Mass Warning SMS</button></li>
+            <li><button onclick="navigateTo('crew')" class="hover:text-emerald-400 transition text-left">• Field Crew Daily Work Orders</button></li>
+            <li><button onclick="navigateTo('dispatch'); setQueueTab('resolved');" class="hover:text-emerald-400 transition text-left">• Before/After Proof Archive</button></li>
+          </ul>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="space-y-3">
+          <h4 class="font-extrabold text-sm text-purple-400 flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
+            <span>4. Auditing & Intelligence</span>
+          </h4>
+          <ul class="space-y-2 text-slate-300">
+            <li><button onclick="navigateTo('track')" class="hover:text-purple-300 transition text-left">• Public Resolution Ledger</button></li>
+            <li><button onclick="navigateTo('analytics')" class="hover:text-purple-300 transition text-left">• Sub-City Scorecard Analytics</button></li>
+            <li><button onclick="navigateTo('analytics')" class="hover:text-purple-300 transition text-left">• SLA Latency Benchmarks</button></li>
+            <li><button onclick="toggleSimulator(true)" class="hover:text-purple-300 transition text-left">• University Defense Testbed</button></li>
+            <li><button onclick="toggleLanguage()" class="hover:text-purple-300 transition text-left">• Bilingual Amharic/English Engine</button></li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -1711,6 +2082,115 @@
       </div>
     </div>
   </footer>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL: GLOBAL OMNISEARCH MODAL (Ctrl+K / Search Button)                  -->
+  <!-- ======================================================================= -->
+  <div id="omnisearch-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-start justify-center p-4 pt-16 sm:pt-24 hidden" onclick="if(event.target===this) closeOmnisearchModal()">
+    <div class="bg-slate-900 border border-slate-700/90 rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[80vh] text-white">
+      <!-- Search Input Header -->
+      <div class="p-4 border-b border-slate-800 flex items-center gap-3">
+        <i data-lucide="search" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+        <input type="text" id="modal-omnisearch-input" oninput="handleOmnisearchInput(this.value, 'modal')" placeholder="Type a service, sub-city, ticket code, or department..." class="flex-1 bg-transparent text-white placeholder-slate-400 text-sm focus:outline-none font-medium">
+        <kbd class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded text-xs font-mono">ESC</kbd>
+        <button onclick="closeOmnisearchModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1">&times;</button>
+      </div>
+
+      <!-- Quick Category Pills -->
+      <div class="p-3 bg-slate-950 border-b border-slate-800/80 flex items-center gap-2 overflow-x-auto text-[11px] custom-scroll">
+        <span class="text-slate-400 font-semibold shrink-0">Jump to:</span>
+        <button onclick="filterOmnisearchType('service')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg shrink-0">🛠️ Services</button>
+        <button onclick="filterOmnisearchType('subcity')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg shrink-0">🗺️ Sub-Cities</button>
+        <button onclick="filterOmnisearchType('emergency')" class="bg-red-950/80 hover:bg-red-900 text-red-300 px-2.5 py-1 rounded-lg shrink-0 border border-red-800">🚨 Emergency</button>
+        <button onclick="filterOmnisearchType('portal')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg shrink-0">🧭 Portals</button>
+      </div>
+
+      <!-- Results List -->
+      <div id="modal-omnisearch-results" class="flex-1 overflow-y-auto divide-y divide-slate-800/80 p-2 text-xs custom-scroll max-h-96">
+        <!-- Rendered dynamically via handleOmnisearchInput -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL: FULL CIVIC DIRECTORY & SITEMAP MODAL                             -->
+  <!-- ======================================================================= -->
+  <div id="sitemap-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden" onclick="if(event.target===this) closeSitemapModal()">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-300 max-w-4xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="bg-slate-900 p-5 text-white flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold">
+            <i data-lucide="sitemap" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Official Municipal Directory</span>
+            <h3 class="text-base font-bold text-white mt-0.5">Gondar SmartCivic Comprehensive Sitemap</h3>
+          </div>
+        </div>
+        <button onclick="closeSitemapModal()" class="text-slate-400 hover:text-white text-2xl font-bold">&times;</button>
+      </div>
+
+      <!-- Sitemap Body -->
+      <div class="p-6 overflow-y-auto custom-scroll text-xs space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5 text-emerald-800">
+              <i data-lucide="phone-call" class="w-4 h-4 text-emerald-600"></i> Citizen Ingestion
+            </h4>
+            <ul class="space-y-2 text-slate-600">
+              <li><button onclick="closeSitemapModal(); toggleSimulator(true);" class="hover:text-emerald-700 text-left">• USSD (*840#) Menu</button></li>
+              <li><button onclick="closeSitemapModal(); toggleSimulator(true); setSimTab('sms');" class="hover:text-emerald-700 text-left">• SMS (8065) Shortcode</button></li>
+              <li><button onclick="closeSitemapModal(); toggleSimulator(true); setSimTab('ivr');" class="hover:text-emerald-700 text-left">• Voice Hotline (8400) IVR</button></li>
+              <li><button onclick="closeSitemapModal(); navigateTo('report');" class="hover:text-emerald-700 text-left">• Spatial Web GIS Form</button></li>
+              <li><button onclick="closeSitemapModal(); openFloodSosModal();" class="text-red-600 font-bold hover:underline text-left">• 🚨 Flash Flood SOS</button></li>
+            </ul>
+          </div>
+
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5 text-sky-800">
+              <i data-lucide="map-pin" class="w-4 h-4 text-sky-600"></i> 12 Gondar Sub-Cities
+            </h4>
+            <ul class="space-y-1.5 text-slate-600">
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Fasil');" class="hover:text-sky-700 text-left">• Zone 01: Fasil (ፋሲል)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Maraki');" class="hover:text-sky-700 text-left">• Zone 02: Maraki (ማራኪ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Arada');" class="hover:text-sky-700 text-left">• Zone 03: Arada (አራዳ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Azezo-Teda');" class="hover:text-sky-700 text-left">• Zone 04: Azezo-Teda (አዘዞ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Zobel');" class="hover:text-sky-700 text-left">• Zone 05: Zobel (ዞበል)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Jantekel');" class="hover:text-sky-700 text-left">• Zone 06: Jantekel (ጃንተከል)</button></li>
+            </ul>
+          </div>
+
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5 text-amber-800">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 text-amber-600"></i> Municipal Command
+            </h4>
+            <ul class="space-y-2 text-slate-600">
+              <li><button onclick="closeSitemapModal(); navigateTo('dispatch');" class="hover:text-amber-700 text-left">• Central GIS Command</button></li>
+              <li><button onclick="closeSitemapModal(); navigateTo('dispatch'); setQueueTab('emergency');" class="hover:text-amber-700 text-left">• Emergency 5-Tier Queues</button></li>
+              <li><button onclick="closeSitemapModal(); openEarlyWarningModal();" class="hover:text-amber-700 text-left">• Geofenced SMS Broadcast</button></li>
+              <li><button onclick="closeSitemapModal(); navigateTo('crew');" class="hover:text-amber-700 text-left">• Field Crew Work Orders</button></li>
+              <li><button onclick="closeSitemapModal(); navigateTo('dispatch'); setQueueTab('resolved');" class="hover:text-amber-700 text-left">• Resolution Proof Archive</button></li>
+            </ul>
+          </div>
+
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5 text-purple-800">
+              <i data-lucide="shield-check" class="w-4 h-4 text-purple-600"></i> Audits & Portals
+            </h4>
+            <ul class="space-y-2 text-slate-600">
+              <li><button onclick="closeSitemapModal(); navigateTo('track');" class="hover:text-purple-700 text-left">• Public Ticket Tracker</button></li>
+              <li><button onclick="closeSitemapModal(); navigateTo('analytics');" class="hover:text-purple-700 text-left">• Sub-City Analytics Scorecard</button></li>
+              <li><button onclick="closeSitemapModal(); navigateTo('analytics');" class="hover:text-purple-700 text-left">• SLA Latency Benchmarks</button></li>
+              <li><button onclick="closeSitemapModal(); toggleSimulator(true);" class="hover:text-purple-700 text-left">• University Defense Testbed</button></li>
+              <li><button onclick="closeSitemapModal(); toggleLanguage();" class="hover:text-purple-700 text-left">• Bilingual Language Switcher</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ======================================================================= -->
   <!-- INTERACTIVE DEFENSE SIMULATOR (MODAL)                                    -->

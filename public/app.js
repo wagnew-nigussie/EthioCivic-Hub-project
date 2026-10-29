@@ -9,6 +9,16 @@
 const TRANSLATIONS = {
   en: {
     brand_title: 'Gondar SmartCivic',
+    top_sitemap: 'Sitemap & Services',
+    nav_services: 'Services',
+    hero_search_btn: 'Find Service',
+    hero_popular_label: 'Popular:',
+    services_dir_tag: 'Official Municipal Department Directory',
+    services_dir_title: 'Municipal Public Works & Utility Services',
+    services_dir_sub: 'Direct dispatch to municipal authorities, emergency services, and field maintenance teams',
+    sitemap_tag: 'Platform Architecture & Civic Directory',
+    sitemap_header: 'Official Gondar SmartCivic Sitemap',
+    sitemap_sub: 'Comprehensive navigational blueprint connecting citizens, municipal authorities, and field crews across all 12 zones.',
     back_to_overview: '← Back to Overview',
 
     // Target Audience (Rule 3)
@@ -2530,5 +2540,290 @@ function toggleFaq(index) {
   } else {
     ans.classList.add('hidden');
     if (icon) icon.classList.remove('rotate-180');
+  }
+}
+
+
+// ============================================================================
+// GLOBAL OMNISEARCH DATASET & DIRECTORY ENGINE
+// ============================================================================
+const OMNISEARCH_DATA = [
+  // Services
+  { type: 'service', category: 'WATER_LEAK', title: 'Water Leak / Broken Pipe Repair (GWSA)', title_am: 'የመጠጥ ውሃ ቧንቧ ብልሽት ጥገና (GWSA)', desc: 'Report burst mains, water outages, low pressure', action: () => quickReportCategory('WATER_LEAK'), icon: '💧', badge: 'GWSA' },
+  { type: 'service', category: 'POWER_OUTAGE', title: 'Power Outage / Electrical Fault (EEU)', title_am: 'የመብራት ኃይል መቋረጥ እና ብልሽት (EEU)', desc: 'Fallen cables, transformer sparks, blackout', action: () => quickReportCategory('POWER_OUTAGE'), icon: '⚡', badge: 'EEU' },
+  { type: 'service', category: 'FLOOD_EMERGENCY', title: '🚨 Flash Flood SOS & River Inundation', title_am: '🚨 አስቸኳይ የጎርፍ አደጋ ጥሪ', desc: 'Angereb & Keha river overflow, trapped residents', action: () => openFloodSosModal(), icon: '🌊', badge: 'RESCUE SOS' },
+  { type: 'service', category: 'SOLID_WASTE', title: 'Solid Waste Clearance & Sanitation', title_am: 'የደረቅ ቆሻሻ ማንሳትና ፅዳት', desc: 'Uncollected garbage heaps, blocked storm drains', action: () => quickReportCategory('SOLID_WASTE'), icon: '🗑️', badge: 'SANITATION' },
+  { type: 'service', category: 'ROAD_DAMAGE', title: 'Road Damage, Pothole & Culvert Repair', title_am: 'የመንገድና የፍሳሽ ቦይ ጥገና', desc: 'Cobblestone erosion, bridge damage, open trench', action: () => quickReportCategory('ROAD_DAMAGE'), icon: '🚧', badge: 'ROADS' },
+  { type: 'service', category: 'USSD', title: '2G Feature Phone Simulator (*840#)', title_am: 'የእጅ ባትሪ ስልክ መሞከሪያ (*840#)', desc: 'Test USSD and SMS reporting with zero internet data', action: () => toggleSimulator(true), icon: '📱', badge: 'TOLL-FREE' },
+
+  // Navigation Portals
+  { type: 'portal', title: 'Dispatch Command Center (GIS Spatial Map)', title_am: 'የGIS ካርታ መላኪያ ማዕከል', desc: 'Central municipal triage and live crew tracking', action: () => navigateTo('dispatch'), icon: '🗺️', badge: 'PORTAL' },
+  { type: 'portal', title: 'Public Ticket Resolution Tracker', title_am: 'የቲኬት ሁኔታ መከታተያ ገጽ', desc: 'Search ticket status and before/after photo proof', action: () => navigateTo('track'), icon: '🔍', badge: 'TRACKER' },
+  { type: 'portal', title: 'Sub-City Performance Analytics', title_am: 'የክፍለ ከተሞች የስራ አፈፃፀም ዳሽቦርድ', desc: 'SLA response times, failure frequency charts', action: () => navigateTo('analytics'), icon: '📊', badge: 'METRICS' },
+  { type: 'portal', title: 'Field Crew Operations Portal', title_am: 'የመስክ ጥገና ባለሙያዎች ገጽ', desc: 'Low-bandwidth work orders and repair certification', action: () => navigateTo('crew'), icon: '🛠️', badge: 'CREW' },
+  { type: 'portal', title: 'Interactive Civic Sitemap & Directory', title_am: 'የማዘጋጃ ቤት ካታሎግ እና ሳይትማፕ', desc: 'Complete 4-pillar municipal service directory', action: () => openSitemapModal(), icon: '📑', badge: 'SITEMAP' },
+
+  // 12 Gondar Sub-Cities
+  { type: 'subcity', title: 'Maraki Sub-City (ማራኪ)', code: 'GDR-SC02', desc: 'Zone 02 • University of Gondar Main Campus & Angereb Basin', action: () => jumpToSubCity('Maraki'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Fasil Sub-City (ፋሲል)', code: 'GDR-SC01', desc: 'Zone 01 • Fasil Ghebbi Imperial Castle & Historic Core', action: () => jumpToSubCity('Fasil'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Arada Sub-City (አራዳ)', code: 'GDR-SC03', desc: 'Zone 03 • Central Commercial Marketplace & Keha River', action: () => jumpToSubCity('Arada'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Azezo-Teda Sub-City (አዘዞ-ቴዳ)', code: 'GDR-SC04', desc: 'Zone 04 • Airport Corridor & Southern Residential Basin', action: () => jumpToSubCity('Azezo-Teda'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Zobel Sub-City (ዞበል)', code: 'GDR-SC05', desc: 'Zone 05 • Zobel Mountain Ridge & Eastern Expansion', action: () => jumpToSubCity('Zobel'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Jantekel Sub-City (ጃንተከል)', code: 'GDR-SC06', desc: 'Zone 06 • Historic Jantekel Escarpment & Northern Kebele', action: () => jumpToSubCity('Jantekel'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Bilajig Sub-City (ብላጅግ)', code: 'GDR-SC07', desc: 'Zone 07 • Bilajig Valley & Mixed Urban Settlement', action: () => jumpToSubCity('Bilajig'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Gubaie Sub-City (ጉባኤ)', code: 'GDR-SC08', desc: 'Zone 08 • Civic Hall & Administrative Centers', action: () => jumpToSubCity('Gubaie'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Piassa Sub-City (ፒያሳ)', code: 'GDR-SC09', desc: 'Zone 09 • Gondar Post Office, Banking & Heritage Streets', action: () => jumpToSubCity('Piassa'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Selam Sub-City (ሰላም)', code: 'GDR-SC10', desc: 'Zone 10 • Residential Suburbs & Community Health Units', action: () => jumpToSubCity('Selam'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Mintiwab Sub-City (ምንትዋብ)', code: 'GDR-SC11', desc: 'Zone 11 • Empress Mintiwab Historical Enclosure', action: () => jumpToSubCity('Mintiwab'), icon: '📍', badge: 'SUB-CITY' },
+  { type: 'subcity', title: 'Abraj Sub-City (አብራጅ)', code: 'GDR-SC12', desc: 'Zone 12 • Emerging Industrial & Logistics Corridor', action: () => jumpToSubCity('Abraj'), icon: '📍', badge: 'SUB-CITY' },
+
+  // Emergency Hotlines
+  { type: 'emergency', title: 'Gondar Fire & Flood Emergency Rescue', title_am: 'የእሳትና የጎርፍ አደጋ መከላከያ', desc: 'Direct Hotline: 939 / 8400 (Toll-Free 24/7)', action: () => alertEmergency('Fire & Rescue Hotline: 939 or 8400'), icon: '📞', badge: 'EMERGENCY: 939' },
+  { type: 'emergency', title: 'Gondar Water Authority (GWSA) Hotline', title_am: 'የውሃ ባለስልጣን የጥሪ መስመር', desc: 'Customer Service: 8065 / 058-111-2030', action: () => alertEmergency('GWSA Water Hotline: 8065'), icon: '📞', badge: 'HOTLINE: 8065' },
+  { type: 'emergency', title: 'Ethiopian Electric Utility (EEU) Emergency', title_am: 'የኤሌክትሪክ አገልግሎት የጥሪ መስመር', desc: 'National Fault Hotline: 905', action: () => alertEmergency('EEU Power Hotline: 905'), icon: '📞', badge: 'HOTLINE: 905' },
+  { type: 'emergency', title: 'Ethiopian Red Cross Society - Gondar Branch', title_am: 'የቀይ መስቀል ማህበር ጎንደር', desc: 'Ambulance & Disaster Support: 907', action: () => alertEmergency('Red Cross Ambulance: 907'), icon: '📞', badge: 'AMBULANCE: 907' },
+  { type: 'emergency', title: 'Gondar City Police Department', title_am: 'የጎንደር ከተማ ፖሊስ መምሪያ', desc: 'Emergency Dispatch: 991', action: () => alertEmergency('Police Emergency: 991'), icon: '📞', badge: 'POLICE: 991' }
+];
+
+let activeOmnisearchFilter = 'all';
+
+function handleOmnisearchInput(query, context) {
+  const containerId = context === 'global' 
+    ? 'global-omnisearch-dropdown' 
+    : (context === 'hero' ? 'hero-omnisearch-dropdown' : 'modal-omnisearch-results');
+  
+  const dropdown = document.getElementById(containerId);
+  if (!dropdown) return;
+
+  const q = (query || '').trim().toLowerCase();
+  if (!q && context !== 'modal') {
+    dropdown.classList.add('hidden');
+    return;
+  }
+
+  let matches = OMNISEARCH_DATA;
+  if (activeOmnisearchFilter !== 'all') {
+    matches = matches.filter(m => m.type === activeOmnisearchFilter);
+  }
+
+  if (q) {
+    matches = matches.filter(item => {
+      const titleMatch = item.title.toLowerCase().includes(q);
+      const titleAmMatch = item.title_am && item.title_am.toLowerCase().includes(q);
+      const descMatch = item.desc && item.desc.toLowerCase().includes(q);
+      const codeMatch = item.code && item.code.toLowerCase().includes(q);
+      const badgeMatch = item.badge && item.badge.toLowerCase().includes(q);
+      return titleMatch || titleAmMatch || descMatch || codeMatch || badgeMatch;
+    });
+  }
+
+  dropdown.classList.remove('hidden');
+
+  let ticketItemHTML = '';
+  // Check if query looks like a ticket number
+  if (q.includes('gdr') || /^\d{3,}/.test(q)) {
+    const formattedCode = q.toUpperCase().startsWith('GDR') ? q.toUpperCase() : `GDR-${q}`;
+    ticketItemHTML = `
+      <div onclick="quickTrackSampleTicket('${formattedCode}'); closeAllOmnisearch();" class="p-3 bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-200 cursor-pointer flex items-center justify-between border-b border-emerald-800 transition">
+        <div class="flex items-center gap-2.5">
+          <span class="text-base">🔍</span>
+          <div>
+            <p class="font-black text-xs text-white">Track Ticket: #${formattedCode}</p>
+            <p class="text-[10px] text-emerald-300">Search municipal public ledger for live resolution progress</p>
+          </div>
+        </div>
+        <span class="text-[10px] bg-emerald-800 text-white font-mono px-2 py-0.5 rounded font-bold">LOOKUP &rarr;</span>
+      </div>
+    `;
+  }
+
+  if (matches.length === 0 && !ticketItemHTML) {
+    dropdown.innerHTML = `
+      <div class="p-4 text-center text-slate-400 text-xs">
+        <p>No direct matches found for "<strong>${escapeHtml(query)}</strong>"</p>
+        <p class="text-[10px] text-slate-500 mt-1">Try keywords like: water, blackout, flood, maraki, hotline, or ticket code</p>
+      </div>
+    `;
+    return;
+  }
+
+  dropdown.innerHTML = ticketItemHTML + matches.slice(0, 8).map((item, index) => {
+    return `
+      <div onclick="OMNISEARCH_DATA.find(x => x.title === '${item.title.replace(/'/g, "\\'")}').action(); closeAllOmnisearch();" class="p-3 hover:bg-slate-800/90 cursor-pointer flex items-center justify-between transition group">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-base shrink-0 border border-slate-700/80 group-hover:scale-110 transition">
+            ${item.icon}
+          </span>
+          <div>
+            <p class="font-bold text-xs text-slate-100 group-hover:text-emerald-400 transition flex items-center gap-1.5">
+              <span>${currentLang === 'am' && item.title_am ? item.title_am : item.title}</span>
+            </p>
+            <p class="text-[10px] text-slate-400 mt-0.5">${item.desc}</p>
+          </div>
+        </div>
+        <span class="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${item.type === 'emergency' ? 'bg-red-950 text-red-300 border border-red-800' : 'bg-slate-800 text-slate-300 border border-slate-700'}">
+          ${item.badge}
+        </span>
+      </div>
+    `;
+  }).join('');
+}
+
+function closeAllOmnisearch() {
+  const g = document.getElementById('global-omnisearch-dropdown');
+  const h = document.getElementById('hero-omnisearch-dropdown');
+  if (g) g.classList.add('hidden');
+  if (h) h.classList.add('hidden');
+  closeOmnisearchModal();
+}
+
+// Global click outside listener to close omnisearch dropdowns
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#global-search-input') && !e.target.closest('#global-omnisearch-dropdown')) {
+    const g = document.getElementById('global-omnisearch-dropdown');
+    if (g) g.classList.add('hidden');
+  }
+  if (!e.target.closest('#hero-search-input') && !e.target.closest('#hero-omnisearch-dropdown')) {
+    const h = document.getElementById('hero-omnisearch-dropdown');
+    if (h) h.classList.add('hidden');
+  }
+});
+
+// Global Keyboard Shortcut Ctrl+K / Cmd+K
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    openOmnisearchModal();
+  }
+  if (e.key === 'Escape') {
+    closeAllOmnisearch();
+    closeSitemapModal();
+  }
+});
+
+function openOmnisearchModal() {
+  const modal = document.getElementById('omnisearch-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    const input = document.getElementById('modal-omnisearch-input');
+    if (input) {
+      input.value = '';
+      input.focus();
+      handleOmnisearchInput('', 'modal');
+    }
+  }
+}
+
+function closeOmnisearchModal() {
+  const modal = document.getElementById('omnisearch-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function filterOmnisearchType(type) {
+  activeOmnisearchFilter = type;
+  const input = document.getElementById('modal-omnisearch-input');
+  handleOmnisearchInput(input ? input.value : '', 'modal');
+}
+
+function openSitemapModal() {
+  const modal = document.getElementById('sitemap-modal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeSitemapModal() {
+  const modal = document.getElementById('sitemap-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function executeHeroSearch(val) {
+  const q = (val || '').trim();
+  if (!q) {
+    navigateTo('report');
+    return;
+  }
+  // If ticket pattern
+  if (q.includes('GDR') || /^\d{3,}/.test(q)) {
+    quickTrackSampleTicket(q);
+    return;
+  }
+  // If category matches
+  const lower = q.toLowerCase();
+  if (lower.includes('water') || lower.includes('ውሃ')) {
+    quickReportCategory('WATER_LEAK');
+  } else if (lower.includes('power') || lower.includes('electric') || lower.includes('መብራት')) {
+    quickReportCategory('POWER_OUTAGE');
+  } else if (lower.includes('flood') || lower.includes('river') || lower.includes('ጎርፍ')) {
+    openFloodSosModal();
+  } else if (lower.includes('waste') || lower.includes('trash') || lower.includes('ቆሻሻ')) {
+    quickReportCategory('SOLID_WASTE');
+  } else if (lower.includes('road') || lower.includes('pothole') || lower.includes('መንገድ')) {
+    quickReportCategory('ROAD_DAMAGE');
+  } else {
+    // Open Omnisearch modal with query
+    openOmnisearchModal();
+    const input = document.getElementById('modal-omnisearch-input');
+    if (input) {
+      input.value = q;
+      handleOmnisearchInput(q, 'modal');
+    }
+  }
+}
+
+function quickSearchTag(keyword) {
+  const input = document.getElementById('hero-search-input');
+  if (input) input.value = keyword;
+  executeHeroSearch(keyword);
+}
+
+function quickReportCategory(cat) {
+  navigateTo('report');
+  setTimeout(() => {
+    if (typeof selectCategoryCard === 'function') {
+      selectCategoryCard(cat);
+    }
+    const elem = document.getElementById('category-selector-cards');
+    if (elem) elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 250);
+}
+
+function quickTrackSampleTicket(ticketCode) {
+  navigateTo('track');
+  setTimeout(() => {
+    const input = document.getElementById('track-input');
+    if (input) {
+      input.value = ticketCode.replace('#', '');
+      queryTicketStatus();
+    }
+  }, 250);
+}
+
+function jumpToSubCity(subcityName) {
+  navigateTo('dispatch');
+  setTimeout(() => {
+    const filter = document.getElementById('filter-subcity');
+    if (filter) {
+      filter.value = subcityName;
+      applyDispatchFilters();
+    }
+    showToast(`Focused on ${subcityName} Sub-City`);
+  }, 350);
+}
+
+function alertEmergency(hotline) {
+  showToast(`Emergency Contact: ${hotline}`);
+}
+
+// Low-Vision Text Size Adjuster
+let currentTextSizeLevel = 0; // -1, 0, 1
+function adjustTextSize(delta) {
+  if (delta === 0) {
+    currentTextSizeLevel = 0;
+    document.documentElement.style.fontSize = '100%';
+    showToast('Text size reset to default (100%)');
+  } else {
+    currentTextSizeLevel = Math.max(-1, Math.min(2, currentTextSizeLevel + delta));
+    const sizes = { '-1': '90%', '0': '100%', '1': '110%', '2': '120%' };
+    document.documentElement.style.fontSize = sizes[currentTextSizeLevel] || '100%';
+    showToast(`Text size adjusted to ${sizes[currentTextSizeLevel]}`);
   }
 }
