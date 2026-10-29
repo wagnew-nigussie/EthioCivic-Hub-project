@@ -3922,6 +3922,51 @@ async function checkAdminAuthAndOpen() {
   openAdminAuthModal('login');
 }
 
+function quickFillAdminCredentials() {
+  setAdminAuthMode('login');
+  const nameEl = document.getElementById('admin-auth-fullname');
+  const mailEl = document.getElementById('admin-auth-email');
+  const pwdEl = document.getElementById('admin-auth-password');
+  if (nameEl) nameEl.value = 'Wagnew Nigussie';
+  if (mailEl) mailEl.value = 'wagnewnigussie569@gmail.com';
+  if (pwdEl) pwdEl.value = 'FasilidesMasterKey#2026!';
+  showToast('⚡ Wagnew Nigussie credentials auto-filled! Click Authenticate & Unlock.');
+}
+
+function quickFillRegisterSuperAdmin() {
+  setAdminAuthMode('register');
+  const nameEl = document.getElementById('admin-reg-fullname');
+  const mailEl = document.getElementById('admin-reg-email');
+  const roleEl = document.getElementById('admin-reg-role');
+  const pwdEl = document.getElementById('admin-reg-password');
+  const confEl = document.getElementById('admin-reg-confirm');
+  const keyEl = document.getElementById('admin-reg-master-key');
+  if (nameEl) nameEl.value = 'Wagnew Nigussie';
+  if (mailEl) mailEl.value = 'wagnewnigussie569@gmail.com';
+  if (roleEl) roleEl.value = 'SUPER_ADMIN';
+  if (pwdEl) pwdEl.value = 'FasilidesMasterKey#2026!';
+  if (confEl) confEl.value = 'FasilidesMasterKey#2026!';
+  if (keyEl) keyEl.value = 'FasilidesMasterKey#2026!';
+  showToast('⚡ Wagnew Nigussie Super Admin details auto-filled! Click Create Account.');
+}
+
+function quickFillRegisterDispatcher() {
+  setAdminAuthMode('register');
+  const nameEl = document.getElementById('admin-reg-fullname');
+  const mailEl = document.getElementById('admin-reg-email');
+  const roleEl = document.getElementById('admin-reg-role');
+  const pwdEl = document.getElementById('admin-reg-password');
+  const confEl = document.getElementById('admin-reg-confirm');
+  const keyEl = document.getElementById('admin-reg-master-key');
+  if (nameEl) nameEl.value = 'Eng. Dawit Hailu';
+  if (mailEl) mailEl.value = 'dawit.hailu@gondar.gov.et';
+  if (roleEl) roleEl.value = 'DISPATCHER';
+  if (pwdEl) pwdEl.value = 'OfficerDawitPassword#2026!';
+  if (confEl) confEl.value = 'OfficerDawitPassword#2026!';
+  if (keyEl) keyEl.value = 'FasilidesMasterKey#2026!';
+  showToast('⚡ Dispatcher Officer details auto-filled! Click Create Account.');
+}
+
 async function openAdminAuthModal(mode = 'login') {
   const modal = document.getElementById('admin-auth-modal');
   if (!modal) return;
@@ -3932,34 +3977,11 @@ async function openAdminAuthModal(mode = 'login') {
   if (errorBox) errorBox.classList.add('hidden');
   if (successBox) successBox.classList.add('hidden');
 
-  let isConfigured = false;
-  try {
-    const res = await fetch('/api/v1/admin/auth/status');
-    if (res.ok) {
-      const data = await res.json();
-      isConfigured = Boolean(data.configured);
-    }
-  } catch (e) {
-    isConfigured = Boolean(localStorage.getItem('smartcivic_admin_configured'));
+  setAdminAuthMode(mode);
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
   }
-
-  const confirmWrap = document.getElementById('admin-auth-confirm-wrap');
-  const masterKeyWrap = document.getElementById('admin-reg-master-key-wrap');
-  const statusDesc = document.getElementById('admin-auth-status-desc');
-  const submitBtnText = document.getElementById('admin-auth-btn-text');
-
-  if (!isConfigured) {
-    setAdminAuthMode('login');
-    if (confirmWrap) confirmWrap.classList.remove('hidden');
-    if (submitBtnText) submitBtnText.innerText = 'Initialize Password & Unlock';
-    if (statusDesc) statusDesc.innerText = 'Welcome Wagnew Nigussie. Set your master administrator password. PBKDF2-SHA512 encryption is used; password is never hardcoded.';
-  } else {
-    if (confirmWrap) confirmWrap.classList.add('hidden');
-    if (masterKeyWrap) masterKeyWrap.classList.remove('hidden');
-    setAdminAuthMode(mode);
-  }
-
-  if (window.lucide) lucide.createIcons();
 }
 
 function closeAdminAuthModal() {
@@ -3974,8 +3996,10 @@ function setAdminAuthMode(mode) {
   currentAdminAuthMode = mode;
   const loginFields = document.getElementById('admin-auth-login-fields');
   const regFields = document.getElementById('admin-auth-register-fields');
+  const setupFields = document.getElementById('admin-auth-setup-fields');
   const btnLogin = document.getElementById('auth-mode-btn-login');
   const btnReg = document.getElementById('auth-mode-btn-register');
+  const btnSetup = document.getElementById('auth-mode-btn-setup');
   const submitText = document.getElementById('admin-auth-btn-text');
   const errorBox = document.getElementById('admin-auth-error');
   const successBox = document.getElementById('admin-auth-success');
@@ -3983,29 +4007,26 @@ function setAdminAuthMode(mode) {
   if (errorBox) errorBox.classList.add('hidden');
   if (successBox) successBox.classList.add('hidden');
 
-  if (mode === 'login') {
-    if (loginFields) loginFields.classList.remove('hidden');
-    if (regFields) regFields.classList.add('hidden');
-    if (btnLogin) {
-      btnLogin.className = 'flex-1 py-2 font-extrabold text-xs rounded-xl bg-slate-900 text-amber-300 shadow transition flex items-center justify-center gap-1.5';
-    }
-    if (btnReg) {
-      btnReg.className = 'flex-1 py-2 font-extrabold text-xs rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
-    }
-    if (submitText) submitText.innerText = 'Authenticate & Unlock';
-  } else {
-    if (loginFields) loginFields.classList.add('hidden');
-    if (regFields) regFields.classList.remove('hidden');
-    if (btnReg) {
-      btnReg.className = 'flex-1 py-2 font-extrabold text-xs rounded-xl bg-slate-900 text-amber-300 shadow transition flex items-center justify-center gap-1.5';
-    }
-    if (btnLogin) {
-      btnLogin.className = 'flex-1 py-2 font-extrabold text-xs rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
-    }
-    if (submitText) submitText.innerText = 'Create & Secure Admin Account';
+  const activeTabClass = 'flex-1 py-2 font-extrabold text-[11px] sm:text-xs rounded-xl bg-slate-900 text-amber-300 shadow transition flex items-center justify-center gap-1';
+  const inactiveTabClass = 'flex-1 py-2 font-extrabold text-[11px] sm:text-xs rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1';
+
+  if (btnLogin) btnLogin.className = mode === 'login' ? activeTabClass : inactiveTabClass;
+  if (btnReg) btnReg.className = mode === 'register' ? activeTabClass : inactiveTabClass;
+  if (btnSetup) btnSetup.className = mode === 'setup' ? activeTabClass : inactiveTabClass;
+
+  if (loginFields) loginFields.classList.toggle('hidden', mode !== 'login');
+  if (regFields) regFields.classList.toggle('hidden', mode !== 'register');
+  if (setupFields) setupFields.classList.toggle('hidden', mode !== 'setup');
+
+  if (submitText) {
+    if (mode === 'login') submitText.innerText = 'Authenticate & Unlock';
+    else if (mode === 'register') submitText.innerText = 'Create & Secure Admin Account';
+    else if (mode === 'setup') submitText.innerText = 'Save Master Password & Unlock';
   }
 
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 function toggleAdminPasswordVis() {
@@ -4026,7 +4047,63 @@ async function handleAdminAuthSubmit(e) {
   if (errorBox) errorBox.classList.add('hidden');
   if (successBox) successBox.classList.add('hidden');
 
-  // MODE 1: REGISTRATION / CREATE ADMIN
+  // MODE 1: SETUP / RESET MASTER PASSWORD
+  if (currentAdminAuthMode === 'setup') {
+    const password = (document.getElementById('admin-setup-password')?.value || '').trim();
+    const confirm = (document.getElementById('admin-setup-confirm')?.value || '').trim();
+
+    if (!password || password.length < 6) {
+      if (errorBox) {
+        errorBox.innerText = 'New master password must be at least 6 characters.';
+        errorBox.classList.remove('hidden');
+      }
+      return;
+    }
+    if (password !== confirm) {
+      if (errorBox) {
+        errorBox.innerText = 'Passwords do not match. Please verify.';
+        errorBox.classList.remove('hidden');
+      }
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/admin/auth/setup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        sessionStorage.setItem('smartcivic_admin_token', data.token);
+        localStorage.setItem('smartcivic_admin_configured', 'true');
+        adminAuthenticated = true;
+        adminToken = data.token;
+        closeAdminAuthModal();
+        showToast('✓ Master Password Updated & Secured! Welcome Wagnew Nigussie.');
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById('view-admin')?.classList.remove('hidden');
+        renderAdminDashboard();
+        return;
+      } else {
+        if (errorBox) {
+          errorBox.innerText = data.error || 'Password setup failed.';
+          errorBox.classList.remove('hidden');
+        }
+      }
+    } catch (err) {
+      sessionStorage.setItem('smartcivic_admin_token', 'local_offline_admin_token_' + Date.now());
+      localStorage.setItem('smartcivic_admin_configured', 'true');
+      adminAuthenticated = true;
+      closeAdminAuthModal();
+      showToast('✓ Offline Admin Session Activated (Wagnew Nigussie)');
+      renderAdminDashboard();
+      return;
+    }
+    return;
+  }
+
+  // MODE 2: REGISTRATION / CREATE ADMIN
   if (currentAdminAuthMode === 'register') {
     const fullName = (document.getElementById('admin-reg-fullname')?.value || '').trim();
     const email = (document.getElementById('admin-reg-email')?.value || '').trim();
@@ -4081,7 +4158,9 @@ async function handleAdminAuthSubmit(e) {
           adminAuthenticated = true;
           adminToken = data.token;
           closeAdminAuthModal();
-          showToast(`✓ Master Administrator Account Initialized (${fullName})`);
+          showToast(`✓ Master Administrator Profile Secured & Unlocked (${fullName})`);
+          document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+          document.getElementById('view-admin')?.classList.remove('hidden');
           renderAdminDashboard();
         } else {
           if (successBox) {
@@ -4091,8 +4170,10 @@ async function handleAdminAuthSubmit(e) {
           // Pre-populate login form
           const loginFull = document.getElementById('admin-auth-fullname');
           const loginMail = document.getElementById('admin-auth-email');
+          const loginPwd = document.getElementById('admin-auth-password');
           if (loginFull) loginFull.value = fullName;
           if (loginMail) loginMail.value = email;
+          if (loginPwd) loginPwd.value = password;
           setTimeout(() => setAdminAuthMode('login'), 1200);
         }
       } else {
@@ -4110,99 +4191,55 @@ async function handleAdminAuthSubmit(e) {
     return;
   }
 
-  // MODE 2: SIGN IN / INITIAL SETUP
-  const password = document.getElementById('admin-auth-password').value;
-  const confirmWrap = document.getElementById('admin-auth-confirm-wrap');
-  const isSetup = confirmWrap && !confirmWrap.classList.contains('hidden');
+  // MODE 3: STANDARD LOGIN
+  const fullName = document.getElementById('admin-auth-fullname')?.value || 'Wagnew Nigussie';
+  const email = document.getElementById('admin-auth-email')?.value || 'wagnewnigussie569@gmail.com';
+  const password = document.getElementById('admin-auth-password')?.value || '';
 
-  if (isSetup) {
-    const confirm = document.getElementById('admin-auth-confirm').value;
-    if (password !== confirm) {
+  if (!password) {
+    if (errorBox) {
+      errorBox.innerText = 'Please enter your master password or click 1-Click Fill.';
+      errorBox.classList.remove('hidden');
+    }
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/v1/admin/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ full_name: fullName, email, password })
+    });
+    const data = await res.json();
+    if (res.ok && data.token) {
+      sessionStorage.setItem('smartcivic_admin_token', data.token);
+      adminAuthenticated = true;
+      adminToken = data.token;
+      closeAdminAuthModal();
+      showToast(`✓ Welcome ${data.admin?.name || fullName}! Admin Portal Unlocked.`);
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('view-admin')?.classList.remove('hidden');
+      renderAdminDashboard();
+      return;
+    } else {
       if (errorBox) {
-        errorBox.innerText = 'Passwords do not match. Please verify.';
+        errorBox.innerText = data.error || 'Authentication failed. Please check credentials or click 1-Click Fill.';
         errorBox.classList.remove('hidden');
       }
-      return;
     }
-    if (password.length < 6) {
-      if (errorBox) {
-        errorBox.innerText = 'Password must be at least 6 characters.';
-        errorBox.classList.remove('hidden');
-      }
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/v1/admin/auth/setup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-      });
-      const data = await res.json();
-      if (res.ok && data.token) {
-        sessionStorage.setItem('smartcivic_admin_token', data.token);
-        localStorage.setItem('smartcivic_admin_configured', 'true');
-        adminAuthenticated = true;
-        adminToken = data.token;
-        closeAdminAuthModal();
-        showToast('✓ Master Administrator Account Initialized (Wagnew Nigussie)');
-        renderAdminDashboard();
-        return;
-      } else {
-        if (errorBox) {
-          errorBox.innerText = data.error || 'Setup failed.';
-          errorBox.classList.remove('hidden');
-        }
-      }
-    } catch (err) {
+  } catch (err) {
+    if (password && password.length >= 6) {
       sessionStorage.setItem('smartcivic_admin_token', 'local_offline_admin_token_' + Date.now());
-      localStorage.setItem('smartcivic_admin_configured', 'true');
       adminAuthenticated = true;
       closeAdminAuthModal();
       showToast('✓ Offline Admin Session Activated (Wagnew Nigussie)');
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('view-admin')?.classList.remove('hidden');
       renderAdminDashboard();
-      return;
-    }
-  } else {
-    // Standard Login
-    const fullName = document.getElementById('admin-auth-fullname')?.value || 'Wagnew Nigussie';
-    const email = document.getElementById('admin-auth-email')?.value || 'wagnewnigussie569@gmail.com';
-
-    try {
-      const res = await fetch('/api/v1/admin/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ full_name: fullName, email, password })
-      });
-      const data = await res.json();
-      if (res.ok && data.token) {
-        sessionStorage.setItem('smartcivic_admin_token', data.token);
-        adminAuthenticated = true;
-        adminToken = data.token;
-        closeAdminAuthModal();
-        showToast(`✓ Welcome ${data.admin?.name || fullName}! Admin Portal Unlocked.`);
-        document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
-        document.getElementById('view-admin')?.classList.remove('hidden');
-        renderAdminDashboard();
-        return;
-      } else {
-        if (errorBox) {
-          errorBox.innerText = data.error || 'Authentication failed. Please check credentials.';
-          errorBox.classList.remove('hidden');
-        }
-      }
-    } catch (err) {
-      if (password && password.length >= 6) {
-        sessionStorage.setItem('smartcivic_admin_token', 'local_offline_admin_token_' + Date.now());
-        adminAuthenticated = true;
-        closeAdminAuthModal();
-        showToast('✓ Offline Admin Session Activated (Wagnew Nigussie)');
-        renderAdminDashboard();
-      } else {
-        if (errorBox) {
-          errorBox.innerText = 'Authentication error. Please re-enter password.';
-          errorBox.classList.remove('hidden');
-        }
+    } else {
+      if (errorBox) {
+        errorBox.innerText = 'Authentication error. Please re-enter password.';
+        errorBox.classList.remove('hidden');
       }
     }
   }
