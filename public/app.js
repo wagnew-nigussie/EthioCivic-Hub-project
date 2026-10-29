@@ -108,8 +108,8 @@ const TRANSLATIONS = {
     hero_btn_report: 'Report Incident Online',
     hero_btn_sim: 'Simulate USSD *840# & Call',
     castle_heritage: 'UNESCO World Heritage',
-    castle_name: 'Fasilides Castle (የፋሲል ግቢ ካስል) - Gondar, Ethiopia',
-    castle_caption: 'The historic royal seat of Emperor Fasilides, serving as the proud civic heart and municipal inspiration for Gondar SmartCivic.',
+    castle_name: '🏰 Fasilides Castle • Gondar',
+    castle_caption: 'Gondar, Ethiopia',
 
     // Statistics Counters
     stat_total_label: 'Total Registered',
@@ -370,8 +370,8 @@ const TRANSLATIONS = {
     hero_btn_report: 'አሁን በመስመር ላይ ሪፖርት ያድርጉ',
     hero_btn_sim: 'የ *840# እና የስልክ ጥሪ ይሞክሩ',
     castle_heritage: 'የዩኔስኮ የዓለም ቅርስ',
-    castle_name: 'የፋሲል ግቢ ካስል (Fasilides Castle) - ጎንደር፣ ኢትዮጵያ',
-    castle_caption: 'በአፄ ፋሲለደስ የተገነባው ታሪካዊው ቤተ-መንግስት የጎንደር ስማርት ሲቪክ ስርዓት ዋና መነሳሻና ኩራት ነው።',
+    castle_name: '🏰 የፋሲል ግቢ ካስል • ጎንደር',
+    castle_caption: 'ጎንደር፣ ኢትዮጵያ',
 
     // Statistics Counters
     stat_total_label: 'ጠቅላላ የተመዘገቡ',
@@ -743,54 +743,21 @@ function renderLandingSubCities() {
   if (!container) return;
 
   container.innerHTML = SUB_CITIES.map(sc => `
-    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-950/10 hover:-translate-y-1.5 transition-all duration-300 group flex flex-col justify-between">
-      <!-- Sub-City Authentic Photographic Showcase -->
-      <div class="h-32 overflow-hidden relative">
-        <img src="${sc.image}" alt="${sc.name}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/images/gondar_fasiledes_castle.jpg';" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-        
-        <!-- #01 .. #12 Index & Zone Code Badge -->
-        <div class="absolute top-2 left-2 flex items-center gap-1">
-          <span class="font-mono text-[10px] font-black bg-slate-950/85 text-amber-300 px-2 py-0.5 rounded-md border border-slate-700/80 backdrop-blur shadow-sm">
-            #${sc.id < 10 ? '0' + sc.id : sc.id}
-          </span>
-          <span class="font-mono text-[9px] font-bold bg-slate-900/70 text-slate-300 px-1.5 py-0.5 rounded backdrop-blur hidden sm:inline-block">
-            ${sc.code}
-          </span>
-        </div>
-        
-        <!-- Live GIS Coverage Status Badge -->
-        <span class="absolute top-2 right-2 flex items-center gap-1 bg-emerald-950/80 border border-emerald-400/50 text-emerald-300 text-[9px] font-black px-2 py-0.5 rounded-full backdrop-blur shadow-sm">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>GIS Active</span>
-        </span>
+    <div onclick="quickFilterSubCity('${sc.name}')" 
+         class="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-slate-200/90 h-36 sm:h-40 bg-slate-900"
+         title="${currentLang === 'am' ? sc.name_am : sc.name} (${sc.name}) - Click for GIS View">
+      <img src="${sc.image}" alt="${sc.name}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/images/gondar_fasiledes_castle.jpg';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+      
+      <!-- Top Zone Badge -->
+      <span class="absolute top-2 left-2 bg-slate-950/80 backdrop-blur text-amber-300 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/10">
+        #${sc.id < 10 ? '0' + sc.id : sc.id}
+      </span>
 
-        <!-- Primary Subcity Name Overlay -->
-        <div class="absolute bottom-2 left-3 right-3 text-white">
-          <h4 class="font-black text-sm tracking-tight drop-shadow-md group-hover:text-amber-300 transition flex items-baseline justify-between">
-            <span>${currentLang === 'am' ? sc.name_am : sc.name}</span>
-            <span class="text-[10px] font-semibold text-slate-300 drop-shadow">${currentLang === 'am' ? sc.name : sc.name_am}</span>
-          </h4>
-        </div>
-      </div>
-
-      <!-- Card Body Content -->
-      <div class="p-3.5 bg-white rounded-b-3xl flex-1 flex flex-col justify-between space-y-2.5">
-        <div>
-          <p class="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">
-            ${currentLang === 'am' ? sc.desc_am : sc.desc}
-          </p>
-        </div>
-
-        <!-- Quick Contextual Actions -->
-        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-          <button onclick="quickFilterSubCity('${sc.name}')" class="text-emerald-600 hover:text-emerald-700 font-extrabold flex items-center gap-0.5 transition group-hover:translate-x-0.5">
-            <span>${currentLang === 'am' ? 'በካርታ እይ' : 'GIS View'}</span> &rarr;
-          </button>
-          <button onclick="quickReportForSubCity('${sc.name}')" class="text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 px-2 py-0.5 rounded-md font-bold transition">
-            + ${currentLang === 'am' ? 'ሪፖርት' : 'Report'}
-          </button>
-        </div>
+      <!-- Bottom Subcity Name (Clear & Simple, Zero Clutter) -->
+      <div class="absolute bottom-2 left-2.5 right-2.5 text-white">
+        <p class="font-black text-sm drop-shadow leading-tight group-hover:text-amber-300 transition">${currentLang === 'am' ? sc.name_am : sc.name}</p>
+        <p class="text-[10px] text-slate-300 font-medium drop-shadow">${currentLang === 'am' ? sc.name : sc.name_am}</p>
       </div>
     </div>
   `).join('');
@@ -1235,32 +1202,31 @@ function renderPublicFeed() {
     const cardPhoto = ticket.photo_before || getCategoryPhoto(ticket.category);
 
     return `
-      <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-        <div class="h-36 overflow-hidden relative">
+      <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div class="h-32 overflow-hidden relative">
           <img src="${cardPhoto}" alt="${ticket.title}" onerror="this.onerror=null; this.src='/images/categories/water_leak.svg';" class="w-full h-full object-cover">
-          <span class="absolute top-3 right-3 text-[11px] font-bold px-2.5 py-1 rounded-full ${badgeColor} shadow">
+          <span class="absolute top-2.5 right-2.5 text-[10px] font-black px-2 py-0.5 rounded-full ${badgeColor} shadow">
             ${ticket.status}
           </span>
-          <span class="absolute bottom-2 left-3 font-mono font-bold text-xs text-white bg-slate-950/70 px-2 py-0.5 rounded backdrop-blur">
+          <span class="absolute bottom-2 left-2.5 font-mono font-bold text-[11px] text-white bg-slate-950/80 px-2 py-0.5 rounded backdrop-blur">
             #${ticket.ticket_code}
           </span>
         </div>
 
-        <div class="p-5 flex-1 flex flex-col justify-between">
+        <div class="p-3.5 flex-1 flex flex-col justify-between">
           <div>
-            <h4 class="font-bold text-sm text-slate-900 line-clamp-1">${ticket.title}</h4>
-            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i>
-              ${ticket.sub_city} • ${ticket.landmark_description || 'Gondar City'}
+            <h4 class="font-bold text-sm text-slate-900 truncate">${ticket.title}</h4>
+            <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
+              <i data-lucide="map-pin" class="w-3 h-3 text-slate-400"></i>
+              <span>${ticket.sub_city}</span>
             </p>
-            <p class="text-xs text-slate-600 mt-2 line-clamp-2">${ticket.description}</p>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-            <span class="flex items-center gap-1 font-semibold text-slate-600">
-              <i data-lucide="radio" class="w-3 h-3 text-emerald-600"></i> ${ticket.channel_origin}
+          <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-[11px] text-slate-500 font-medium">
+              ${ticket.channel_origin}
             </span>
-            <button onclick="trackSpecificTicket('${ticket.ticket_code}')" class="font-bold text-emerald-600 hover:underline">
+            <button onclick="trackSpecificTicket('${ticket.ticket_code}')" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline">
               ${currentLang === 'am' ? 'ተከታተል' : 'Track'} &rarr;
             </button>
           </div>
