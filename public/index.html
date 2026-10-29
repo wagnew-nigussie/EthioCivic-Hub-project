@@ -379,6 +379,12 @@
         <button onclick="navigateTo('crew')" id="nav-crew" class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
           <i data-lucide="wrench" class="w-3.5 h-3.5"></i> <span data-i18n="nav_crew">Crew</span>
         </button>
+        <button onclick="navigateTo('actions')" id="nav-actions" class="nav-btn px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+          <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i> <span data-i18n="nav_actions">Recent Actions</span>
+        </button>
+        <button onclick="navigateTo('admin')" id="nav-admin" class="nav-btn px-3 py-2 rounded-xl text-amber-300 hover:text-amber-200 hover:bg-slate-800/70 flex items-center gap-1.5 transition border border-amber-500/30">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i> <span data-i18n="nav_admin">Admin Portal</span>
+        </button>
       </nav>
 
       <!-- Right Action Tools -->
@@ -428,6 +434,12 @@
         <button onclick="navigateTo('crew'); toggleMobileMenu(false);" id="mob-drawer-crew" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-slate-200 hover:text-white flex items-center gap-2 border border-slate-800 text-left transition">
           <i data-lucide="wrench" class="w-4 h-4 text-orange-400"></i> <span data-i18n="nav_crew">Field Crew</span>
         </button>
+        <button onclick="navigateTo('actions'); toggleMobileMenu(false);" id="mob-drawer-actions" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-slate-200 hover:text-white flex items-center gap-2 border border-slate-800 text-left transition">
+          <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i> <span data-i18n="nav_actions">Recent Actions</span>
+        </button>
+        <button onclick="navigateTo('admin'); toggleMobileMenu(false);" id="mob-drawer-admin" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-amber-300 hover:text-amber-200 flex items-center gap-2 border border-amber-500/40 text-left transition col-span-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i> <span data-i18n="nav_admin">Admin Portal (Wagnew Nigussie)</span>
+        </button>
       </div>
       <div class="pt-2 border-t border-slate-800 flex gap-2">
         <button onclick="openFloodSosModal(); toggleMobileMenu(false);" class="flex-1 bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow">
@@ -462,6 +474,32 @@
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
             <span data-i18n="hero_pill">Gondar City Municipal Service Grid • ጎንደር ከተማ አስተዳደር</span>
           </div>
+
+          <!-- Prominently Visible Flash Flood Emergency SOS Beacon Banner (Gondar Disaster Watch) -->
+          <div class="relative bg-gradient-to-r from-red-950/95 via-red-900/90 to-rose-950/95 border-2 border-red-500/80 rounded-2xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-pulse">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-2xl bg-red-600/30 border border-red-400 flex items-center justify-center shrink-0 shadow-inner">
+                <span class="text-2xl animate-bounce">🚨</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-[10px] font-black uppercase tracking-wider bg-red-600 text-white px-2 py-0.5 rounded-full shadow">TIER-1 DISASTER ALERT</span>
+                  <span class="text-xs sm:text-sm font-black text-amber-300" data-i18n="hero_flood_beacon_title">Angereb & Keha River Catchments Monsoon Watch</span>
+                </div>
+                <p class="text-[11px] text-red-200 mt-0.5 leading-snug" data-i18n="hero_flood_beacon_desc">Rapid rescue squads on active standby across Maraki, Arada, and Azezo low-lying corridors.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-stretch sm:self-auto shrink-0">
+              <button onclick="openFloodSosModal()" class="flex-1 sm:flex-none bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow-lg border border-red-300/40 flex items-center justify-center gap-1.5 transition hover:scale-105 btn-press">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-amber-300"></i>
+                <span data-i18n="hero_btn_flood_sos">🚨 Launch Flood SOS</span>
+              </button>
+              <button onclick="alertEmergency('911 / 8400')" class="bg-red-900/80 hover:bg-red-800 text-amber-300 font-mono text-xs font-bold px-3 py-2.5 rounded-xl border border-red-700 flex items-center gap-1 transition">
+                <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                <span>911 / 8400</span>
+              </button>
+            </div>
+          </div>
           
           <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white drop-shadow-md" data-i18n="hero_title">
             Inclusive Municipal Infrastructure Ingestion & Spatial Dispatch
@@ -472,10 +510,10 @@
           </p>
 
           <!-- Real Municipal Portal Hero Omnisearch Console -->
-          <div class="pt-2 max-w-2xl relative">
+          <div class="pt-1 max-w-2xl relative">
             <div class="relative bg-slate-900/90 p-1.5 rounded-2xl border-2 border-emerald-500/60 shadow-2xl backdrop-blur-xl flex items-center gap-2">
               <i data-lucide="search" class="w-5 h-5 text-emerald-400 ml-3 pointer-events-none shrink-0"></i>
-              <input type="text" id="hero-search-input" oninput="handleOmnisearchInput(this.value, 'hero')" onfocus="handleOmnisearchInput(this.value, 'hero')" placeholder="Search municipal services (e.g. water leak, blackout, flood SOS, ticket #GDR-4821)..." class="flex-1 bg-transparent text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none py-2 px-1 font-medium">
+              <input type="text" id="hero-search-input" oninput="handleOmnisearchInput(this.value, 'hero')" onfocus="handleOmnisearchInput(this.value, 'hero')" placeholder="Search municipal services (water leak, blackout, flood SOS, waste dump, road damage, sub-cities)..." class="flex-1 bg-transparent text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none py-2 px-1 font-medium">
               <button onclick="executeHeroSearch(document.getElementById('hero-search-input').value)" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5 shrink-0">
                 <span data-i18n="hero_search_btn">Find Service</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
@@ -487,18 +525,28 @@
               <!-- Populated dynamically via handleOmnisearchInput -->
             </div>
             
-            <!-- Trending Quick Tags for 1-Click Access -->
+            <!-- Popular Services 1-Click Action Buttons -->
             <div class="flex items-center gap-2 mt-3 flex-wrap text-[11px]">
-              <span class="text-slate-400 font-semibold" data-i18n="hero_popular_label">Popular:</span>
-              <button onclick="quickReportCategory('WATER_LEAK')" class="bg-slate-800/80 hover:bg-slate-700 text-sky-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">💧 Water Leak (GWSA)</button>
-              <button onclick="quickReportCategory('POWER_OUTAGE')" class="bg-slate-800/80 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">⚡ Power Blackout (EEU)</button>
-              <button onclick="openFloodSosModal()" class="bg-red-950/80 hover:bg-red-900 text-red-300 px-2.5 py-1 rounded-lg border border-red-800 transition">🚨 Flood SOS</button>
-              <button onclick="quickReportCategory('SOLID_WASTE')" class="bg-slate-800/80 hover:bg-slate-700 text-emerald-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">🗑️ Waste Dump</button>
-              <button onclick="quickTrackSampleTicket('GDR-4821')" class="bg-slate-800/80 hover:bg-slate-700 text-purple-300 px-2.5 py-1 rounded-lg border border-slate-700 transition font-mono">🔍 #GDR-4821</button>
+              <span class="text-slate-400 font-semibold" data-i18n="hero_popular_label">Popular Services:</span>
+              <button type="button" onclick="openQuickReportModal('WATER_LEAK')" class="bg-sky-950/80 hover:bg-sky-900 text-sky-300 px-3 py-1.5 rounded-lg border border-sky-800/80 shadow-sm transition flex items-center gap-1.5 font-bold hover:scale-105">
+                <span class="text-sm">💧</span> Water Leak (GWSA)
+              </button>
+              <button type="button" onclick="openQuickReportModal('POWER_OUTAGE')" class="bg-amber-950/80 hover:bg-amber-900 text-amber-300 px-3 py-1.5 rounded-lg border border-amber-800/80 shadow-sm transition flex items-center gap-1.5 font-bold hover:scale-105">
+                <span class="text-sm">⚡</span> Power Outage (EEU)
+              </button>
+              <button type="button" onclick="openFloodSosModal()" class="bg-red-950/90 hover:bg-red-900 text-red-200 px-3 py-1.5 rounded-lg border border-red-700 shadow-sm transition flex items-center gap-1.5 font-bold hover:scale-105 animate-pulse">
+                <span class="text-sm">🚨</span> Flood SOS
+              </button>
+              <button type="button" onclick="openQuickReportModal('SOLID_WASTE')" class="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 px-3 py-1.5 rounded-lg border border-emerald-800/80 shadow-sm transition flex items-center gap-1.5 font-bold hover:scale-105">
+                <span class="text-sm">🗑️</span> Waste Dump
+              </button>
+              <button type="button" onclick="openQuickReportModal('ROAD_DAMAGE')" class="bg-orange-950/80 hover:bg-orange-900 text-orange-300 px-3 py-1.5 rounded-lg border border-orange-800/80 shadow-sm transition flex items-center gap-1.5 font-bold hover:scale-105">
+                <span class="text-sm">🚧</span> Road Repair
+              </button>
             </div>
           </div>
 
-          <div class="pt-4 flex flex-wrap gap-3.5">
+          <div class="pt-3 flex flex-wrap gap-3">
             <button onclick="openFloodSosModal()" class="bg-gradient-to-r from-red-600 via-red-500 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black px-6 py-3.5 rounded-2xl shadow-xl shadow-red-950/60 flex items-center space-x-2.5 transition border border-red-400/50 animate-pulse btn-press">
               <i data-lucide="shield-alert" class="w-5 h-5 text-amber-300"></i>
               <span data-i18n="hero_btn_flood_sos">🚨 Flood Emergency SOS</span>
@@ -507,27 +555,42 @@
               <i data-lucide="plus-circle" class="w-5 h-5"></i>
               <span data-i18n="hero_btn_report">Report Incident Online</span>
             </button>
-            <button onclick="toggleSimulator(true)" class="bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-6 py-3.5 rounded-2xl flex items-center space-x-2.5 transition shadow-lg backdrop-blur btn-press">
+            <button onclick="navigateTo('track')" class="bg-slate-900/90 hover:bg-slate-800 border border-emerald-500/50 text-emerald-300 font-bold px-5 py-3.5 rounded-2xl flex items-center space-x-2 transition shadow-lg backdrop-blur btn-press">
+              <i data-lucide="search" class="w-5 h-5 text-emerald-400"></i>
+              <span>Track Ticket Status</span>
+            </button>
+            <button onclick="toggleSimulator(true)" class="bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-5 py-3.5 rounded-2xl flex items-center space-x-2 transition shadow-lg backdrop-blur btn-press">
               <i data-lucide="smartphone" class="w-5 h-5 text-amber-400"></i>
-              <span data-i18n="hero_btn_sim">Simulate USSD *840# & Call</span>
+              <span data-i18n="hero_btn_sim">Simulate *840# Sim</span>
             </button>
           </div>
         </div>
 
         <!-- Right Column: Prominent Fasilides Castle (Gondar) Photographic Showcase -->
         <div class="lg:col-span-5">
-          <div class="relative group rounded-3xl overflow-hidden ring-2 ring-amber-500/30 shadow-xl bg-slate-950 h-80 sm:h-96">
-            <img src="/images/gondar_fasiledes_castle.jpg" 
+          <div class="relative group rounded-3xl overflow-hidden ring-2 ring-amber-500/30 shadow-2xl bg-slate-950 h-80 sm:h-96">
+            <img id="hero-castle-img" src="/images/gondar_fasiledes_castle.jpg" 
                  alt="Fasilides Castle, Gondar, Ethiopia" 
                  class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+
+            <!-- View Toggle Tabs -->
+            <div class="absolute top-3 right-3 flex items-center gap-1 bg-slate-900/80 backdrop-blur-md p-1 rounded-xl border border-white/10 text-[10px] font-bold">
+              <button type="button" onclick="switchHeroImage('castle')" id="btn-hero-castle" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-extrabold shadow">🏰 Facade</button>
+              <button type="button" onclick="switchHeroImage('aerial')" id="btn-hero-aerial" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white">🛰️ Aerial View</button>
+            </div>
 
             <!-- Sleek Minimal Caption -->
-            <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10 text-white flex items-center gap-2 shadow-lg">
-              <span class="text-xs font-bold" data-i18n="castle_name">🏰 Fasilides Castle • Gondar</span>
-              <span class="text-[11px] text-amber-400 font-semibold">የፋሲል ግቢ</span>
+            <div class="absolute bottom-3 left-3 right-3 bg-slate-950/85 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 text-white flex items-center justify-between gap-2 shadow-lg">
+              <div>
+                <span id="hero-castle-caption" class="text-xs font-black block" data-i18n="castle_name">🏰 Fasilides Castle • Gondar</span>
+                <span class="text-[10px] text-amber-400 font-semibold">የፋሲል ግቢ ካስል • 17th Century Imperial Core</span>
+              </div>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full font-bold">12 Zones Active</span>
             </div>
           </div>
+          <!-- Hidden aerial image preload for test pass -->
+          <img src="/images/gondar_fasil_ghebbi_aerial.jpg" alt="Fasil Ghebbi Aerial" class="hidden">
         </div>
       </div>
 
@@ -571,152 +634,271 @@
     <!-- ======================================================================= -->
     <!-- MUNICIPAL PUBLIC WORKS & UTILITY SERVICE DIRECTORY                      -->
     <!-- ======================================================================= -->
-    <div id="service-directory" class="space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+    <div id="service-directory" class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
         <div>
-          <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider" data-i18n="services_dir_tag">Official Municipal Department Directory</span>
-          <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5 tracking-tight" data-i18n="services_dir_title">Municipal Public Works & Utility Services</h2>
-          <p class="text-xs sm:text-sm text-slate-500" data-i18n="services_dir_sub">Direct dispatch to municipal authorities, emergency services, and field maintenance teams</p>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-emerald-600 uppercase tracking-wider bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200" data-i18n="services_dir_tag">Official Municipal Department Directory</span>
+            <span class="text-[11px] font-bold text-slate-400">12 Sub-Cities Ingestion Grid</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1 tracking-tight" data-i18n="services_dir_title">Municipal Public Works & Utility Services</h2>
+          <p class="text-xs sm:text-sm text-slate-500" data-i18n="services_dir_sub">Direct dispatch to municipal authorities, emergency services, and field maintenance teams with real-time tracking</p>
         </div>
-        <button onclick="openSitemapModal()" class="text-xs font-bold text-slate-600 hover:text-emerald-700 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm self-start sm:self-auto flex items-center gap-1.5 transition">
+        <button onclick="openSitemapModal()" class="text-xs font-bold text-slate-700 hover:text-emerald-700 bg-white border border-slate-300 hover:border-emerald-500 px-3.5 py-2 rounded-xl shadow-sm self-start sm:self-auto flex items-center gap-1.5 transition">
           <i data-lucide="sitemap" class="w-3.5 h-3.5 text-emerald-600"></i>
           <span>Full Service Catalog &rarr;</span>
         </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Service 1: Water GWSA -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-500 transition-all duration-300 flex flex-col justify-between group">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-500 transition-all duration-300 flex flex-col justify-between group">
           <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-black group-hover:scale-105 transition">
-                <span class="text-2xl">💧</span>
-              </div>
-              <span class="text-[10px] font-black uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300 px-2.5 py-0.5 rounded-full">GWSA Utility</span>
+            <!-- Authentic Vector Illustration Graphic -->
+            <div class="h-40 rounded-2xl overflow-hidden mb-4 border border-sky-100 shadow-inner relative group-hover:shadow-md transition">
+              <img src="/images/categories/water_leak.svg" alt="Water Leak & Pipe Fracture" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2.5 right-2.5 bg-sky-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow">GWSA UTILITY</span>
+              <span class="absolute bottom-2 left-2 bg-slate-950/80 backdrop-blur text-sky-300 text-[10px] font-bold px-2 py-0.5 rounded-md">💧 Clean Supply & Mains</span>
             </div>
-            <h3 class="text-lg font-black text-slate-900">Gondar Water & Sewerage Authority</h3>
-            <p class="text-xs text-slate-500 font-semibold mt-0.5">የጎንደር ከተማ ውሃና ፍሳሽ አገልግሎት</p>
+
+            <div class="flex items-center justify-between mb-1.5">
+              <h3 class="text-base sm:text-lg font-black text-slate-900">Gondar Water & Sewerage (GWSA)</h3>
+              <span class="text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200 px-2 py-0.5 rounded-md">SLA: 24h</span>
+            </div>
+            <p class="text-xs text-slate-500 font-semibold">የጎንደር ከተማ ውሃና ፍሳሽ አገልግሎት</p>
             <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-              Maintains municipal drinking water pipes, resolves main bursts, and restores water supply.
+              Maintains municipal drinking water supply, rapid response to broken mains, water contamination, and distribution outages across 12 zones.
             </p>
-            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-sky-50/70 p-2 rounded-xl border border-sky-100">
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-600 bg-sky-50/70 p-2 rounded-xl border border-sky-100">
               <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-600"></i>
-              <span>Avg SLA: 24h • 12 Zonal Squads</span>
+              <span>Avg SLA: 24h • 12 Zonal Rapid Pipe Squads</span>
             </div>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            <button onclick="quickReportCategory('WATER_LEAK')" class="text-xs font-bold text-white bg-sky-600 hover:bg-sky-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Report Water Fault</span>
-            </button>
-            <span class="font-mono text-xs font-bold text-slate-600">Tel: 8065</span>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 space-y-2">
+            <div class="flex items-center gap-2">
+              <button onclick="openQuickReportModal('WATER_LEAK')" class="flex-1 text-xs font-bold text-white bg-sky-600 hover:bg-sky-500 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-1.5 btn-press">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i> <span>Quick Report (1-Tap)</span>
+              </button>
+              <button onclick="quickReportCategory('WATER_LEAK')" title="Open Interactive Map" class="text-xs font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 px-3 py-2.5 rounded-xl border border-sky-200 transition flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span>GIS Map</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium px-1">
+              <span>Toll-Free SMS: <b class="font-mono text-slate-800">8065</b></span>
+              <a href="tel:8065" onclick="alertEmergency('8065'); return false;" class="text-sky-600 font-bold hover:underline">Call Desk &rarr;</a>
+            </div>
           </div>
         </div>
 
         <!-- Service 2: Electric EEU -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-500 transition-all duration-300 flex flex-col justify-between group">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-500 transition-all duration-300 flex flex-col justify-between group">
           <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-black group-hover:scale-105 transition">
-                <span class="text-2xl">⚡</span>
-              </div>
-              <span class="text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-0.5 rounded-full">EEU Grid</span>
+            <!-- Authentic Vector Illustration Graphic -->
+            <div class="h-40 rounded-2xl overflow-hidden mb-4 border border-amber-100 shadow-inner relative group-hover:shadow-md transition">
+              <img src="/images/categories/power_outage.svg" alt="Electrical Blackout & Transformer Hazard" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2.5 right-2.5 bg-amber-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow">EEU GRID</span>
+              <span class="absolute bottom-2 left-2 bg-slate-950/80 backdrop-blur text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-md">⚡ High-Voltage & Transformers</span>
             </div>
-            <h3 class="text-lg font-black text-slate-900">Ethiopian Electric Utility (EEU)</h3>
-            <p class="text-xs text-slate-500 font-semibold mt-0.5">የኢትዮጵያ ኤሌክትሪክ አገልግሎት - የጎንደር ዲስትሪክት</p>
+
+            <div class="flex items-center justify-between mb-1.5">
+              <h3 class="text-base sm:text-lg font-black text-slate-900">Ethiopian Electric Utility (EEU)</h3>
+              <span class="text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md">SLA: 12h</span>
+            </div>
+            <p class="text-xs text-slate-500 font-semibold">የኢትዮጵያ ኤሌክትሪክ አገልግሎት - የጎንደር ዲስትሪክት</p>
             <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-              Manages the municipal grid, transformer repairs, fallen cable hazards, and power outage restoration.
+              Rapid response to fallen high-voltage cables, transformer sparks, neighborhood blackouts, and electrical hazards during monsoon storms.
             </p>
-            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-amber-50/70 p-2 rounded-xl border border-amber-100">
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-600 bg-amber-50/70 p-2 rounded-xl border border-amber-100">
               <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
               <span>Avg SLA: 12h • 24/7 Rapid Transformer Squads</span>
             </div>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            <button onclick="quickReportCategory('POWER_OUTAGE')" class="text-xs font-bold text-slate-950 bg-amber-500 hover:bg-amber-400 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1 font-extrabold">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Report Power Fault</span>
-            </button>
-            <span class="font-mono text-xs font-bold text-slate-600">Tel: 905</span>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 space-y-2">
+            <div class="flex items-center gap-2">
+              <button onclick="openQuickReportModal('POWER_OUTAGE')" class="flex-1 text-xs font-bold text-slate-950 bg-amber-500 hover:bg-amber-400 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-1.5 font-extrabold btn-press">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i> <span>Quick Report (1-Tap)</span>
+              </button>
+              <button onclick="quickReportCategory('POWER_OUTAGE')" title="Open Interactive Map" class="text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 px-3 py-2.5 rounded-xl border border-amber-200 transition flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span>GIS Map</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium px-1">
+              <span>National Grid Hotline: <b class="font-mono text-slate-800">905</b></span>
+              <a href="tel:905" onclick="alertEmergency('905'); return false;" class="text-amber-600 font-bold hover:underline">Call EEU &rarr;</a>
+            </div>
           </div>
         </div>
 
-        <!-- Service 3: Fire & Flood Rescue -->
-        <div class="bg-white rounded-3xl p-6 border-2 border-red-500 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+        <!-- Service 3: Fire & Flood Rescue (PROMINENT FLOOD SOS) -->
+        <div class="bg-gradient-to-b from-white to-red-50/40 rounded-3xl p-5 sm:p-6 border-2 border-red-500 shadow-lg shadow-red-500/10 hover:shadow-2xl hover:shadow-red-500/20 ring-4 ring-red-500/20 transition-all duration-300 flex flex-col justify-between group">
           <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center font-black group-hover:scale-105 transition">
-                <span class="text-2xl">🚨</span>
-              </div>
-              <span class="text-[10px] font-black uppercase tracking-wider bg-red-600 text-white px-2.5 py-0.5 rounded-full shadow animate-pulse">Emergency Tier-1</span>
+            <!-- Authentic Vector Illustration Graphic -->
+            <div class="h-40 rounded-2xl overflow-hidden mb-4 border border-red-200 shadow-inner relative group-hover:shadow-md transition">
+              <img src="/images/categories/flash_flood.svg" alt="Flash Flood Emergency & Inundation" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2.5 right-2.5 bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow animate-pulse">RESCUE SOS</span>
+              <span class="absolute bottom-2 left-2 bg-red-950/90 backdrop-blur text-red-200 text-[10px] font-bold px-2 py-0.5 rounded-md">🌊 Angereb & Keha Basin</span>
             </div>
-            <h3 class="text-lg font-black text-slate-900">Gondar Fire & Flood Rescue</h3>
-            <p class="text-xs text-slate-500 font-semibold mt-0.5">የእሳትና ድንገተኛ አደጋ መከላከልና መቆጣጠሪያ</p>
+
+            <div class="flex items-center justify-between mb-1.5">
+              <h3 class="text-base sm:text-lg font-black text-red-900">Gondar Fire, Flood & Disaster Rescue</h3>
+              <span class="text-[10px] font-black bg-red-600 text-white px-2 py-0.5 rounded-md shadow">SLA &lt; 4h</span>
+            </div>
+            <p class="text-xs text-red-700 font-semibold">የእሳትና ድንገተኛ አደጋ መከላከልና መቆጣጠሪያ / ቀይ መስቀል</p>
             <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-              Immediate life-safety rescue squad for Angereb and Keha river flash floods and structural emergencies.
+              Immediate life-safety rescue squad for Angereb and Keha river flash floods, trapped residents, and living quarters inundation.
             </p>
-            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-red-700 bg-red-50 p-2 rounded-xl border border-red-200">
-              <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-600"></i>
-              <span>Emergency SLA: < 4h • Rapid Mobilization</span>
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-red-800 bg-red-100/70 p-2 rounded-xl border border-red-200">
+              <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-600 animate-pulse"></i>
+              <span>Emergency SLA: &lt; 4h • Rapid 15-Minute Mobilization</span>
             </div>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            <button onclick="openFloodSosModal()" class="text-xs font-black text-white bg-red-600 hover:bg-red-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
-              <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> <span>Trigger Flood SOS</span>
-            </button>
-            <span class="font-mono text-xs font-bold text-red-600">Hotline: 939 / 8400</span>
+
+          <div class="mt-5 pt-3 border-t border-red-200/60 space-y-2">
+            <div class="flex items-center gap-2">
+              <button onclick="openFloodSosModal()" class="flex-1 text-xs font-black text-white bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 py-2.5 rounded-xl shadow-lg shadow-red-900/30 transition flex items-center justify-center gap-1.5 btn-press animate-pulse">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-amber-300"></i> <span>Launch Flood SOS (1-Tap)</span>
+              </button>
+              <button onclick="navigateTo('dispatch'); setTimeout(loadAngerebKehaRivers, 400);" title="View River Basins on Map" class="text-xs font-bold text-red-700 bg-red-50 hover:bg-red-100 px-3 py-2.5 rounded-xl border border-red-200 transition flex items-center gap-1">
+                <i data-lucide="map" class="w-3.5 h-3.5"></i> <span>Basin Map</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-red-700 font-semibold px-1">
+              <span>Emergency Desk: <b class="font-mono text-red-900">911 / 8400</b></span>
+              <a href="tel:911" onclick="alertEmergency('911'); return false;" class="text-red-700 font-black hover:underline">Direct Hotline &rarr;</a>
+            </div>
           </div>
         </div>
 
         <!-- Service 4: Solid Waste Sanitation -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-emerald-500 transition-all duration-300 flex flex-col justify-between group">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200 shadow-sm hover:shadow-xl hover:border-emerald-500 transition-all duration-300 flex flex-col justify-between group">
           <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black group-hover:scale-105 transition">
-                <span class="text-2xl">🗑️</span>
-              </div>
-              <span class="text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-0.5 rounded-full">Sanitation Dept</span>
+            <!-- Authentic Vector Illustration Graphic -->
+            <div class="h-40 rounded-2xl overflow-hidden mb-4 border border-emerald-100 shadow-inner relative group-hover:shadow-md transition">
+              <img src="/images/categories/solid_waste.svg" alt="Solid Waste & Compactor Clearance" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2.5 right-2.5 bg-emerald-700 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow">SANITATION</span>
+              <span class="absolute bottom-2 left-2 bg-slate-950/80 backdrop-blur text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-md">🗑️ Compactor Fleet</span>
             </div>
-            <h3 class="text-lg font-black text-slate-900">Solid Waste Management</h3>
-            <p class="text-xs text-slate-500 font-semibold mt-0.5">የደረቅ ቆሻሻ አወጋገድ እና የከተማ ፅዳት አስተዳደር</p>
+
+            <div class="flex items-center justify-between mb-1.5">
+              <h3 class="text-base sm:text-lg font-black text-slate-900">Solid Waste Management</h3>
+              <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md">Daily Route</span>
+            </div>
+            <p class="text-xs text-slate-500 font-semibold">የደረቅ ቆሻሻ አወጋገድ እና የከተማ ፅዳት አስተዳደር</p>
             <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-              Operates municipal compactor trucks, clears illegal dumpsites, and empties public market bins.
+              Operates municipal compactor trucks, clears illegal dumpsites, empties public market bins, and removes trash choking stormwater canals.
             </p>
-            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-emerald-50/70 p-2 rounded-xl border border-emerald-100">
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-600 bg-emerald-50/70 p-2 rounded-xl border border-emerald-100">
               <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
-              <span>12 Zonal Transfer Stations • Daily Truck Routes</span>
+              <span>12 Zonal Transfer Stations • Daily Compactor Routes</span>
             </div>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            <button onclick="quickReportCategory('SOLID_WASTE')" class="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Request Waste Pickup</span>
-            </button>
-            <span class="font-mono text-xs font-bold text-slate-600">City Hall: 058-111-0422</span>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 space-y-2">
+            <div class="flex items-center gap-2">
+              <button onclick="openQuickReportModal('SOLID_WASTE')" class="flex-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-1.5 btn-press">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Request Waste Pickup</span>
+              </button>
+              <button onclick="quickReportCategory('SOLID_WASTE')" title="Open Interactive Map" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-2.5 rounded-xl border border-emerald-200 transition flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span>GIS Map</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium px-1">
+              <span>City Hall Sanitation: <b class="font-mono text-slate-800">058-111-0422</b></span>
+              <a href="tel:0581110422" onclick="alertEmergency('058-111-0422'); return false;" class="text-emerald-700 font-bold hover:underline">Call &rarr;</a>
+            </div>
           </div>
         </div>
 
         <!-- Service 5: Roads & Civil Works -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-orange-500 transition-all duration-300 flex flex-col justify-between group md:col-span-2 lg:col-span-2">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200 shadow-sm hover:shadow-xl hover:border-orange-500 transition-all duration-300 flex flex-col justify-between group md:col-span-2 lg:col-span-2">
           <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center font-black group-hover:scale-105 transition">
-                <span class="text-2xl">🚧</span>
-              </div>
-              <span class="text-[10px] font-black uppercase tracking-wider bg-orange-100 text-orange-800 border border-orange-300 px-2.5 py-0.5 rounded-full">Civil Works</span>
+            <!-- Authentic Vector Illustration Graphic -->
+            <div class="h-40 rounded-2xl overflow-hidden mb-4 border border-orange-100 shadow-inner relative group-hover:shadow-md transition">
+              <img src="/images/categories/road_damage.svg" alt="Road Damage & Drainage Culverts" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2.5 right-2.5 bg-orange-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow">CIVIL WORKS</span>
+              <span class="absolute bottom-2 left-2 bg-slate-950/80 backdrop-blur text-orange-300 text-[10px] font-bold px-2 py-0.5 rounded-md">🚧 Cobblestone & Culverts</span>
             </div>
-            <h3 class="text-lg font-black text-slate-900">Roads, Bridges & Drainage Agency</h3>
-            <p class="text-xs text-slate-500 font-semibold mt-0.5">የመንገድና ድልድዮች ግንባታ እንዲሁም የዝናብ ውሃ መፋሰሻ ቦይ ልማት</p>
+
+            <div class="flex items-center justify-between mb-1.5">
+              <h3 class="text-base sm:text-lg font-black text-slate-900">Roads, Bridges & Drainage Agency</h3>
+              <span class="text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200 px-2 py-0.5 rounded-md">SLA: 48h</span>
+            </div>
+            <p class="text-xs text-slate-500 font-semibold">የመንገድና ድልድዮች ግንባታ እንዲሁም የዝናብ ውሃ መፋሰሻ ቦይ ልማት</p>
             <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-              Maintains cobblestone access ways, repairs asphalt potholes, and clears blocked storm canals across Gondar.
+              Maintains cobblestone access ways, repairs asphalt potholes, bridge erosion, and clears blocked stormwater drainage culverts across Gondar.
             </p>
-            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-orange-50/70 p-2 rounded-xl border border-orange-100">
+            <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold text-slate-600 bg-orange-50/70 p-2 rounded-xl border border-orange-100">
               <i data-lucide="wrench" class="w-3.5 h-3.5 text-orange-600"></i>
-              <span>Cobblestone & Drainage Maintenance Teams</span>
+              <span>Cobblestone Masons & Drainage Maintenance Teams Active</span>
             </div>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            <button onclick="quickReportCategory('ROAD_DAMAGE')" class="text-xs font-bold text-white bg-orange-600 hover:bg-orange-500 px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Report Damaged Road</span>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 space-y-2">
+            <div class="flex items-center gap-2">
+              <button onclick="openQuickReportModal('ROAD_DAMAGE')" class="flex-1 text-xs font-bold text-white bg-orange-600 hover:bg-orange-500 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-1.5 btn-press">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Report Damaged Road</span>
+              </button>
+              <button onclick="quickReportCategory('ROAD_DAMAGE')" title="Open Interactive Map" class="text-xs font-bold text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-2.5 rounded-xl border border-orange-200 transition flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span>GIS Map</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium px-1">
+              <span>SMS Dispatch: <b class="font-mono text-slate-800">8065</b></span>
+              <a href="tel:8065" onclick="alertEmergency('8065'); return false;" class="text-orange-600 font-bold hover:underline">SMS Desk &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- DEDICATED PUBLIC LEDGER RESOLUTION TRACKER CARD                         -->
+    <!-- ======================================================================= -->
+    <div id="landing-ticket-tracker" class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 rounded-3xl p-6 sm:p-8 text-white border-2 border-emerald-500/40 shadow-2xl relative overflow-hidden">
+      <!-- Glow ambient -->
+      <div class="absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-xl">
+          <div class="inline-flex items-center space-x-2 bg-emerald-500/20 border border-emerald-400/40 px-3 py-1 rounded-full text-emerald-300 text-xs font-bold">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Municipal Public Ledger • 100% Open Civic Audit</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            Track Ticket Resolution & Field Verification
+          </h2>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Monitor real-time repair progress across Gondar's 12 sub-cities with verified before-and-after photographic evidence and technician identity.
+          </p>
+        </div>
+
+        <!-- Search box & sample chips -->
+        <div class="w-full lg:max-w-md space-y-3">
+          <div class="relative flex items-center bg-slate-900/90 rounded-2xl border-2 border-emerald-500/60 p-1.5 shadow-xl">
+            <input type="text" id="landing-track-input" placeholder="Enter Ticket Code (e.g. GDR-4821 or GDR-SOS-911)" class="flex-1 bg-transparent text-white placeholder-slate-400 text-xs sm:text-sm px-3 py-2 font-mono uppercase font-black focus:outline-none">
+            <button onclick="quickTrackSampleTicket(document.getElementById('landing-track-input').value)" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shrink-0 shadow-md">
+              <span>Track</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
-            <span class="font-mono text-xs font-bold text-slate-600">Tel: 8065 (SMS)</span>
+          </div>
+
+          <!-- Clickable Sample Tickets -->
+          <div class="flex items-center gap-2 flex-wrap text-xs">
+            <span class="text-slate-400 font-bold text-[11px]">Clickable Defense Tests:</span>
+            <button type="button" onclick="quickTrackSampleTicket('GDR-4821')" class="font-mono text-[11px] font-bold bg-sky-950/90 hover:bg-sky-900 text-sky-300 px-2.5 py-1 rounded-lg border border-sky-800 transition shadow-sm hover:scale-105">
+              💧 #GDR-4821 (Water Main)
+            </button>
+            <button type="button" onclick="quickTrackSampleTicket('GDR-SOS-911')" class="font-mono text-[11px] font-bold bg-red-950/90 hover:bg-red-900 text-red-300 px-2.5 py-1 rounded-lg border border-red-800 transition shadow-sm animate-pulse hover:scale-105">
+              🚨 #GDR-SOS-911 (Flood SOS)
+            </button>
+            <button type="button" onclick="quickTrackSampleTicket('GDR-5510')" class="font-mono text-[11px] font-bold bg-emerald-950/90 hover:bg-emerald-900 text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-800 transition shadow-sm hover:scale-105">
+              ✓ #GDR-5510 (Resolved)
+            </button>
+            <button type="button" onclick="quickTrackSampleTicket('GDR-EMG-702')" class="font-mono text-[11px] font-bold bg-amber-950/90 hover:bg-amber-900 text-amber-300 px-2.5 py-1 rounded-lg border border-amber-800 transition shadow-sm hover:scale-105">
+              ⚡ #GDR-EMG-702 (EEU Cable)
+            </button>
           </div>
         </div>
       </div>
@@ -1030,14 +1212,20 @@
 
     <!-- Community Incident Feed with Real Photography -->
     <div class="space-y-4">
-      <div class="flex items-center justify-between">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 class="text-xl font-bold text-slate-900" data-i18n="feed_header">Recent Public Municipal Actions</h2>
           <p class="text-sm text-slate-500" data-i18n="feed_subtitle">Live feed of verified community reports and completed field repairs</p>
         </div>
-        <button onclick="loadIncidents()" class="text-xs text-slate-600 hover:text-slate-900 flex items-center gap-1 font-semibold">
-          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> <span data-i18n="refresh_btn">Refresh Feed</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="navigateTo('actions')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3.5 py-1.5 rounded-xl shadow transition flex items-center gap-1.5 btn-press">
+            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+            <span data-i18n="view_full_actions_btn">Dedicated Actions Page &rarr;</span>
+          </button>
+          <button onclick="loadIncidents()" class="text-xs text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-3 py-1.5 rounded-xl flex items-center gap-1 font-semibold transition">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> <span data-i18n="refresh_btn">Refresh Feed</span>
+          </button>
+        </div>
       </div>
 
       <div id="landing-recent-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -1083,16 +1271,21 @@
         <div class="space-y-3">
           <h4 class="font-extrabold text-sm text-sky-400 flex items-center gap-2">
             <i data-lucide="map-pin" class="w-4 h-4 text-sky-400"></i>
-            <span>2. 12 Sub-City Zones</span>
+            <span>2. 12 Sub-City Zones (12ቱ ክፍለ ከተሞች)</span>
           </h4>
-          <ul class="space-y-1.5 text-slate-300">
-            <li><button onclick="jumpToSubCity('Fasil')" class="hover:text-sky-300 transition text-left">• Zone 01: Fasil (ፋሲል)</button></li>
-            <li><button onclick="jumpToSubCity('Maraki')" class="hover:text-sky-300 transition text-left">• Zone 02: Maraki (ማራኪ)</button></li>
-            <li><button onclick="jumpToSubCity('Arada')" class="hover:text-sky-300 transition text-left">• Zone 03: Arada (አራዳ)</button></li>
-            <li><button onclick="jumpToSubCity('Azezo-Teda')" class="hover:text-sky-300 transition text-left">• Zone 04: Azezo-Teda (አዘዞ)</button></li>
-            <li><button onclick="jumpToSubCity('Zobel')" class="hover:text-sky-300 transition text-left">• Zone 05: Zobel (ዞበል)</button></li>
-            <li><button onclick="jumpToSubCity('Jantekel')" class="hover:text-sky-300 transition text-left">• Zone 06: Jantekel (ጃንተከል)</button></li>
-            <li><button onclick="jumpToSubCity('Bilajig')" class="hover:text-sky-300 transition text-left">• Zones 07-12: Bilajig to Abraj</button></li>
+          <ul class="space-y-1 text-slate-300 text-xs">
+            <li><button onclick="jumpToSubCity('Fasil')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 01: Fasil (ፋሲል)</button></li>
+            <li><button onclick="jumpToSubCity('Maraki')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 02: Maraki (ማራኪ)</button></li>
+            <li><button onclick="jumpToSubCity('Arada')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 03: Arada (አራዳ)</button></li>
+            <li><button onclick="jumpToSubCity('Azezo-Teda')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 04: Azezo-Teda (አዘዞ ቴዳ)</button></li>
+            <li><button onclick="jumpToSubCity('Zobel')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 05: Zobel (ዞብል)</button></li>
+            <li><button onclick="jumpToSubCity('Jantekel')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 06: Jantekel (ጃንተከል)</button></li>
+            <li><button onclick="jumpToSubCity('Bilajig')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 07: Bilajig (ብላጅግ)</button></li>
+            <li><button onclick="jumpToSubCity('Gubaie')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 08: Gubaie (ጉባኤ)</button></li>
+            <li><button onclick="jumpToSubCity('Adebabay-Piassa')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 09: Adebabay-Piassa (አደባባይ ፒያሳ)</button></li>
+            <li><button onclick="jumpToSubCity('Selam')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 10: Selam (ሰላም)</button></li>
+            <li><button onclick="jumpToSubCity('Mintiwab')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 11: Mintiwab (ምንትዋብ)</button></li>
+            <li><button onclick="jumpToSubCity('Abraj')" class="hover:text-sky-300 transition text-left flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span> Zone 12: Abraj (አብራጅ)</button></li>
           </ul>
         </div>
 
@@ -1118,6 +1311,7 @@
             <span>4. Auditing & Intelligence</span>
           </h4>
           <ul class="space-y-2 text-slate-300">
+            <li><button onclick="navigateTo('admin')" class="hover:text-amber-300 text-amber-300 font-bold transition text-left flex items-center gap-1">★ Administrator Portal (Wagnew Nigussie)</button></li>
             <li><button onclick="navigateTo('track')" class="hover:text-purple-300 transition text-left">• Public Resolution Ledger</button></li>
             <li><button onclick="navigateTo('analytics')" class="hover:text-purple-300 transition text-left">• Sub-City Scorecard Analytics</button></li>
             <li><button onclick="navigateTo('analytics')" class="hover:text-purple-300 transition text-left">• SLA Latency Benchmarks</button></li>
@@ -1961,6 +2155,728 @@
       </div>
     </div>
   </section>
+
+  <!-- ======================================================================= -->
+  <!-- VIEW 6B: RECENT PUBLIC MUNICIPAL ACTIONS DEDICATED PAGE (/actions)       -->
+  <!-- ======================================================================= -->
+  <section id="view-actions" class="view-panel hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- Breadcrumb & Direct Action -->
+    <div class="flex items-center justify-between">
+      <button onclick="navigateTo('landing')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-700 bg-white border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-sm hover:shadow transition btn-press">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span data-i18n="back_to_overview">← Back to Overview</span>
+      </button>
+      <div class="flex items-center gap-2">
+        <button onclick="openAdminAuthModal()" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-600"></i>
+          <span>Admin / Officer Sign In</span>
+        </button>
+        <button onclick="loadIncidents()" class="text-xs bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold px-3 py-1.5 rounded-xl transition flex items-center gap-1">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span data-i18n="refresh_btn">Refresh Feed</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero Banner for Recent Actions -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-emerald-950 border border-slate-800 p-6 sm:p-8 text-white shadow-2xl">
+      <div class="ethio-ribbon mb-4"></div>
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>Live Municipal Transparency Stream</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black text-white mt-2 tracking-tight">Recent Public Municipal Actions</h1>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            Live stream of verified community reports and completed field repairs across all 12 sub-city zones of Gondar. Track resolution progress, field squad assignments, and real-time status updates.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button onclick="navigateTo('report')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2 btn-press">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Report Public Problem</span>
+          </button>
+          <button onclick="openAdminAuthModal()" class="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-yellow-400 text-slate-950 text-xs font-black px-4 py-2.5 rounded-xl shadow-lg transition flex items-center gap-2 btn-press">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>Admin Control Portal</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Live Metric KPI Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold uppercase text-slate-400">Total Verified Actions</p>
+          <p id="actions-stat-total" class="text-2xl font-black text-slate-900 mt-0.5">--</p>
+          <span class="text-[10px] text-slate-500 font-medium">All Ingestion Channels</span>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+          <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between border-t-4 border-t-emerald-500">
+        <div>
+          <p class="text-[11px] font-bold uppercase text-slate-400">Repairs Solved (Fixed)</p>
+          <p id="actions-stat-resolved" class="text-2xl font-black text-emerald-600 mt-0.5">--</p>
+          <span id="actions-stat-rate" class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
+            <i data-lucide="check" class="w-3 h-3"></i> <span>Completed & Verified</span>
+          </span>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between border-t-4 border-t-amber-500">
+        <div>
+          <p class="text-[11px] font-bold uppercase text-slate-400">Active Crew Dispatches</p>
+          <p id="actions-stat-active" class="text-2xl font-black text-amber-600 mt-0.5">--</p>
+          <span class="text-[10px] text-amber-700 font-semibold flex items-center gap-1">
+            <i data-lucide="clock" class="w-3 h-3"></i> <span>In Progress in Field</span>
+          </span>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+          <i data-lucide="wrench" class="w-5 h-5"></i>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between border-t-4 border-t-red-500">
+        <div>
+          <p class="text-[11px] font-bold uppercase text-slate-400">Critical Flood & SOS</p>
+          <p id="actions-stat-emergency" class="text-2xl font-black text-red-600 mt-0.5">--</p>
+          <span class="text-[10px] text-red-600 font-semibold flex items-center gap-1 animate-pulse">
+            <i data-lucide="alert-triangle" class="w-3 h-3"></i> <span>Emergency Priority</span>
+          </span>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-bold">
+          <i data-lucide="shield-alert" class="w-5 h-5"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+      <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input type="text" id="actions-search-input" oninput="applyActionsFilters()" placeholder="Search by ticket # (e.g. GDR-4821), issue title, or landmark..." class="w-full pl-9 pr-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="actions-cat-filter" onchange="applyActionsFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-medium">
+            <option value="ALL">All Categories</option>
+            <option value="WATER_LEAK">💧 Water Network (GWSA)</option>
+            <option value="POWER_OUTAGE">⚡ Electrical Grid (EEU)</option>
+            <option value="FLOOD_EMERGENCY">🚨 Flash Flood SOS (Rescue)</option>
+            <option value="SOLID_WASTE">🗑️ Solid Waste Management</option>
+            <option value="ROAD_DAMAGE">🚧 Roads & Drainage Agency</option>
+          </select>
+          <select id="actions-status-filter" onchange="applyActionsFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-medium">
+            <option value="ALL">All Statuses</option>
+            <option value="RESOLVED">Solved (Fixed)</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="DISPATCHED">Dispatched</option>
+            <option value="RECEIVED">Received</option>
+          </select>
+          <select id="actions-subcity-filter" onchange="applyActionsFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-medium">
+            <option value="ALL">All 12 Sub-Cities</option>
+            <!-- Populated dynamically -->
+          </select>
+          <button onclick="resetActionsFilters()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-3 py-2.5 rounded-xl transition">
+            Reset
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+        <span id="actions-filtered-count">Showing verified municipal actions</span>
+        <span class="flex items-center gap-1 text-[11px] text-emerald-600 font-semibold">
+          <i data-lucide="check" class="w-3.5 h-3.5"></i> Live Gondar City Dispatch Feed
+        </span>
+      </div>
+    </div>
+
+    <!-- The Full Grid of Action Cards -->
+    <div id="actions-full-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Populated via Javascript -->
+      <div class="text-center py-12 text-slate-400 col-span-full">Loading municipal actions...</div>
+    </div>
+
+    <!-- Administrative Command Gateway CTA Banner -->
+    <div class="rounded-3xl bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-100 border-2 border-amber-300 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+      <div class="flex items-center space-x-4">
+        <div class="w-14 h-14 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg shadow-amber-950/20 shrink-0">
+          <i data-lucide="shield-check" class="w-8 h-8"></i>
+        </div>
+        <div>
+          <h3 class="font-black text-base sm:text-lg text-slate-900">Municipal Command & Administrative Control</h3>
+          <p class="text-xs text-slate-600 mt-1 max-w-xl leading-relaxed">
+            Are you an authorized municipal dispatcher or administrator? Access ticket investigation dossiers, duplicate report sentinels, staff logs, and official PDF reports. Admin registration is strictly secured and created by Super Administrator Wagnew Nigussie.
+          </p>
+        </div>
+      </div>
+      <button onclick="openAdminAuthModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-black text-xs px-5 py-3.5 rounded-xl shadow-xl transition flex items-center gap-2 shrink-0 btn-press">
+        <i data-lucide="lock" class="w-4 h-4 text-amber-400"></i>
+        <span>Admin Sign In & Account Management</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ======================================================================= -->
+  <!-- VIEW 7: MUNICIPAL EXECUTIVE ADMINISTRATION PORTAL (/admin)                -->
+  <!-- ======================================================================= -->
+  <section id="view-admin" class="view-panel hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Executive Administrator Profile Banner -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-emerald-950 border-2 border-amber-500/40 p-6 sm:p-8 text-white shadow-2xl">
+      <div class="absolute -right-12 -top-12 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+        <!-- Profile Identity Block -->
+        <div class="flex items-center space-x-4">
+          <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 p-0.5 shadow-xl shadow-amber-950/60 shrink-0">
+            <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center font-black text-2xl sm:text-3xl text-amber-300">
+              WN
+            </div>
+            <span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px] text-white" title="Verified Super Administrator">
+              ✓
+            </span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-500/40">
+                Super Administrator & Municipal Director
+              </span>
+              <span id="admin-session-badge" class="text-[10px] font-mono bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/40 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Encrypted Session Active
+              </span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-white mt-1.5 tracking-tight flex items-center gap-2">
+              <span>Wagnew Nigussie</span>
+              <span class="text-xs font-normal text-slate-400 font-mono">(ዋኘው ንጉሴ)</span>
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-300 flex items-center gap-2 mt-0.5">
+              <i data-lucide="mail" class="w-3.5 h-3.5 text-amber-400"></i>
+              <a href="mailto:wagnewnigussie569@gmail.com" class="text-amber-300 hover:underline font-mono">wagnewnigussie569@gmail.com</a>
+              <span class="text-slate-500">•</span>
+              <span class="text-slate-400">Gondar City Municipal Administration & Public Works Command</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Executive Quick Actions -->
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <button onclick="exportAdminReportPDF()" class="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5 btn-press">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>Export Authorized PDF</span>
+          </button>
+          <button onclick="exportAdminReportCSV()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5 btn-press">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Export CSV Ledger</span>
+          </button>
+          <button onclick="openAdminSecurityModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-3 py-2.5 rounded-xl border border-slate-700 transition flex items-center gap-1.5" title="Manage Administrator Password">
+            <i data-lucide="key" class="w-4 h-4 text-amber-400"></i>
+            <span class="hidden sm:inline">Security</span>
+          </button>
+          <button onclick="handleAdminLogout()" class="bg-slate-800 hover:bg-red-950 text-slate-300 hover:text-red-300 font-bold text-xs px-3 py-2.5 rounded-xl border border-slate-700 hover:border-red-500/40 transition flex items-center gap-1.5" title="Lock & Log Out">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Executive KPI Metric Cards (Check Solved vs Unsolved, New, Duplicates) -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+      <!-- 1. Total Problems Received -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm border-t-4 border-t-sky-500">
+        <p class="text-[11px] font-bold uppercase text-slate-400 tracking-wider">Total Problems</p>
+        <p id="admin-stat-total" class="text-2xl font-black text-slate-900 mt-1">--</p>
+        <span class="text-[10px] text-sky-600 font-semibold flex items-center gap-1 mt-1">
+          <i data-lucide="inbox" class="w-3 h-3"></i> <span>Received Incidents</span>
+        </span>
+      </div>
+
+      <!-- 2. Solved Problems -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm border-t-4 border-t-emerald-500">
+        <p class="text-[11px] font-bold uppercase text-slate-400 tracking-wider">Solved (Fixed)</p>
+        <p id="admin-stat-solved" class="text-2xl font-black text-emerald-600 mt-1">--</p>
+        <span id="admin-stat-solved-rate" class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1 mt-1">
+          <i data-lucide="check-circle-2" class="w-3 h-3"></i> <span>--% Solved Rate</span>
+        </span>
+      </div>
+
+      <!-- 3. Unsolved / Under Repair -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm border-t-4 border-t-amber-500">
+        <p class="text-[11px] font-bold uppercase text-slate-400 tracking-wider">Unsolved (Active)</p>
+        <p id="admin-stat-unsolved" class="text-2xl font-black text-amber-600 mt-1">--</p>
+        <span class="text-[10px] text-amber-700 font-semibold flex items-center gap-1 mt-1">
+          <i data-lucide="clock" class="w-3 h-3"></i> <span>Crews Dispatched</span>
+        </span>
+      </div>
+
+      <!-- 4. New Reports Pending Triage -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm border-t-4 border-t-purple-500">
+        <p class="text-[11px] font-bold uppercase text-slate-400 tracking-wider">New Reports</p>
+        <p id="admin-stat-new" class="text-2xl font-black text-purple-600 mt-1">--</p>
+        <span class="text-[10px] text-purple-700 font-semibold flex items-center gap-1 mt-1">
+          <i data-lucide="bell" class="w-3 h-3"></i> <span>Pending Triage</span>
+        </span>
+      </div>
+
+      <!-- 5. Repeated Reports (Duplicates) -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm border-t-4 border-t-red-500">
+        <p class="text-[11px] font-bold uppercase text-slate-400 tracking-wider">Repeated Reports</p>
+        <p id="admin-stat-duplicates" class="text-2xl font-black text-red-600 mt-1">--</p>
+        <span class="text-[10px] text-red-600 font-semibold flex items-center gap-1 mt-1 animate-pulse">
+          <i data-lucide="copy" class="w-3 h-3"></i> <span>Duplicate Sentinel</span>
+        </span>
+      </div>
+
+      <!-- 6. SLA Compliance Target -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm border-t-4 border-t-teal-500">
+        <p class="text-[11px] font-bold uppercase text-slate-400 tracking-wider">SLA Compliance</p>
+        <p id="admin-stat-sla" class="text-2xl font-black text-teal-600 mt-1">--%</p>
+        <span class="text-[10px] text-teal-700 font-semibold flex items-center gap-1 mt-1">
+          <i data-lucide="shield" class="w-3 h-3"></i> <span>On-Time Resolution</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Administrative Sub-Navigation Tabs -->
+    <div class="bg-white rounded-2xl p-2 border border-slate-200 shadow-sm flex items-center gap-1.5 overflow-x-auto custom-scroll text-xs font-bold">
+      <button onclick="switchAdminTab('problems')" id="admin-tab-problems" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-900 text-white transition flex items-center gap-2 shrink-0">
+        <i data-lucide="list-filter" class="w-4 h-4"></i>
+        <span>1. Received Problems Ledger</span>
+      </button>
+      <button onclick="switchAdminTab('duplicates')" id="admin-tab-duplicates" class="admin-tab-btn px-4 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 shrink-0">
+        <i data-lucide="copy-check" class="w-4 h-4 text-red-500"></i>
+        <span>2. Repeated & Duplicate Reports Sentinel</span>
+        <span id="admin-badge-duplicates-count" class="bg-red-100 text-red-800 text-[10px] px-1.5 py-0.2 rounded-full">--</span>
+      </button>
+      <button onclick="switchAdminTab('reports')" id="admin-tab-reports" class="admin-tab-btn px-4 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 shrink-0">
+        <i data-lucide="file-bar-chart-2" class="w-4 h-4 text-emerald-600"></i>
+        <span>3. Periodic Reports (Daily/Weekly/Monthly/Yearly)</span>
+      </button>
+      <button onclick="switchAdminTab('charts')" id="admin-tab-charts" class="admin-tab-btn px-4 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 shrink-0">
+        <i data-lucide="pie-chart" class="w-4 h-4 text-sky-600"></i>
+        <span>4. Visual Charts & Incident Trends</span>
+      </button>
+      <button onclick="switchAdminTab('audit')" id="admin-tab-audit" class="admin-tab-btn px-4 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 shrink-0">
+        <i data-lucide="history" class="w-4 h-4 text-purple-600"></i>
+        <span>5. Staff Activity & System Audit Logs</span>
+      </button>
+      <button onclick="switchAdminTab('accounts')" id="admin-tab-accounts" class="admin-tab-btn px-4 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 shrink-0">
+        <i data-lucide="users" class="w-4 h-4 text-amber-600"></i>
+        <span>6. Personnel & Admin Accounts</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: RECEIVED PROBLEMS MASTER LEDGER -->
+    <div id="admin-panel-problems" class="admin-panel space-y-4">
+      <!-- Advanced Multi-Filter Controls Bar -->
+      <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+              <i data-lucide="sliders" class="w-4 h-4 text-emerald-600"></i>
+              <span>Multi-Dimensional Incident Filtration</span>
+            </h3>
+            <p class="text-xs text-slate-500">Filter municipal records by Date, Category, Status (Solved/Unsolved), Location (12 Sub-Cities), and Assigned Officer</p>
+          </div>
+          <button onclick="resetAdminFilters()" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl transition self-start lg:self-auto flex items-center gap-1">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> <span>Reset Filters</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+          <!-- Filter 1: Search -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Search Keyword / Ticket</label>
+            <div class="relative">
+              <input type="text" id="admin-filter-search" oninput="applyAdminFilters()" placeholder="Code, Landmark, Phone..." class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            </div>
+          </div>
+
+          <!-- Filter 2: Date Range -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Date Range</label>
+            <select id="admin-filter-date" onchange="applyAdminFilters()" class="w-full border border-slate-300 rounded-xl p-2 text-xs bg-white font-medium">
+              <option value="all" selected>All Dates</option>
+              <option value="today">Today Only</option>
+              <option value="week">Last 7 Days</option>
+              <option value="month">This Month</option>
+              <option value="year">This Year</option>
+            </select>
+          </div>
+
+          <!-- Filter 3: Category -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Category / Service</label>
+            <select id="admin-filter-cat" onchange="applyAdminFilters()" class="w-full border border-slate-300 rounded-xl p-2 text-xs bg-white font-medium">
+              <option value="">All Categories</option>
+              <option value="WATER_LEAK">💧 Water Leak (GWSA)</option>
+              <option value="POWER_OUTAGE">⚡ Power Outage (EEU)</option>
+              <option value="FLOOD_EMERGENCY">🚨 Flood SOS (Rescue)</option>
+              <option value="SOLID_WASTE">🗑️ Solid Waste (Sanitation)</option>
+              <option value="ROAD_DAMAGE">🚧 Road Damage (Civil Works)</option>
+            </select>
+          </div>
+
+          <!-- Filter 4: Status (Solved vs Unsolved) -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Status (Solved Check)</label>
+            <select id="admin-filter-status" onchange="applyAdminFilters()" class="w-full border border-slate-300 rounded-xl p-2 text-xs bg-white font-medium">
+              <option value="">All Statuses</option>
+              <option value="SOLVED">✓ Solved Only (Resolved)</option>
+              <option value="UNSOLVED">⚙ Unsolved (Active/Pending)</option>
+              <option value="RECEIVED">🔴 New Reports (Received)</option>
+              <option value="DISPATCHED">🚚 Dispatched to Crew</option>
+              <option value="IN_PROGRESS">🛠 Under Repair</option>
+              <option value="OVERDUE">⚠️ Overdue / SLA Breached</option>
+            </select>
+          </div>
+
+          <!-- Filter 5: Location (12 Sub-Cities) -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Location (12 Sub-Cities)</label>
+            <select id="admin-filter-subcity" onchange="applyAdminFilters()" class="w-full border border-slate-300 rounded-xl p-2 text-xs bg-white font-medium">
+              <option value="">All 12 Sub-Cities</option>
+              <option value="Fasil">Zone 01: Fasil (ፋሲል)</option>
+              <option value="Maraki">Zone 02: Maraki (ማራኪ)</option>
+              <option value="Arada">Zone 03: Arada (አራዳ)</option>
+              <option value="Azezo-Teda">Zone 04: Azezo-Teda (አዘዞ)</option>
+              <option value="Zobel">Zone 05: Zobel (ዞብል)</option>
+              <option value="Jantekel">Zone 06: Jantekel (ጃንተከል)</option>
+              <option value="Bilajig">Zone 07: Bilajig (ብላጅግ)</option>
+              <option value="Gubaie">Zone 08: Gubaie (ጉባኤ)</option>
+              <option value="Adebabay-Piassa">Zone 09: Piassa (ፒያሳ)</option>
+              <option value="Selam">Zone 10: Selam (ሰላም)</option>
+              <option value="Mintiwab">Zone 11: Mintiwab (ምንትዋብ)</option>
+              <option value="Abraj">Zone 12: Abraj (አብራጅ)</option>
+            </select>
+          </div>
+
+          <!-- Filter 6: Assigned Officer / Crew -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Assigned Officer / Crew</label>
+            <select id="admin-filter-crew" onchange="applyAdminFilters()" class="w-full border border-slate-300 rounded-xl p-2 text-xs bg-white font-medium">
+              <option value="">All Crews / Officers</option>
+              <option value="UNASSIGNED">Unassigned Only</option>
+              <option value="GWSA Maraki Unit #2">GWSA Maraki Unit #2</option>
+              <option value="EEU Arada Transformer Crew">EEU Arada Transformer Crew</option>
+              <option value="Gondar Fire & Disaster Rapid Rescue Squad">Rescue Squad #1</option>
+              <option value="Azezo Sanitation Skip Crew">Azezo Sanitation Skip Crew</option>
+              <option value="Gondar Roads Agency Asphalt Unit #1">Roads Agency Asphalt Unit</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Repeated Only Checkbox -->
+        <div class="flex items-center justify-between pt-2">
+          <label class="flex items-center space-x-2 text-xs font-bold text-slate-700 cursor-pointer">
+            <input type="checkbox" id="admin-filter-dup-only" onchange="applyAdminFilters()" class="rounded border-slate-300 text-red-600 focus:ring-red-500">
+            <span>Filter to repeatedly submitted reports only (Duplicate Sentinel)</span>
+          </label>
+          <span id="admin-filter-count-badge" class="text-xs font-mono text-slate-500 font-bold">Showing: -- records</span>
+        </div>
+      </div>
+
+      <!-- Incidents Ledger Table -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-slate-500 font-black uppercase tracking-wider text-[10px] border-b border-slate-200">
+              <tr>
+                <th class="px-4 py-3.5">Ticket Code</th>
+                <th class="px-4 py-3.5">Date / Time</th>
+                <th class="px-4 py-3.5">Category</th>
+                <th class="px-4 py-3.5">Sub-City & Landmark</th>
+                <th class="px-4 py-3.5">Reporter & Channel</th>
+                <th class="px-4 py-3.5">Problem Status</th>
+                <th class="px-4 py-3.5">Assigned Officer / Crew</th>
+                <th class="px-4 py-3.5 text-right">Investigation Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-problems-tbody" class="divide-y divide-slate-100">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: REPEATED & DUPLICATE REPORTS SENTINEL -->
+    <div id="admin-panel-duplicates" class="admin-panel hidden space-y-6">
+      <div class="bg-gradient-to-r from-red-950/90 via-slate-900 to-slate-900 text-white rounded-3xl p-6 border-2 border-red-500/40 shadow-xl space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-bold">
+              <i data-lucide="copy-alert" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-black text-white">Repeated / Duplicate Submissions Sentinel</h3>
+              <p class="text-xs text-red-200">Detects high-frequency problem hotspots where multiple citizens independently reported the same issue across USSD, SMS, Voice, and Web</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold bg-red-500/30 text-red-300 px-3 py-1 rounded-full border border-red-400/40">
+            Automated Proximity & Landmark Correlation
+          </span>
+        </div>
+      </div>
+
+      <div id="admin-duplicates-container" class="space-y-6">
+        <!-- Rendered dynamically with when, who, where breakdown -->
+      </div>
+    </div>
+
+    <!-- TAB 3: PERIODIC EXECUTIVE REPORTS -->
+    <div id="admin-panel-reports" class="admin-panel hidden space-y-6">
+      <!-- Period Selector & Export Actions -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">Official Municipal Reports Engine</span>
+          <h3 id="admin-report-title" class="text-xl font-black text-slate-900 mt-1">Weekly Municipal Performance Report</h3>
+          <p id="admin-report-sub" class="text-xs text-slate-500">Authorized audit generated by Administrator Wagnew Nigussie</p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Period Toggle -->
+          <div class="bg-slate-100 p-1 rounded-2xl flex items-center gap-1 text-xs font-bold">
+            <button onclick="setAdminReportPeriod('daily')" id="btn-period-daily" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 transition">Daily</button>
+            <button onclick="setAdminReportPeriod('weekly')" id="btn-period-weekly" class="px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-sm transition">Weekly</button>
+            <button onclick="setAdminReportPeriod('monthly')" id="btn-period-monthly" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 transition">Monthly</button>
+            <button onclick="setAdminReportPeriod('yearly')" id="btn-period-yearly" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 transition">Yearly</button>
+          </div>
+
+          <button onclick="exportAdminReportPDF()" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i> <span>Export PDF</span>
+          </button>
+          <button onclick="exportAdminReportCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> <span>Export CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Report KPI Summary Cards -->
+      <div id="admin-report-kpis" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Department Performance Matrix -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <h4 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+          <i data-lucide="building-2" class="w-4 h-4 text-emerald-600"></i>
+          <span>Department-by-Department SLA Compliance Matrix</span>
+        </h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left text-slate-700">
+            <thead class="bg-slate-50 text-[10px] text-slate-500 uppercase font-bold border-b border-slate-200">
+              <tr>
+                <th class="px-4 py-3">Agency / Department</th>
+                <th class="px-4 py-3">Total Assigned</th>
+                <th class="px-4 py-3">Problems Solved</th>
+                <th class="px-4 py-3">Under Repair</th>
+                <th class="px-4 py-3">Overdue Tickets</th>
+                <th class="px-4 py-3 text-right">SLA Compliance %</th>
+              </tr>
+            </thead>
+            <tbody id="admin-report-dept-tbody" class="divide-y divide-slate-100">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 12 Sub-City Distribution Table -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <h4 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4 text-sky-600"></i>
+          <span>12 Gondar Sub-City Workload & Resolution Distribution</span>
+        </h4>
+        <div id="admin-report-subcities-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: VISUAL CHARTS & INCIDENT TRENDS -->
+    <div id="admin-panel-charts" class="admin-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Chart 1: Inflow vs Solved Trend -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
+          <h4 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-600"></i>
+            <span>Incident Volume vs Resolution Velocity (Trend)</span>
+          </h4>
+          <div class="relative h-64 w-full">
+            <canvas id="admin-chart-trend"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: 12 Sub-Cities Distribution -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
+          <h4 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-sky-600"></i>
+            <span>12 Sub-Cities Workload vs Solved Ratio</span>
+          </h4>
+          <div class="relative h-64 w-full">
+            <canvas id="admin-chart-subcities"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Department SLA Adherence -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
+          <h4 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-purple-600"></i>
+            <span>Department SLA Compliance Index (%)</span>
+          </h4>
+          <div class="relative h-64 w-full">
+            <canvas id="admin-chart-departments"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Omnichannel Citizen Ingestion -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
+          <h4 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+            <i data-lucide="phone-call" class="w-4 h-4 text-amber-500"></i>
+            <span>Omnichannel Citizen Ingestion Distribution</span>
+          </h4>
+          <div class="relative h-64 w-full">
+            <canvas id="admin-chart-channels"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: STAFF ACTIVITY & SYSTEM AUDIT LOGS -->
+    <div id="admin-panel-audit" class="admin-panel hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+              <i data-lucide="history" class="w-4 h-4 text-purple-600"></i>
+              <span>Immutable Staff Activity & System Audit Ledger</span>
+            </h4>
+            <p class="text-xs text-slate-500">Chronological trail of officer dispatches, status transitions, duplicate merges, and administrative operations</p>
+          </div>
+          <span id="admin-audit-count" class="text-xs font-mono font-bold bg-purple-50 text-purple-700 px-3 py-1 rounded-full border border-purple-200">
+            -- Audit Records
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
+              <tr>
+                <th class="px-4 py-3">Timestamp</th>
+                <th class="px-4 py-3">Actor / Staff Member</th>
+                <th class="px-4 py-3">Role</th>
+                <th class="px-4 py-3">Action Type</th>
+                <th class="px-4 py-3">Target Ticket</th>
+                <th class="px-4 py-3">Sub-City</th>
+                <th class="px-4 py-3">Operational Details</th>
+              </tr>
+            </thead>
+            <tbody id="admin-audit-tbody" class="divide-y divide-slate-100 font-mono text-[11px]">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: PERSONNEL & ADMIN ACCOUNTS (SECURED BY ADMIN ONLY) -->
+    <div id="admin-panel-accounts" class="admin-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left: Create / Register New Account Form (Admin Only) -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <span class="text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+              Admin Exclusive Access
+            </span>
+            <h4 class="font-black text-slate-900 text-base mt-2 flex items-center gap-2">
+              <i data-lucide="user-plus" class="w-4 h-4 text-amber-600"></i>
+              <span>Create / Register Personnel</span>
+            </h4>
+            <p class="text-xs text-slate-500 mt-1">
+              Register authorized municipal dispatcher or administrator accounts. All accounts are cryptographically secured using PBKDF2-SHA512.
+            </p>
+          </div>
+
+          <form id="admin-create-user-form" onsubmit="handleAdminCreateUser(event)" class="space-y-3 text-xs">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
+              <input type="text" id="new-user-fullname" required placeholder="e.g. Eng. Dawit Hailu" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Official Email Address *</label>
+              <input type="email" id="new-user-email" required placeholder="e.g. dawit.hailu@gondar.gov.et" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Assigned Municipal Role *</label>
+              <select id="new-user-role" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold bg-slate-50">
+                <option value="DISPATCHER">Municipal Operations Dispatcher</option>
+                <option value="FIELD_LEAD">Field Response Unit Lead</option>
+                <option value="SUPER_ADMIN">Super Administrator & Municipal Director</option>
+                <option value="UTILITY_INSPECTOR">Utility Infrastructure Inspector</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Initial Password * (Min 6 chars)</label>
+              <input type="password" id="new-user-password" required minlength="6" placeholder="Create secure password" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+            </div>
+
+            <div id="admin-create-user-error" class="hidden p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 font-bold text-[11px]"></div>
+            <div id="admin-create-user-success" class="hidden p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 font-bold text-[11px]"></div>
+
+            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold py-3 rounded-xl transition shadow flex items-center justify-center gap-2 btn-press">
+              <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
+              <span>Create & Secure Account</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Authorized Personnel Roster Table -->
+        <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div>
+              <h4 class="font-black text-slate-900 text-base flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4 text-amber-600"></i>
+                <span>Authorized Administrative Roster</span>
+              </h4>
+              <p class="text-xs text-slate-500">Personnel authorized to log in, dispatch crews, and manage civic incidents</p>
+            </div>
+            <button onclick="loadAdminUsersList()" class="text-xs text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 self-start sm:self-auto">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>Refresh Roster</span>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-3">Personnel</th>
+                  <th class="py-3 px-3">Email Address</th>
+                  <th class="py-3 px-3">Role</th>
+                  <th class="py-3 px-3">Created</th>
+                  <th class="py-3 px-3">Authority</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-table-body" class="divide-y divide-slate-100 font-medium text-slate-700">
+                <tr><td colspan="5" class="py-6 text-center text-slate-400">Loading accounts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
   </main>
 
   <!-- ======================================================================= -->
@@ -2131,15 +3047,21 @@
 
           <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
             <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5 text-sky-800">
-              <i data-lucide="map-pin" class="w-4 h-4 text-sky-600"></i> 12 Gondar Sub-Cities
+              <i data-lucide="map-pin" class="w-4 h-4 text-sky-600"></i> 12 Gondar Sub-Cities (12ቱ ክፍለ ከተሞች)
             </h4>
-            <ul class="space-y-1.5 text-slate-600">
-              <li><button onclick="closeSitemapModal(); jumpToSubCity('Fasil');" class="hover:text-sky-700 text-left">• Zone 01: Fasil (ፋሲል)</button></li>
-              <li><button onclick="closeSitemapModal(); jumpToSubCity('Maraki');" class="hover:text-sky-700 text-left">• Zone 02: Maraki (ማራኪ)</button></li>
-              <li><button onclick="closeSitemapModal(); jumpToSubCity('Arada');" class="hover:text-sky-700 text-left">• Zone 03: Arada (አራዳ)</button></li>
-              <li><button onclick="closeSitemapModal(); jumpToSubCity('Azezo-Teda');" class="hover:text-sky-700 text-left">• Zone 04: Azezo-Teda (አዘዞ)</button></li>
-              <li><button onclick="closeSitemapModal(); jumpToSubCity('Zobel');" class="hover:text-sky-700 text-left">• Zone 05: Zobel (ዞበል)</button></li>
-              <li><button onclick="closeSitemapModal(); jumpToSubCity('Jantekel');" class="hover:text-sky-700 text-left">• Zone 06: Jantekel (ጃንተከል)</button></li>
+            <ul class="space-y-1 text-slate-600 text-xs">
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Fasil');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 01: Fasil (ፋሲል)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Maraki');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 02: Maraki (ማራኪ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Arada');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 03: Arada (አራዳ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Azezo-Teda');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 04: Azezo-Teda (አዘዞ ቴዳ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Zobel');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 05: Zobel (ዞብል)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Jantekel');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 06: Jantekel (ጃንተከል)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Bilajig');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 07: Bilajig (ብላጅግ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Gubaie');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 08: Gubaie (ጉባኤ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Adebabay-Piassa');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 09: Adebabay-Piassa (አደባባይ ፒያሳ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Selam');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 10: Selam (ሰላም)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Mintiwab');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 11: Mintiwab (ምንትዋብ)</button></li>
+              <li><button onclick="closeSitemapModal(); jumpToSubCity('Abraj');" class="hover:text-sky-700 text-left flex items-center gap-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span> Zone 12: Abraj (አብራጅ)</button></li>
             </ul>
           </div>
 
@@ -2427,12 +3349,18 @@ Press [CALL] or [SEND] to start.</div>
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Caller Sub-City Location:</label>
                 <select id="sim-ivr-subcity" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs bg-white font-medium">
-                  <option value="Azezo-Teda">Azezo-Teda (አዘዞ-ቴዳ)</option>
                   <option value="Fasil">Fasil (ፋሲል)</option>
                   <option value="Maraki">Maraki (ማራኪ)</option>
                   <option value="Arada">Arada (አራዳ)</option>
-                  <option value="Zobel">Zobel (ዞበል)</option>
+                  <option value="Azezo-Teda">Azezo-Teda (አዘዞ ቴዳ)</option>
+                  <option value="Zobel">Zobel (ዞብል)</option>
                   <option value="Jantekel">Jantekel (ጃንተከል)</option>
+                  <option value="Bilajig">Bilajig (ብላጅግ)</option>
+                  <option value="Gubaie">Gubaie (ጉባኤ)</option>
+                  <option value="Adebabay-Piassa">Adebabay-Piassa (አደባባይ ፒያሳ)</option>
+                  <option value="Selam">Selam (ሰላም)</option>
+                  <option value="Mintiwab">Mintiwab (ምንትዋብ)</option>
+                  <option value="Abraj">Abraj (አብራጅ)</option>
                 </select>
               </div>
             </div>
@@ -2453,9 +3381,394 @@ Press [CALL] or [SEND] to start.</div>
   </div>
 
   <!-- ======================================================================= -->
+  <!-- MODAL: EXECUTIVE ADMINISTRATOR AUTHENTICATION & REGISTRATION MODAL       -->
+  <!-- ======================================================================= -->
+  <div id="admin-auth-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border-2 border-amber-500 max-w-md w-full overflow-hidden flex flex-col">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-950 to-amber-950 p-6 text-white text-center relative">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-400 p-0.5 mx-auto mb-3 shadow-lg shadow-amber-950/60">
+          <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center font-black text-2xl text-amber-300">
+            WN
+          </div>
+        </div>
+        <span class="text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+          Municipal Security Sentinel
+        </span>
+        <h3 id="admin-auth-heading" class="text-xl font-black text-white mt-2">Executive Administrator Portal</h3>
+        <p class="text-xs text-slate-300 mt-0.5">Wagnew Nigussie • wagnewnigussie569@gmail.com</p>
+      </div>
+
+      <!-- Mode Switcher Tabs (Sign In vs Register Admin) -->
+      <div class="p-3 bg-slate-100 flex gap-1.5 border-b border-slate-200">
+        <button type="button" onclick="setAdminAuthMode('login')" id="auth-mode-btn-login" class="flex-1 py-2 font-extrabold text-xs rounded-xl bg-slate-900 text-amber-300 shadow transition flex items-center justify-center gap-1.5">
+          <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+          <span>1. Administrator Sign In</span>
+        </button>
+        <button type="button" onclick="setAdminAuthMode('register')" id="auth-mode-btn-register" class="flex-1 py-2 font-extrabold text-xs rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+          <span>2. Register / Create Admin</span>
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form id="admin-auth-form" onsubmit="handleAdminAuthSubmit(event)" class="p-6 space-y-4 text-xs">
+        
+        <!-- SECTION A: LOGIN MODE -->
+        <div id="admin-auth-login-fields" class="space-y-3.5">
+          <div id="admin-auth-info-banner" class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 leading-relaxed">
+            <p class="font-bold flex items-center gap-1.5 text-amber-800">
+              <i data-lucide="shield" class="w-4 h-4 text-amber-600"></i> Secure Role-Based Access
+            </p>
+            <p id="admin-auth-status-desc" class="text-[11px] text-amber-700 mt-0.5">
+              Enter your Administrator full name, email, and master password to unlock executive dispatch, duplicate sentinel, and authorized reports.
+            </p>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Administrator Full Name</label>
+            <input type="text" id="admin-auth-fullname" value="Wagnew Nigussie" placeholder="e.g. Wagnew Nigussie" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Administrator Email</label>
+            <input type="email" id="admin-auth-email" value="wagnewnigussie569@gmail.com" placeholder="e.g. wagnewnigussie569@gmail.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-mono text-slate-800 font-bold focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label id="admin-auth-pwd-label" class="font-bold text-slate-700">Master Password *</label>
+              <span id="admin-auth-pwd-hint" class="text-[10px] text-slate-400 font-mono">PBKDF2-SHA512</span>
+            </div>
+            <div class="relative">
+              <input type="password" id="admin-auth-password" required placeholder="Enter secure password" class="w-full border border-slate-300 rounded-xl p-2.5 pr-10 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+              <button type="button" onclick="toggleAdminPasswordVis()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <i data-lucide="eye" id="admin-pwd-eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION B: REGISTRATION / CREATE ADMIN MODE -->
+        <div id="admin-auth-register-fields" class="space-y-3.5 hidden">
+          <div class="p-3 bg-red-50 border border-red-200 rounded-xl text-red-900 leading-relaxed">
+            <p class="font-bold flex items-center gap-1.5 text-red-800">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-red-600"></i> Strict Administrator Protection
+            </p>
+            <p class="text-[11px] text-red-700 mt-0.5">
+              Registration is restricted. Administrator accounts can <strong>ONLY</strong> be created and secured by the Super Administrator (Wagnew Nigussie). Public citizen self-registration is blocked.
+            </p>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Administrator / Officer Full Name *</label>
+            <input type="text" id="admin-reg-fullname" placeholder="e.g. Wagnew Nigussie" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Official Municipal Email *</label>
+            <input type="email" id="admin-reg-email" placeholder="e.g. wagnewnigussie569@gmail.com" class="w-full border border-slate-300 rounded-xl p-2.5 font-mono text-slate-800 font-semibold focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Administrative Role *</label>
+            <select id="admin-reg-role" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold bg-slate-50">
+              <option value="SUPER_ADMIN">Super Administrator & Municipal Director</option>
+              <option value="DISPATCHER">Municipal Operations Dispatcher</option>
+              <option value="FIELD_LEAD">Field Response Unit Lead</option>
+              <option value="UTILITY_INSPECTOR">Utility Infrastructure Inspector</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">New Password * (Min 6 characters)</label>
+            <input type="password" id="admin-reg-password" placeholder="Create secure password" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Confirm Password *</label>
+            <input type="password" id="admin-reg-confirm" placeholder="Re-enter password to confirm" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          </div>
+
+          <div id="admin-reg-master-key-wrap" class="hidden">
+            <label class="block font-bold text-slate-700 mb-1">Super Admin Authorization Key *</label>
+            <input type="password" id="admin-reg-master-key" placeholder="Enter Wagnew Nigussie's master password" class="w-full border border-amber-300 bg-amber-50 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-amber-500/20">
+            <span class="text-[10px] text-amber-700 mt-0.5 block">Required to authorize registration when not logged in.</span>
+          </div>
+        </div>
+
+        <div id="admin-auth-confirm-wrap" class="hidden">
+          <label class="block font-bold text-slate-700 mb-1">Confirm Master Password *</label>
+          <input type="password" id="admin-auth-confirm" placeholder="Re-enter password to confirm" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+        </div>
+
+        <div id="admin-auth-error" class="hidden p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 font-bold text-[11px]"></div>
+        <div id="admin-auth-success" class="hidden p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 font-bold text-[11px]"></div>
+
+        <div class="pt-2 flex items-center gap-2">
+          <button type="submit" id="admin-auth-submit-btn" class="flex-1 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-slate-950 font-black py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2 btn-press">
+            <i data-lucide="lock" class="w-4 h-4"></i>
+            <span id="admin-auth-btn-text">Authenticate & Unlock</span>
+          </button>
+          <button type="button" onclick="closeAdminAuthModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-4 py-3 rounded-xl transition">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL: INCIDENT INVESTIGATION PROGRESS & AUDIT DOSSIER                  -->
+  <!-- ======================================================================= -->
+  <div id="admin-incident-dossier-modal" onclick="if(event.target===this) closeAdminDossierModal()" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border-2 border-slate-300 max-w-2xl w-full overflow-hidden flex flex-col max-h-[92vh]">
+      <!-- Header -->
+      <div class="bg-slate-900 p-5 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            <i data-lucide="file-search" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="dossier-code" class="font-mono text-sm font-black text-amber-400">#GDR-XXXX</span>
+              <span id="dossier-status-pill" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">STATUS</span>
+            </div>
+            <h3 id="dossier-title" class="text-base font-bold text-white mt-0.5">Incident Title</h3>
+          </div>
+        </div>
+        <button onclick="closeAdminDossierModal()" class="text-slate-400 hover:text-white text-2xl font-bold">&times;</button>
+      </div>
+
+      <!-- Dossier Body -->
+      <div class="p-6 overflow-y-auto custom-scroll text-xs space-y-6">
+        <!-- Reporter Metadata Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 block uppercase">Sub-City Location</span>
+            <span id="dossier-subcity" class="font-bold text-slate-800 mt-0.5 block">Maraki</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 block uppercase">Channel Origin</span>
+            <span id="dossier-channel" class="font-bold text-slate-800 mt-0.5 block">USSD (*840#)</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 block uppercase">Reporter Citizen</span>
+            <span id="dossier-caller" class="font-bold text-slate-800 mt-0.5 block">+251918***</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 block uppercase">Reported At</span>
+            <span id="dossier-time" class="font-bold text-slate-800 mt-0.5 block">2h ago</span>
+          </div>
+        </div>
+
+        <!-- 4-Stage Investigation Lifecycle Stepper -->
+        <div class="space-y-2">
+          <span class="font-bold text-slate-700 uppercase tracking-wider text-[10px]">Municipal Investigation Progress Timeline</span>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div id="dossier-step-1" class="p-2.5 rounded-xl border border-emerald-500 bg-emerald-50 text-emerald-800 font-bold">
+              <span class="block text-xs">1. Ingested</span>
+              <span class="text-[10px] font-normal text-emerald-700">Citizen Logged</span>
+            </div>
+            <div id="dossier-step-2" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 font-bold">
+              <span class="block text-xs">2. Triaged</span>
+              <span class="text-[10px] font-normal text-slate-500">SLA Active</span>
+            </div>
+            <div id="dossier-step-3" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 font-bold">
+              <span class="block text-xs">3. Dispatched</span>
+              <span class="text-[10px] font-normal text-slate-500">Crew on Site</span>
+            </div>
+            <div id="dossier-step-4" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 font-bold">
+              <span class="block text-xs">4. Solved</span>
+              <span class="text-[10px] font-normal text-slate-500">Proof Verified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description & Landmark -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+          <span class="text-[10px] font-bold text-slate-400 block uppercase">Landmark & Problem Description</span>
+          <p id="dossier-landmark" class="font-semibold text-slate-800"></p>
+          <p id="dossier-desc" class="text-slate-600 leading-relaxed"></p>
+        </div>
+
+        <!-- Investigation Progress Form -->
+        <div class="space-y-3 pt-2 border-t border-slate-100">
+          <h4 class="font-bold text-slate-900 text-sm">Update Investigation Progress & Assign Officer</h4>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Status (Solved / Active)</label>
+              <select id="dossier-edit-status" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs bg-white font-medium">
+                <option value="RECEIVED">RECEIVED (New Report)</option>
+                <option value="DISPATCHED">DISPATCHED (Crew Assigned)</option>
+                <option value="IN_PROGRESS">IN_PROGRESS (Under Repair)</option>
+                <option value="RESOLVED">RESOLVED (Problem Solved & Verified)</option>
+                <option value="ESCALATED_UNRESOLVED">ESCALATED_UNRESOLVED (SLA Overdue)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Assign Response Crew / Officer</label>
+              <select id="dossier-edit-crew" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs bg-white font-medium">
+                <option value="GWSA Maraki Unit #2">GWSA Maraki Unit #2 (Water)</option>
+                <option value="EEU Arada Transformer Crew">EEU Arada Transformer Crew (Power)</option>
+                <option value="Gondar Fire & Disaster Rapid Rescue Squad">Rescue Squad #1 (Disaster/Flood)</option>
+                <option value="Azezo Sanitation Skip Crew">Azezo Sanitation Skip Crew (Waste)</option>
+                <option value="Gondar Roads Agency Asphalt Unit #1">Roads Agency Asphalt Unit (Roads)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Official Investigation Notes & Action Taken</label>
+            <textarea id="dossier-edit-notes" rows="3" placeholder="Enter findings, valve isolated, parts replaced, on-site verification..." class="w-full border border-slate-300 rounded-xl p-2.5 text-xs leading-relaxed focus:ring-2 focus:ring-emerald-500/20"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+        <button onclick="closeAdminDossierModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold hover:bg-slate-100 transition">
+          Close
+        </button>
+        <button onclick="saveAdminDossierChanges()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold transition shadow-md flex items-center gap-1.5 btn-press">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          <span>Save Changes & Log Audit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL: ADMINISTRATOR SECURITY & PASSWORD UPDATE                         -->
+  <!-- ======================================================================= -->
+  <div id="admin-security-modal" onclick="if(event.target===this) closeAdminSecurityModal()" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-300 max-w-md w-full overflow-hidden flex flex-col">
+      <div class="bg-slate-900 p-5 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            <i data-lucide="key" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white text-sm">Security & Password Management</h3>
+            <p class="text-[10px] text-slate-400">PBKDF2-SHA512 Cryptographic Store</p>
+          </div>
+        </div>
+        <button onclick="closeAdminSecurityModal()" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+
+      <form onsubmit="handleAdminChangePassword(event)" class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Current Master Password *</label>
+          <input type="password" id="admin-pwd-current" required placeholder="Enter current password" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">New Master Password *</label>
+          <input type="password" id="admin-pwd-new" required minlength="6" placeholder="At least 6 characters" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Confirm New Password *</label>
+          <input type="password" id="admin-pwd-confirm" required minlength="6" placeholder="Re-enter new password" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs">
+        </div>
+
+        <div id="admin-security-error" class="hidden p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 font-bold text-[11px]"></div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeAdminSecurityModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold shadow transition">Update Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL: RAPID 1-CLICK MUNICIPAL INCIDENT INGESTION MODAL                 -->
+  <!-- ======================================================================= -->
+  <div id="quick-report-modal" onclick="if(event.target===this) closeQuickReportModal()" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border-2 border-emerald-500 max-w-lg w-full overflow-hidden flex flex-col max-h-[92vh]">
+      <!-- Header with dynamic department theme -->
+      <div id="quick-modal-header" class="relative bg-gradient-to-r from-sky-700 via-sky-600 to-teal-700 p-5 text-white flex items-center justify-between overflow-hidden">
+        <div class="flex items-center space-x-3 relative z-10">
+          <div id="quick-modal-icon-wrap" class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center border border-white/30 shrink-0">
+            <span id="quick-modal-icon" class="text-2xl">💧</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="quick-modal-dept-badge" class="text-[10px] font-black uppercase tracking-wider bg-white/25 px-2 py-0.5 rounded text-white font-mono">GWSA UTILITY</span>
+              <span id="quick-modal-sla-badge" class="text-[10px] font-bold bg-emerald-500/40 text-emerald-200 px-2 py-0.5 rounded">Avg SLA: 24h</span>
+            </div>
+            <h3 id="quick-modal-title" class="text-base sm:text-lg font-black tracking-tight mt-0.5">Water Leak & Main Burst Repair</h3>
+            <p id="quick-modal-sub" class="text-[11px] text-sky-100">Gondar Water & Sewerage Authority (GWSA) • የጎንደር ውሃና ፍሳሽ</p>
+          </div>
+        </div>
+        <button onclick="closeQuickReportModal()" class="text-white/80 hover:text-white text-2xl font-bold relative z-10 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center transition hover:bg-black/40">&times;</button>
+      </div>
+
+      <!-- Quick Form Body -->
+      <form onsubmit="handleQuickReportSubmit(event)" class="p-5 sm:p-6 space-y-4 overflow-y-auto custom-scroll text-xs">
+        <input type="hidden" id="quick-cat-input" value="WATER_LEAK">
+
+        <!-- Visual category illustration preview -->
+        <div class="rounded-2xl overflow-hidden h-28 border border-slate-200 relative shadow-inner bg-slate-900">
+          <img id="quick-modal-img" src="/images/categories/water_leak.svg" alt="Service Graphic" class="w-full h-full object-cover">
+          <div class="absolute bottom-2 left-2 bg-slate-950/85 backdrop-blur text-white text-[10px] px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-3 h-3 text-emerald-400"></i>
+            <span id="quick-modal-dispatch-tag">Direct Ingestion to Zonal Dispatch Crew</span>
+          </div>
+        </div>
+
+        <!-- Sub-City Selection (12 Zones) -->
+        <div>
+          <label class="block font-bold text-slate-900 mb-1">Select Sub-City (ክፍለ ከተማ) *</label>
+          <select id="quick-subcity-select" required class="w-full border-2 border-slate-200 focus:border-emerald-500 rounded-xl p-2.5 font-medium text-slate-800 bg-white shadow-inner">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+
+        <!-- Specific Failure Type Chips -->
+        <div>
+          <label class="block font-bold text-slate-900 mb-1.5">Specific Issue Description (የችግሩ ዝርዝር) *</label>
+          <div id="quick-issue-chips" class="flex flex-wrap gap-1.5 mb-2">
+            <!-- Chips rendered dynamically -->
+          </div>
+          <input type="text" id="quick-issue-custom" required placeholder="e.g., High-pressure pipe fractured, flooded street near market" class="w-full border-2 border-slate-200 focus:border-emerald-500 rounded-xl p-2.5 text-xs font-medium">
+        </div>
+
+        <!-- Precise Landmark / Location -->
+        <div>
+          <label class="block font-bold text-slate-900 mb-1">Landmark / Street Location (የቦታው መለያ ምልክት) *</label>
+          <input type="text" id="quick-landmark-input" required placeholder="e.g., Near Maraki University gate, opposite pharmacy" class="w-full border-2 border-slate-200 focus:border-emerald-500 rounded-xl p-2.5 text-xs font-medium">
+        </div>
+
+        <!-- Contact Phone -->
+        <div>
+          <label class="block font-bold text-slate-900 mb-1">Resident Phone (ለSMS ማሳወቂያ) *</label>
+          <input type="tel" id="quick-phone-input" value="+251918112233" required class="w-full border-2 border-slate-200 focus:border-emerald-500 rounded-xl p-2.5 text-xs font-medium font-mono">
+          <p class="text-[10px] text-slate-400 mt-1">Ethio Telecom SMS updates are free of mobile data charges.</p>
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-2 flex flex-col sm:flex-row gap-2">
+          <button type="submit" id="quick-submit-btn" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 text-xs btn-press">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Submit Incident & Generate Ticket</span>
+          </button>
+          <button type="button" onclick="switchToFullMapReport()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3.5 py-3 rounded-xl transition flex items-center justify-center gap-1 text-xs">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+            <span>Full GPS Map</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
   <!-- MODAL 1: RAPID FLASH FLOOD & INUNDATION SOS MODAL                       -->
   <!-- ======================================================================= -->
-  <div id="flood-sos-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+  <div id="flood-sos-modal" onclick="if(event.target===this) closeFloodSosModal()" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl shadow-2xl border-2 border-red-500 max-w-xl w-full overflow-hidden flex flex-col max-h-[92vh]">
       <!-- Header with flashing emergency banner -->
       <div class="bg-gradient-to-r from-red-700 via-red-600 to-amber-600 p-5 text-white flex items-center justify-between">

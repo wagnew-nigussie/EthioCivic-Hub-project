@@ -12,12 +12,460 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const zlib = require('zlib');
+const crypto = require('crypto');
 
 const PORT = process.env.PORT || 5000;
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const AUDIO_DIR = path.join(UPLOADS_DIR, 'audio');
 const PHOTO_DIR = path.join(UPLOADS_DIR, 'photos');
+const AUTH_FILE = path.join(__dirname, '.admin_auth.json');
+
+// Session storage: token -> { id, email, name, role, expiresAt }
+const adminSessions = new Map();
+
+function getAdminAuth() {
+  let authData = null;
+  if (fs.existsSync(AUTH_FILE)) {
+    try {
+      authData = JSON.parse(fs.readFileSync(AUTH_FILE, 'utf8'));
+    } catch (e) {
+      console.error('Error reading admin auth file:', e);
+    }
+  }
+  if (!authData && process.env.ADMIN_PASSWORD) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(process.env.ADMIN_PASSWORD, salt, 100000, 64, 'sha512').toString('hex');
+    authData = {
+      name: 'Wagnew Nigussie',
+      email: 'wagnewnigussie569@gmail.com',
+      salt,
+      hash,
+      configured: true,
+      updated_at: new Date().toISOString()
+    };
+    try {
+      fs.writeFileSync(AUTH_FILE, JSON.stringify(authData, null, 2), { mode: 0o600 });
+    } catch (e) {}
+  }
+  if (!authData) {
+    authData = {
+      name: 'Wagnew Nigussie',
+      email: 'wagnewnigussie569@gmail.com',
+      salt: null,
+      hash: null,
+      configured: false
+    };
+  }
+
+  // Ensure users collection exists
+  if (!Array.isArray(authData.users)) {
+    authData.users = [];
+  }
+  // Ensure master administrator Wagnew Nigussie is present in users array if configured
+  if (authData.configured && authData.hash && !authData.users.some(u => u.email.toLowerCase() === 'wagnewnigussie569@gmail.com')) {
+    authData.users.unshift({
+      id: 'ADM-001',
+      full_name: authData.name || 'Wagnew Nigussie',
+      email: 'wagnewnigussie569@gmail.com',
+      role: 'SUPER_ADMIN',
+      salt: authData.salt,
+      hash: authData.hash,
+      created_at: authData.updated_at || new Date().toISOString(),
+      created_by: 'MASTER_SETUP'
+    });
+  }
+
+  return authData;
+}
+
+function saveAdminPassword(password, fullName = 'Wagnew Nigussie', email = 'wagnewnigussie569@gmail.com') {
+  const current = getAdminAuth();
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+  
+  const users = current.users || [];
+  const normalizedEmail = email.toLowerCase().trim();
+  const idx = users.findIndex(u => u.email.toLowerCase() === normalizedEmail);
+  const userEntry = {
+    id: idx >= 0 ? users[idx].id : `ADM-00${users.length + 1}`,
+    full_name: fullName,
+    email: normalizedEmail,
+    role: 'SUPER_ADMIN',
+    salt,
+    hash,
+    created_at: idx >= 0 ? users[idx].created_at : new Date().toISOString(),
+    created_by: 'SUPER_ADMIN'
+  };
+
+  if (idx >= 0) {
+    users[idx] = userEntry;
+  } else {
+    users.unshift(userEntry);
+  }
+
+  const authData = {
+    name: fullName,
+    email: normalizedEmail,
+    salt,
+    hash,
+    configured: true,
+    users,
+    updated_at: new Date().toISOString()
+  };
+  fs.writeFileSync(AUTH_FILE, JSON.stringify(authData, null, 2), { mode: 0o600 });
+  return authData;
+}
+
+function findUserByEmail(email) {
+  const auth = getAdminAuth();
+  const normalized = (email || '').toLowerCase().trim();
+  return (auth.users || []).find(u => u.email.toLowerCase() === normalized);
+}
+
+function verifyUserPassword(email, password) {
+  const auth = getAdminAuth();
+  const user = findUserByEmail(email);
+  if (user && user.salt && user.hash) {
+    const hashAttempt = crypto.pbkdf2Sync(password, user.salt, 100000, 64, 'sha512').toString('hex');
+    if (crypto.timingSafeEqual(Buffer.from(hashAttempt, 'hex'), Buffer.from(user.hash, 'hex'))) {
+      return user;
+    }
+  }
+  // Fallback to master auth if email is Wagnew Nigussie
+  if (auth.configured && auth.salt && auth.hash && (email || '').toLowerCase().trim() === 'wagnewnigussie569@gmail.com') {
+    const hashAttempt = crypto.pbkdf2Sync(password, auth.salt, 100000, 64, 'sha512').toString('hex');
+    if (crypto.timingSafeEqual(Buffer.from(hashAttempt, 'hex'), Buffer.from(auth.hash, 'hex'))) {
+      return {
+        id: 'ADM-001',
+        full_name: auth.name || 'Wagnew Nigussie',
+        email: auth.email,
+        role: 'SUPER_ADMIN'
+      };
+    }
+  }
+  return null;
+}
+
+function verifyAdminPassword(password) {
+  const verified = verifyUserPassword('wagnewnigussie569@gmail.com', password);
+  return verified !== null;
+}
+
+function createAdminUser({ full_name, email, password, role = 'DISPATCHER', created_by = 'Wagnew Nigussie' }) {
+  const auth = getAdminAuth();
+  const normalizedEmail = (email || '').toLowerCase().trim();
+
+  if (auth.users.some(u => u.email.toLowerCase() === normalizedEmail)) {
+    throw new Error(`An administrator or officer account with email "${normalizedEmail}" already exists.`);
+  }
+
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+
+  const newUser = {
+    id: `ADM-00${auth.users.length + 1}`,
+    full_name: (full_name || 'Municipal Officer').trim(),
+    email: normalizedEmail,
+    role: role || 'DISPATCHER',
+    salt,
+    hash,
+    created_at: new Date().toISOString(),
+    created_by
+  };
+
+  auth.users.push(newUser);
+  auth.updated_at = new Date().toISOString();
+  fs.writeFileSync(AUTH_FILE, JSON.stringify(auth, null, 2), { mode: 0o600 });
+
+  return {
+    id: newUser.id,
+    full_name: newUser.full_name,
+    email: newUser.email,
+    role: newUser.role,
+    created_at: newUser.created_at,
+    created_by: newUser.created_by
+  };
+}
+
+function authenticateAdminReq(req) {
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  if (!token) return null;
+  const session = adminSessions.get(token);
+  if (!session) return null;
+  if (session.expiresAt < Date.now()) {
+    adminSessions.delete(token);
+    return null;
+  }
+  return session;
+}
+
+// Immutable System Audit Trail Ledger
+const auditLogs = [
+  {
+    id: 'AUD-001',
+    timestamp: new Date(Date.now() - 4.5 * 3600 * 1000).toISOString(),
+    actor_name: 'Wagnew Nigussie',
+    actor_email: 'wagnewnigussie569@gmail.com',
+    actor_role: 'SUPER_ADMIN',
+    action: 'SYSTEM_INITIALIZATION',
+    ticket_code: 'SYS-INIT',
+    category: 'SYSTEM',
+    sub_city: 'Adebabay-Piassa',
+    details: 'Gondar SmartCivic Executive Administration portal initialized with high-security PBKDF2 cryptography.',
+    ip: '127.0.0.1'
+  },
+  {
+    id: 'AUD-002',
+    timestamp: new Date(Date.now() - 3.8 * 3600 * 1000).toISOString(),
+    actor_name: 'Dispatcher Unit #1',
+    actor_email: 'dispatch@gondar.gov.et',
+    actor_role: 'DISPATCHER',
+    action: 'TICKET_DISPATCHED',
+    ticket_code: 'GDR-4821',
+    category: 'WATER_LEAK',
+    sub_city: 'Maraki',
+    details: 'Dispatched to GWSA Maraki Unit #2 for immediate water main valve isolation.',
+    ip: '192.168.1.102'
+  },
+  {
+    id: 'AUD-003',
+    timestamp: new Date(Date.now() - 2.8 * 3600 * 1000).toISOString(),
+    actor_name: 'Wagnew Nigussie',
+    actor_email: 'wagnewnigussie569@gmail.com',
+    actor_role: 'SUPER_ADMIN',
+    action: 'DUPLICATE_INCIDENTS_AUDIT',
+    ticket_code: 'GDR-4821',
+    category: 'WATER_LEAK',
+    sub_city: 'Maraki',
+    details: 'Audited 3 repeatedly submitted water main burst reports near Maraki University Gate.',
+    ip: '127.0.0.1'
+  },
+  {
+    id: 'AUD-004',
+    timestamp: new Date(Date.now() - 1.2 * 3600 * 1000).toISOString(),
+    actor_name: 'Fire & Rescue Lead',
+    actor_email: 'rescue@gondar.gov.et',
+    actor_role: 'EMERGENCY_LEAD',
+    action: 'SOS_RAPID_DISPATCH',
+    ticket_code: 'GDR-SOS-911',
+    category: 'FLOOD_EMERGENCY',
+    sub_city: 'Maraki',
+    details: 'Rapid Rescue Squad #1 deployed to Angereb River catchment zone with evacuation boats.',
+    ip: '192.168.1.115'
+  },
+  {
+    id: 'AUD-005',
+    timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+    actor_name: 'Wagnew Nigussie',
+    actor_email: 'wagnewnigussie569@gmail.com',
+    actor_role: 'SUPER_ADMIN',
+    action: 'EXECUTIVE_REPORT_GENERATED',
+    ticket_code: 'REP-WEEKLY',
+    category: 'ANALYTICS',
+    sub_city: 'All 12 Sub-Cities',
+    details: 'Generated weekly municipal resolution audit report across all 5 municipal departments.',
+    ip: '127.0.0.1'
+  }
+];
+
+function logAuditAction(actorName, actorEmail, actorRole, action, ticketCode, category, subCity, details, ip = '127.0.0.1') {
+  const entry = {
+    id: `AUD-${String(auditLogs.length + 1).padStart(3, '0')}`,
+    timestamp: new Date().toISOString(),
+    actor_name: actorName || 'Wagnew Nigussie',
+    actor_email: actorEmail || 'wagnewnigussie569@gmail.com',
+    actor_role: actorRole || 'SUPER_ADMIN',
+    action,
+    ticket_code: ticketCode || 'N/A',
+    category: category || 'GENERAL',
+    sub_city: subCity || 'Gondar',
+    details: details || '',
+    ip
+  };
+  auditLogs.unshift(entry);
+  if (auditLogs.length > 500) auditLogs.pop();
+  return entry;
+}
+
+// Duplicate / Repeatedly Submitted Incidents Detection Engine
+function detectDuplicateIncidents(incidentsList) {
+  const clusters = [];
+  const processed = new Set();
+
+  for (let i = 0; i < incidentsList.length; i++) {
+    const a = incidentsList[i];
+    if (processed.has(a.ticket_code)) continue;
+
+    const group = [a];
+    for (let j = i + 1; j < incidentsList.length; j++) {
+      const b = incidentsList[j];
+      if (processed.has(b.ticket_code)) continue;
+
+      if (a.category === b.category && a.sub_city === b.sub_city) {
+        let isMatch = false;
+        if (a.latitude && a.longitude && b.latitude && b.longitude) {
+          const dist = getDistanceMeters(a.latitude, a.longitude, b.latitude, b.longitude);
+          if (dist <= 450) isMatch = true;
+        }
+        if (!isMatch && a.landmark_description && b.landmark_description) {
+          const l1 = a.landmark_description.toLowerCase();
+          const l2 = b.landmark_description.toLowerCase();
+          const words1 = l1.split(/[\s,.-]+/).filter(w => w.length > 3);
+          const common = words1.filter(w => l2.includes(w));
+          if (common.length >= 1) isMatch = true;
+        }
+
+        if (isMatch) {
+          group.push(b);
+          processed.add(b.ticket_code);
+        }
+      }
+    }
+
+    if (group.length > 1) {
+      processed.add(a.ticket_code);
+      group.sort((x, y) => new Date(x.created_at) - new Date(y.created_at));
+      const master = group[0];
+      const isSolved = group.some(t => t.status === 'RESOLVED');
+
+      clusters.push({
+        cluster_id: `CLUSTER-${master.ticket_code}`,
+        category: master.category,
+        sub_city: master.sub_city,
+        sub_city_am: master.sub_city_am || master.sub_city,
+        landmark: master.landmark_description,
+        repetition_count: group.length,
+        master_ticket_code: master.ticket_code,
+        status: isSolved ? 'RESOLVED' : master.status,
+        is_solved: isSolved,
+        department: master.department,
+        assigned_crew: master.assigned_crew || 'Pending Allocation',
+        first_reported_at: group[0].created_at,
+        latest_reported_at: group[group.length - 1].created_at,
+        submissions: group.map((t, idx) => ({
+          sequence: idx + 1,
+          ticket_code: t.ticket_code,
+          created_at: t.created_at,
+          channel: t.channel_origin,
+          caller_phone: t.caller_phone || 'Anonymous Citizen',
+          landmark: t.landmark_description,
+          status: t.status,
+          title: t.title,
+          is_solved: t.status === 'RESOLVED'
+        }))
+      });
+    }
+  }
+
+  return clusters;
+}
+
+// Periodic Executive Reports Engine (Daily, Weekly, Monthly, Yearly)
+function generatePeriodicReport(period, incidentsList) {
+  const now = new Date();
+  let startTime;
+  let periodLabel;
+
+  if (period === 'daily') {
+    startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    periodLabel = `Daily Operational Report (${now.toLocaleDateString()})`;
+  } else if (period === 'monthly') {
+    startTime = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+    periodLabel = `Monthly Municipal Audit (${now.toLocaleString('default', { month: 'long', year: 'numeric' })})`;
+  } else if (period === 'yearly') {
+    startTime = new Date(now.getFullYear(), 0, 1).getTime();
+    periodLabel = `Annual Municipal Infrastructure Report (${now.getFullYear()})`;
+  } else {
+    // Default: weekly (last 7 days)
+    startTime = Date.now() - 7 * 24 * 3600 * 1000;
+    periodLabel = `Weekly Municipal Performance Report (${new Date(startTime).toLocaleDateString()} - ${now.toLocaleDateString()})`;
+  }
+
+  const periodIncidents = incidentsList.filter(t => new Date(t.created_at).getTime() >= startTime);
+  const total = periodIncidents.length;
+  const solved = periodIncidents.filter(t => t.status === 'RESOLVED').length;
+  const inProgress = periodIncidents.filter(t => t.status === 'IN_PROGRESS' || t.status === 'DISPATCHED').length;
+  const newPending = periodIncidents.filter(t => t.status === 'RECEIVED' || t.status === 'SUBMITTED' || t.status === 'TRIAGED').length;
+  const emergency = periodIncidents.filter(t => t.is_emergency || t.urgency === 'CRITICAL' || t.category === 'FLOOD_EMERGENCY').length;
+  const overdue = periodIncidents.filter(t => t.is_sla_breached || t.status === 'ESCALATED_UNRESOLVED').length;
+  
+  const resolutionRate = total > 0 ? Math.round((solved / total) * 100) : 0;
+  
+  const solvedWithTime = periodIncidents.filter(t => t.status === 'RESOLVED' && t.time_to_fix_minutes);
+  const avgFixMinutes = solvedWithTime.length > 0 
+    ? Math.round(solvedWithTime.reduce((acc, t) => acc + t.time_to_fix_minutes, 0) / solvedWithTime.length) 
+    : 120;
+
+  const departments = [
+    { name: 'Gondar Water & Sewerage Authority', short: 'GWSA', icon: '💧' },
+    { name: 'Ethiopian Electric Utility (EEU)', short: 'EEU', icon: '⚡' },
+    { name: 'Gondar Fire & Disaster Prevention Agency / Red Cross', short: 'RESCUE', icon: '🚨' },
+    { name: 'Gondar Sanitation & Beautification', short: 'SANITATION', icon: '🗑️' },
+    { name: 'Gondar City Roads & Drainage Construction Agency', short: 'ROADS', icon: '🚧' }
+  ];
+
+  const departmentStats = departments.map(dept => {
+    const list = periodIncidents.filter(t => (t.department || '').toLowerCase().includes(dept.short.toLowerCase()) || (t.department || '').toLowerCase().includes(dept.name.toLowerCase()));
+    const depTotal = list.length;
+    const depSolved = list.filter(t => t.status === 'RESOLVED').length;
+    const depOverdue = list.filter(t => t.is_sla_breached).length;
+    return {
+      department: dept.name,
+      short: dept.short,
+      icon: dept.icon,
+      total: depTotal,
+      solved: depSolved,
+      in_progress: depTotal - depSolved,
+      overdue: depOverdue,
+      sla_rate: depTotal > 0 ? Math.round(((depTotal - depOverdue) / depTotal) * 100) : 100
+    };
+  });
+
+  const subCityStats = SUB_CITIES.map(sc => {
+    const list = periodIncidents.filter(t => t.sub_city === sc.name);
+    const scTotal = list.length;
+    const scSolved = list.filter(t => t.status === 'RESOLVED').length;
+    return {
+      name: sc.name,
+      name_am: sc.name_am,
+      total: scTotal,
+      solved: scSolved,
+      pending: scTotal - scSolved
+    };
+  });
+
+  const duplicateClusters = detectDuplicateIncidents(periodIncidents);
+
+  return {
+    period,
+    period_label: periodLabel,
+    start_time: new Date(startTime).toISOString(),
+    end_time: now.toISOString(),
+    generated_at: now.toISOString(),
+    generated_by: {
+      name: 'Wagnew Nigussie',
+      email: 'wagnewnigussie569@gmail.com',
+      role: 'SUPER_ADMIN'
+    },
+    metrics: {
+      total,
+      solved,
+      in_progress: inProgress,
+      new_pending: newPending,
+      emergency,
+      overdue,
+      resolution_rate: resolutionRate,
+      avg_fix_minutes: avgFixMinutes,
+      duplicate_clusters_count: duplicateClusters.length
+    },
+    department_stats: departmentStats,
+    sub_city_stats: subCityStats,
+    duplicate_clusters: duplicateClusters,
+    incidents: periodIncidents
+  };
+}
 
 [UPLOADS_DIR, AUDIO_DIR, PHOTO_DIR].forEach(dir => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -278,6 +726,80 @@ let incidents = [
     created_at: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
     assigned_at: new Date(Date.now() - 3 * 3600 * 1000).toISOString(),
     sla_deadline: new Date(Date.now() + 20 * 3600 * 1000).toISOString(),
+    is_sla_breached: false,
+    resolved_at: null
+  },
+  {
+    id: '2b',
+    ticket_code: 'GDR-SMS-4822',
+    title: 'Water Main Flooding Maraki University Gate (Duplicate)',
+    description: 'Second citizen report: clean tap water gushing across university asphalt entrance.',
+    category: 'WATER_LEAK',
+    urgency: 'HIGH',
+    is_emergency: false,
+    emergency_severity: 'MEDIUM',
+    status: 'IN_PROGRESS',
+    channel_origin: 'SMS',
+    caller_phone: '+251918990011',
+    is_anonymous: false,
+    is_life_threatening: false,
+    latitude: 12.6241,
+    longitude: 37.4726,
+    gps_accuracy_meters: 6.0,
+    landmark_description: 'Maraki Campus Main Gate, gushing onto asphalt',
+    sub_city: 'Maraki',
+    sub_city_am: 'ማራኪ',
+    department: 'Gondar Water & Sewerage Authority',
+    department_id: 1,
+    assigned_crew: 'GWSA Maraki Unit #2',
+    photo_before: '/images/categories/water_leak.svg',
+    photo_after: null,
+    resolution_proof_url: null,
+    resolution_notes: 'Linked to primary incident GDR-4821.',
+    resolved_by_worker_id: null,
+    time_to_fix_minutes: null,
+    audio_path: null,
+    voice_transcript: null,
+    created_at: new Date(Date.now() - 2.5 * 3600 * 1000).toISOString(),
+    assigned_at: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
+    sla_deadline: new Date(Date.now() + 21 * 3600 * 1000).toISOString(),
+    is_sla_breached: false,
+    resolved_at: null
+  },
+  {
+    id: '2c',
+    ticket_code: 'GDR-USD-4823',
+    title: 'Gushing Main Water Leak at University Junction (Duplicate)',
+    description: 'Third citizen report via USSD: tap water flooding street.',
+    category: 'WATER_LEAK',
+    urgency: 'HIGH',
+    is_emergency: false,
+    emergency_severity: 'MEDIUM',
+    status: 'IN_PROGRESS',
+    channel_origin: 'USSD',
+    caller_phone: '+251922334455',
+    is_anonymous: false,
+    is_life_threatening: false,
+    latitude: 12.6239,
+    longitude: 37.4724,
+    gps_accuracy_meters: 10.0,
+    landmark_description: 'Maraki University Gate taxi stop',
+    sub_city: 'Maraki',
+    sub_city_am: 'ማራኪ',
+    department: 'Gondar Water & Sewerage Authority',
+    department_id: 1,
+    assigned_crew: 'GWSA Maraki Unit #2',
+    photo_before: '/images/categories/water_leak.svg',
+    photo_after: null,
+    resolution_proof_url: null,
+    resolution_notes: null,
+    resolved_by_worker_id: null,
+    time_to_fix_minutes: null,
+    audio_path: null,
+    voice_transcript: null,
+    created_at: new Date(Date.now() - 1 * 3600 * 1000).toISOString(),
+    assigned_at: null,
+    sla_deadline: new Date(Date.now() + 23 * 3600 * 1000).toISOString(),
     is_sla_breached: false,
     resolved_at: null
   },
@@ -621,7 +1143,7 @@ function sendJSON(res, statusCode, data) {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   });
   res.end(JSON.stringify(data));
 }
@@ -670,7 +1192,7 @@ async function handleRequest(req, res) {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     });
     return res.end();
   }
@@ -1600,6 +2122,306 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
 
   if (pathname === '/api/v1/ethiopian-cities' && method === 'GET') {
     return sendJSON(res, 200, { count: ETHIOPIAN_CITIES.length, cities: ETHIOPIAN_CITIES });
+  }
+
+  // ==========================================================================
+  // 7. ADMIN EXECUTIVE PORTAL APIS (Wagnew Nigussie - Super Administrator)
+  // ==========================================================================
+
+  // 7A. Admin Auth Status / Setup Check
+  if (pathname === '/api/v1/admin/auth/status' && method === 'GET') {
+    const auth = getAdminAuth();
+    return sendJSON(res, 200, {
+      configured: auth.configured,
+      admin_name: 'Wagnew Nigussie',
+      email: 'wagnewnigussie569@gmail.com',
+      role: 'SUPER_ADMIN'
+    });
+  }
+
+  // 7B. Admin Secure Setup / Initialize Password
+  if (pathname === '/api/v1/admin/auth/setup' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { password, current_password } = body;
+    const auth = getAdminAuth();
+    
+    if (auth.configured && auth.hash) {
+      if (!current_password || !verifyAdminPassword(current_password)) {
+        return sendJSON(res, 401, { error: 'Current password verification failed' });
+      }
+    }
+    
+    if (!password || password.length < 6) {
+      return sendJSON(res, 400, { error: 'Password must be at least 6 characters' });
+    }
+
+    saveAdminPassword(password);
+    logAuditAction('Wagnew Nigussie', 'wagnewnigussie569@gmail.com', 'SUPER_ADMIN', 'ADMIN_PASSWORD_UPDATED', 'SYS-AUTH', 'SECURITY', 'Gondar', 'Administrator master password securely initialized/updated using PBKDF2-SHA512.');
+    
+    const token = crypto.randomBytes(32).toString('hex');
+    adminSessions.set(token, {
+      email: 'wagnewnigussie569@gmail.com',
+      name: 'Wagnew Nigussie',
+      role: 'SUPER_ADMIN',
+      expiresAt: Date.now() + 24 * 3600 * 1000
+    });
+
+    return sendJSON(res, 200, {
+      status: 'SUCCESS',
+      message: 'Administrator password securely saved.',
+      token,
+      admin: { name: 'Wagnew Nigussie', email: 'wagnewnigussie569@gmail.com', role: 'SUPER_ADMIN' }
+    });
+  }
+
+  // 7C. Admin Login (Accepts Full Name, Email, Password)
+  if (pathname === '/api/v1/admin/auth/login' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { full_name, fullname, email, password } = body;
+    const auth = getAdminAuth();
+
+    if (!auth.configured) {
+      return sendJSON(res, 400, { error: 'Admin account password not yet initialized. Please complete initial setup.', needsSetup: true });
+    }
+
+    const verifiedUser = verifyUserPassword(email, password);
+    if (!verifiedUser) {
+      logAuditAction(full_name || fullname || 'Security Sentinel', email || 'Unknown', 'UNKNOWN', 'LOGIN_FAILED', 'SYS-AUTH', 'SECURITY', 'Gondar', `Unauthorized login attempt for email: ${email}`);
+      return sendJSON(res, 401, { error: 'Invalid administrator credentials. Access restricted to authorized personnel.' });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const adminUser = {
+      id: verifiedUser.id || 'ADM-001',
+      email: verifiedUser.email,
+      name: verifiedUser.full_name || verifiedUser.name || 'Wagnew Nigussie',
+      role: verifiedUser.role || 'SUPER_ADMIN'
+    };
+
+    adminSessions.set(token, {
+      ...adminUser,
+      expiresAt: Date.now() + 24 * 3600 * 1000
+    });
+
+    logAuditAction(adminUser.name, adminUser.email, adminUser.role, 'LOGIN_SUCCESS', 'SYS-AUTH', 'SECURITY', 'Gondar', `Administrator ${adminUser.name} authenticated successfully.`);
+
+    return sendJSON(res, 200, {
+      status: 'SUCCESS',
+      token,
+      admin: adminUser
+    });
+  }
+
+  // 7C-2. Admin Registration / Account Creation (Secured by Admin Only)
+  if (pathname === '/api/v1/admin/auth/register' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { full_name, fullname, email, password, role, admin_master_key } = body;
+    const name = (full_name || fullname || '').trim();
+    const mail = (email || '').trim().toLowerCase();
+    const auth = getAdminAuth();
+
+    if (!password || password.length < 6) {
+      return sendJSON(res, 400, { error: 'Password must be at least 6 characters' });
+    }
+
+    // CASE 1: Initial Master Setup if not configured yet
+    if (!auth.configured) {
+      if (mail !== 'wagnewnigussie569@gmail.com') {
+        return sendJSON(res, 403, {
+          error: 'Registration Restricted: Initial master administrator must be Wagnew Nigussie (wagnewnigussie569@gmail.com).'
+        });
+      }
+      saveAdminPassword(password, name || 'Wagnew Nigussie', mail);
+      logAuditAction('Wagnew Nigussie', 'wagnewnigussie569@gmail.com', 'SUPER_ADMIN', 'ADMIN_PASSWORD_UPDATED', 'SYS-AUTH', 'SECURITY', 'Gondar', 'Master Administrator Wagnew Nigussie registered master account.');
+
+      const token = crypto.randomBytes(32).toString('hex');
+      adminSessions.set(token, {
+        email: 'wagnewnigussie569@gmail.com',
+        name: name || 'Wagnew Nigussie',
+        role: 'SUPER_ADMIN',
+        expiresAt: Date.now() + 24 * 3600 * 1000
+      });
+
+      return sendJSON(res, 200, {
+        status: 'SUCCESS',
+        message: 'Master administrator registered and secured successfully.',
+        token,
+        admin: { name: name || 'Wagnew Nigussie', email: mail, role: 'SUPER_ADMIN' }
+      });
+    }
+
+    // CASE 2: System already configured. ONLY authenticated Admin can register / create accounts!
+    const session = authenticateAdminReq(req);
+    const isMasterKeyValid = admin_master_key && verifyUserPassword('wagnewnigussie569@gmail.com', admin_master_key);
+
+    if (!session && !isMasterKeyValid) {
+      logAuditAction(name || 'Unknown', mail, 'GUEST', 'UNAUTHORIZED_REGISTRATION_ATTEMPT', 'SYS-AUTH', 'SECURITY', 'Gondar', `Blocked unauthorized registration attempt for "${mail}". Accounts can ONLY be created and secured by Admin.`);
+      return sendJSON(res, 403, {
+        error: 'Registration Restricted: Administrative and officer accounts can ONLY be created and secured by the Super Administrator (Wagnew Nigussie). Please authenticate as Admin first or provide the Master Key.'
+      });
+    }
+
+    const creatorName = session ? session.name : 'Wagnew Nigussie (Master Key)';
+    try {
+      const newUser = createAdminUser({
+        full_name: name || 'Municipal Officer',
+        email: mail,
+        password,
+        role: role || 'DISPATCHER',
+        created_by: creatorName
+      });
+
+      logAuditAction(creatorName, session ? session.email : 'wagnewnigussie569@gmail.com', 'SUPER_ADMIN', 'ADMIN_USER_CREATED', 'SYS-AUTH', 'SECURITY', 'Gondar', `Created and secured new ${newUser.role} account for ${newUser.full_name} (${newUser.email}).`);
+
+      return sendJSON(res, 201, {
+        status: 'SUCCESS',
+        message: 'Administrator account successfully created and secured by Admin.',
+        user: newUser
+      });
+    } catch (err) {
+      return sendJSON(res, 400, { error: err.message });
+    }
+  }
+
+  // 7C-3. Admin Users Roster (Protected: Only Authenticated Admin)
+  if (pathname === '/api/v1/admin/users' && method === 'GET') {
+    const session = authenticateAdminReq(req);
+    if (!session) return sendJSON(res, 401, { error: 'Unauthorized: Admin session required' });
+    const auth = getAdminAuth();
+    const safeUsers = (auth.users || []).map(u => ({
+      id: u.id,
+      full_name: u.full_name || u.name,
+      email: u.email,
+      role: u.role,
+      created_at: u.created_at,
+      created_by: u.created_by
+    }));
+    return sendJSON(res, 200, { count: safeUsers.length, users: safeUsers });
+  }
+
+  // 7C-4. Admin Direct User Creation (Protected: Only Authenticated Admin)
+  if (pathname === '/api/v1/admin/users' && method === 'POST') {
+    const session = authenticateAdminReq(req);
+    if (!session) return sendJSON(res, 401, { error: 'Unauthorized: Admin session required' });
+    const body = await parseRequestBody(req);
+    const { full_name, fullname, email, password, role } = body;
+    if (!password || password.length < 6) {
+      return sendJSON(res, 400, { error: 'Password must be at least 6 characters' });
+    }
+    try {
+      const newUser = createAdminUser({
+        full_name: (full_name || fullname || 'Municipal Officer').trim(),
+        email: (email || '').trim().toLowerCase(),
+        password,
+        role: role || 'DISPATCHER',
+        created_by: session.name
+      });
+      logAuditAction(session.name, session.email, session.role, 'ADMIN_USER_CREATED', 'SYS-AUTH', 'SECURITY', 'Gondar', `Created authorized account for ${newUser.full_name} (${newUser.email}).`);
+      return sendJSON(res, 201, { status: 'SUCCESS', message: 'Account created and secured by Admin.', user: newUser });
+    } catch (err) {
+      return sendJSON(res, 400, { error: err.message });
+    }
+  }
+
+  // 7D. Admin Session Check
+  if (pathname === '/api/v1/admin/auth/session' && method === 'GET') {
+    const session = authenticateAdminReq(req);
+    if (!session) {
+      return sendJSON(res, 401, { error: 'Session expired or invalid' });
+    }
+    return sendJSON(res, 200, {
+      status: 'AUTHENTICATED',
+      admin: { name: session.name, email: session.email, role: session.role }
+    });
+  }
+
+  // 7E. Admin Logout
+  if (pathname === '/api/v1/admin/auth/logout' && method === 'POST') {
+    const authHeader = req.headers['authorization'] || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+    if (token) adminSessions.delete(token);
+    logAuditAction('Wagnew Nigussie', 'wagnewnigussie569@gmail.com', 'SUPER_ADMIN', 'LOGOUT', 'SYS-AUTH', 'SECURITY', 'Gondar', 'Administrator logged out.');
+    return sendJSON(res, 200, { status: 'SUCCESS' });
+  }
+
+  // 7F. Admin Audit Logs
+  if (pathname === '/api/v1/admin/audit-logs' && method === 'GET') {
+    const { action, actor, ticket } = parsedUrl.query;
+    let list = [...auditLogs];
+    if (action) list = list.filter(l => l.action.toLowerCase().includes(action.toLowerCase()));
+    if (actor) list = list.filter(l => l.actor_name.toLowerCase().includes(actor.toLowerCase()));
+    if (ticket) list = list.filter(l => l.ticket_code.toLowerCase().includes(ticket.toLowerCase()));
+    return sendJSON(res, 200, { count: list.length, logs: list });
+  }
+
+  // 7G. Admin Duplicate / Repeated Incidents
+  if (pathname === '/api/v1/admin/duplicates' && method === 'GET') {
+    const clusters = detectDuplicateIncidents(incidents);
+    return sendJSON(res, 200, { count: clusters.length, clusters });
+  }
+
+  // 7H. Admin Merge Duplicates
+  if (pathname === '/api/v1/admin/duplicates/merge' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { master_ticket, duplicate_tickets } = body;
+    (duplicate_tickets || []).forEach(dt => {
+      const t = incidents.find(x => x.ticket_code === dt);
+      if (t) {
+        t.status = 'RESOLVED';
+        t.resolution_notes = `Merged into primary ticket #${master_ticket}`;
+        t.resolved_at = new Date().toISOString();
+        t.resolved_by_worker_id = 'SUPER-ADMIN-WAGNEW';
+      }
+    });
+    logAuditAction('Wagnew Nigussie', 'wagnewnigussie569@gmail.com', 'SUPER_ADMIN', 'DUPLICATES_MERGED', master_ticket, 'CONSOLIDATION', 'Maraki', `Merged ${(duplicate_tickets || []).length} duplicate tickets into #${master_ticket}.`);
+    return sendJSON(res, 200, { status: 'SUCCESS', message: 'Duplicates merged successfully.' });
+  }
+
+  // 7I. Admin Periodic Reports
+  if (pathname === '/api/v1/admin/reports' && method === 'GET') {
+    const period = parsedUrl.query.period || 'weekly';
+    const reportData = generatePeriodicReport(period, incidents);
+    return sendJSON(res, 200, reportData);
+  }
+
+  // 7J. Admin Investigation Progress Update
+  if (pathname.startsWith('/api/v1/admin/incidents/') && pathname.endsWith('/investigate') && method === 'PATCH') {
+    const parts = pathname.split('/');
+    const code = parts[parts.indexOf('incidents') + 1].toUpperCase();
+    const ticket = incidents.find(t => t.ticket_code === code);
+    if (!ticket) return sendJSON(res, 404, { error: 'Ticket not found' });
+
+    const body = await parseRequestBody(req);
+    const { investigation_notes, status, assigned_crew, officer_name } = body;
+
+    if (investigation_notes) {
+      ticket.resolution_notes = investigation_notes;
+    }
+    if (status) {
+      ticket.status = status;
+      if (status === 'RESOLVED') {
+        ticket.resolved_at = new Date().toISOString();
+        ticket.resolved_by_worker_id = officer_name || 'Wagnew Nigussie';
+        ticket.is_sla_breached = false;
+      }
+    }
+    if (assigned_crew) {
+      ticket.assigned_crew = assigned_crew;
+      ticket.assigned_at = new Date().toISOString();
+    }
+
+    logAuditAction(
+      officer_name || 'Wagnew Nigussie',
+      'wagnewnigussie569@gmail.com',
+      'SUPER_ADMIN',
+      'INVESTIGATION_NOTE_ADDED',
+      ticket.ticket_code,
+      ticket.category,
+      ticket.sub_city,
+      `Investigation update: ${investigation_notes || 'Crew assigned/Status updated: ' + ticket.status}`
+    );
+
+    return sendJSON(res, 200, { status: 'SUCCESS', ticket });
   }
 
   // ==========================================================================

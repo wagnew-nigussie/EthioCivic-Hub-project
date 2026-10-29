@@ -2,8 +2,8 @@
 const http = require('http');
 const { spawn } = require('child_process');
 
-const PORT = 5050;
-process.env.PORT = PORT;
+const PORT = process.env.TEST_PORT || 5060;
+process.env.PORT = String(PORT);
 
 console.log('--- Starting Server on Port ' + PORT + ' for Image & Position Verification ---');
 const serverProc = spawn('node', ['server/server.js'], {

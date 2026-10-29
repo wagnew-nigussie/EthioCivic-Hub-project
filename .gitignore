@@ -2,9 +2,12 @@
 node_modules/
 package-lock.json
 
-# Environment variables
+# Environment variables & secrets
 .env
 .env.local
+server/.admin_auth.json
+server/.admin_secret.json
+*.credentials.json
 
 # OS / Editor files
 .DS_Store
