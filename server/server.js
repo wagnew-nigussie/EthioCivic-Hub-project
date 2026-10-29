@@ -2443,14 +2443,12 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-    // High performance Cache-Control headers (Rule 1: Fast load speed)
+    // High performance Cache-Control headers (no-cache for code so updates are always fresh)
     let cacheControl = 'public, max-age=3600';
-    if (ext === '.html') {
-      cacheControl = 'no-cache';
+    if (ext === '.html' || ext === '.js' || ext === '.css') {
+      cacheControl = 'no-cache, no-store, must-revalidate';
     } else if (['.jpg', '.jpeg', '.png', '.svg', '.wav', '.mp3'].includes(ext)) {
       cacheControl = 'public, max-age=86400, stale-while-revalidate=604800';
-    } else if (['.js', '.css'].includes(ext)) {
-      cacheControl = 'public, max-age=14400, stale-while-revalidate=86400';
     }
 
     const acceptEncoding = req.headers['accept-encoding'] || '';
