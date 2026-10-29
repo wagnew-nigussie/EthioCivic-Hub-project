@@ -24,32 +24,32 @@ const TRANSLATIONS = {
     // Target Audience (Rule 3)
     target_audience_badge: 'Universal Accessibility Matrix',
     target_audience_header: 'Defined Target Audience & Inclusive User Matrix',
-    target_audience_sub: 'Built for all 450,000+ residents of Gondar, frontline municipal technicians, and executive dispatchers across every connectivity tier.',
-    persona_1_title: 'General Citizens & Residents',
-    persona_1_am: 'የጎንደር ከተማ ነዋሪዎች እና ማህበረሰብ',
-    persona_1_desc: 'From market traders at Arada to students in Maraki. Regardless of smartphone ownership, residents report broken water mains, blackouts, or flood hazards using zero-data 2G USSD (*840#), SMS (8065), or spoken voice hotline (8400).',
-    persona_1_channels: 'Channels: USSD (*840#), SMS (8065), Voice (8400), Web',
+    target_audience_sub: 'Built for all 450,000+ residents of Gondar, field crews, and dispatchers across every connectivity tier.',
+    persona_1_title: 'Citizens & Residents',
+    persona_1_am: 'የጎንደር ከተማ ነዋሪዎች',
+    persona_1_desc: 'Report water leaks, power outages, and waste via free USSD (*840#), SMS (8065), or web.',
+    persona_1_channels: 'Channels: USSD, SMS, Voice, Web',
     persona_1_badge: '100% Free / Toll-Free',
-    persona_2_title: 'Municipal Triage Dispatchers',
-    persona_2_am: 'የማዘጋጃ ቤት መላኪያ ማዕከል ኃላፊዎች',
-    persona_2_desc: 'Control room officers operating the central GIS console. Manages 5-tier triage queues, listens to ingested voice calls, routes tickets to GWSA or EEU, and monitors live SLA countdown timers to prevent overdue escalations.',
-    persona_2_channels: 'Interface: GIS Spatial Dispatch Console',
+    persona_2_title: 'Triage Dispatchers',
+    persona_2_am: 'የመላኪያ ማዕከል ኃላፊዎች',
+    persona_2_desc: 'Triage incoming reports in real time, review voice notes, and assign crews on the GIS map.',
+    persona_2_channels: 'Interface: GIS Dispatch Console',
     persona_2_badge: 'Real-Time PostGIS',
-    persona_3_title: 'Emergency Disaster Responders',
-    persona_3_am: 'የአደጋ መከላከልና ነፍስ አድን ግብረ-ኃይል',
-    persona_3_desc: 'Gondar Fire & Emergency Service, Red Cross, and flood rescue units. Receives instant sub-second alarms with trapped persons count, water depth telemetry, and river corridor proximity for life-saving interventions.',
-    persona_3_channels: 'Focus: Angereb & Keha River Catchments',
+    persona_3_title: 'Disaster Responders',
+    persona_3_am: 'የአደጋ መከላከል ግብረ-ኃይል',
+    persona_3_desc: 'Receive instant flash flood alarms along Angereb river and coordinate rescue interventions.',
+    persona_3_channels: 'Focus: Flash Flood & River Corridors',
     persona_3_badge: '< 4h Emergency SLA',
-    persona_4_title: 'Public Works Field Technicians',
-    persona_4_am: 'የመስክ ጥገና ባለሙያዎችና ቴክኒሻኖች',
-    persona_4_desc: 'Rapid response crews from Gondar Water (GWSA), Electric Utility (EEU), and road drainage. Operates in low-bandwidth offline mode, updates job progress, and must upload before-and-after photo verification to close tickets.',
-    persona_4_channels: 'Interface: Field Crew Low-Bandwidth Mode',
-    persona_4_badge: 'Audit Proof Verified',
-    persona_5_title: 'University Researchers & Municipal Leadership',
-    persona_5_am: 'የዩኒቨርሲቲ ተመራማሪዎችና የከተማ አስተዳደር አመራር',
-    persona_5_desc: 'University of Gondar faculty, evaluation committee members, and city planners. Analyzes empirical sub-city failure patterns, average repair latency benchmarks, and open civic datasets without costly commercial proprietary licenses.',
-    persona_5_channels: 'Interface: 12 Sub-City Analytics & Scorecard',
-    persona_5_badge: '100% Open Standards',
+    persona_4_title: 'Field Technicians',
+    persona_4_am: 'የመስክ ጥገና ባለሙያዎች',
+    persona_4_desc: 'Receive repair work orders on mobile and upload before-and-after photo verification.',
+    persona_4_channels: 'Interface: Field Crew Mobile Mode',
+    persona_4_badge: 'Photo Verified',
+    persona_5_title: 'Researchers & Leadership',
+    persona_5_am: 'ተመራማሪዎችና የከተማ አመራር',
+    persona_5_desc: 'Analyze repair speed, sub-city performance benchmarks, and municipal service KPIs.',
+    persona_5_channels: 'Interface: Sub-City Analytics Dashboard',
+    persona_5_badge: '100% Open Data',
 
     // 4-Stage Lifecycle Pipeline (Rule 5 & 8)
     lifecycle_tag: 'Deterministic State Transition Engine',
@@ -130,19 +130,19 @@ const TRANSLATIONS = {
     channels_header: 'Universal Access Channels',
     channels_subtitle: 'Zero-data, accessible on any Ethio Telecom mobile device',
     toll_free_badge: 'Toll-Free • ነፃ አገልግሎት',
-    card_ussd_tag: 'Channel A • 2G Feature Phones',
+    card_ussd_tag: 'Channel A • 2G Phones',
     card_ussd_title: 'USSD Quick Menu (*840#)',
-    card_ussd_desc: 'Dial *840# on any button phone (የእጅ ባትሪ ስልክ). Choose Amharic or English, select from 12 sub-cities, and receive an instant SMS ticket ID.',
+    card_ussd_desc: 'Dial *840# on any phone with zero data. Select issue & sub-city to get instant SMS ticket ID.',
     zero_data_text: 'Zero Data Required',
     sim_dial_link: 'Simulate Dialing →',
-    card_sms_tag: 'Channel B • Inbound/Outbound SMS',
+    card_sms_tag: 'Channel B • Free SMS',
     card_sms_title: 'SMS Short Code (8065)',
-    card_sms_desc: 'Send an SMS to 8065 in English or Amharic:\nREPORT [CATEGORY] [SUBCITY] [LANDMARK]',
+    card_sms_desc: 'Send a free SMS to 8065 with your sub-city and issue. Automated ticket code returned instantly.',
     auto_receipts_text: 'Auto SMS Receipts',
     sim_sms_link: 'Simulate SMS →',
     card_ivr_tag: 'Channel C • Voice Hotline',
     card_ivr_title: 'Voice Hotline (8400)',
-    card_ivr_desc: 'Automated Amharic Interactive Voice Response (IVR). Callers press DTMF buttons and record a 30-second spoken voice message for municipal dispatchers to listen to.',
+    card_ivr_desc: 'Call 8400 and record a 30-second spoken voice message directly for municipal dispatchers.',
     voice_note_text: 'Voice Note Attachment',
     sim_call_link: 'Simulate Call →',
 
@@ -286,32 +286,32 @@ const TRANSLATIONS = {
     // Target Audience (Rule 3)
     target_audience_badge: 'ሁለገብ የአገልግሎት ተደራሽነት',
     target_audience_header: 'የተጠቃሚዎች ማዕቀፍ እና ሁለገብ የአገልግሎት ተደራሽነት',
-    target_audience_sub: 'ለሁሉም 450,000+ የጎንደር ከተማ ነዋሪዎች፣ የመስክ ጥገና ቴክኒሻኖች እና የማዘጋጃ ቤት መላኪያ ኃላፊዎች የተዘጋጀ።',
-    persona_1_title: 'የከተማው ነዋሪዎች እና ማህበረሰብ',
-    persona_1_am: 'የጎንደር ከተማ ነዋሪዎች እና ማህበረሰብ',
-    persona_1_desc: 'ከአራዳ ገበያ እስከ ማራኪ ዩኒቨርሲቲ ተማሪዎች ድረስ። ስማርትፎን ሳይኖራቸው በማንኛውም የእጅ ባትሪ ስልክ በUSSD (*840#)፣ በSMS (8065) ወይም በድምፅ መስመር (8400) የውሃ፣ የመብራት ወይም የጎርፍ ችግርን ያሳውቃሉ።',
-    persona_1_channels: 'መገናኛ መንገዶች፦ USSD (*840#)፣ SMS (8065)፣ ድምፅ (8400)፣ ዌብ',
+    target_audience_sub: 'ለሁሉም 450,000+ የጎንደር ከተማ ነዋሪዎች፣ የመስክ ጥገና ቡድኖች እና የመላኪያ ኃላፊዎች የተዘጋጀ።',
+    persona_1_title: 'የከተማው ነዋሪዎች',
+    persona_1_am: 'የጎንደር ከተማ ነዋሪዎች',
+    persona_1_desc: 'የውሃ፣ የመብራት ወይም የቆሻሻ ችግሮችን በነፃ በUSSD (*840#)፣ በSMS (8065) ወይም በዌብ ያሳውቁ።',
+    persona_1_channels: 'መገናኛ መንገዶች፦ USSD፣ SMS፣ ድምፅ፣ ዌብ',
     persona_1_badge: '100% ነፃ (Toll-Free)',
-    persona_2_title: 'የማዘጋጃ ቤት መላኪያ ማዕከል ኃላፊዎች',
-    persona_2_am: 'የማዘጋጃ ቤት መላኪያ ማዕከል ኃላፊዎች',
-    persona_2_desc: 'ማዕከላዊውን የGIS ካርታ የሚቆጣጠሩ የኮማንድ ሴንተር ኃላፊዎች። 5ቱን የቲኬት ክፍሎች ይመራሉ፣ የድምፅ መልዕክቶችን ያዳምጣሉ፣ ለውሃና ለመብራት ተቋማት ይመድባሉ፣ የSLA የጊዜ ቆጣሪዎችን ይከታተላሉ።',
-    persona_2_channels: 'መተግበሪያ፦ የGIS ቁጥጥር ማዕከል (Dispatch Command)',
+    persona_2_title: 'የመላኪያ ማዕከል ኃላፊዎች',
+    persona_2_am: 'የመላኪያ ማዕከል ኃላፊዎች',
+    persona_2_desc: 'የከተማውን ሪፖርቶች በመገምገም ለጥገና ቡድኖች በካርታ በቀጥታ ይመድቡ።',
+    persona_2_channels: 'መተግበሪያ፦ የGIS ቁጥጥር ማዕከል (Dispatch)',
     persona_2_badge: 'የቀጥታ PostGIS ካርታ',
-    persona_3_title: 'የአደጋ መከላከልና ነፍስ አድን ግብረ-ኃይል',
-    persona_3_am: 'የአደጋ መከላከልና ነፍስ አድን ግብረ-ኃይል',
-    persona_3_desc: 'የጎንደር እሳትና ድንገተኛ አደጋ፣ ቀይ መስቀል እና የጎርፍ ነፍስ አድን ክፍሎች። የተከበቡ ሰዎችን ቁጥር፣ የውሃ ጥልቀት መረጃ እና የወንዝ ሙላት ማንቂያዎችን በቅጽበት ተቀብለው ፈጣን እርዳታ ያደርጋሉ።',
+    persona_3_title: 'የአደጋ መከላከል ግብረ-ኃይል',
+    persona_3_am: 'የአደጋ መከላከል ግብረ-ኃይል',
+    persona_3_desc: 'የአንገረብ ወንዝ ጎርፍ ማንቂያዎችን በመቀበል አፋጣኝ የነፍስ አድን እርዳታ ያደርጉ።',
     persona_3_channels: 'ትኩረት፦ የአንገረብና የቀሃ ወንዞች ተፋሰስ',
     persona_3_badge: '< 4 ሰዓት የአስቸኳይ ጊዜ SLA',
-    persona_4_title: 'የመስክ ጥገና ባለሙያዎችና ቴክኒሻኖች',
-    persona_4_am: 'የመስክ ጥገና ባለሙያዎችና ቴክኒሻኖች',
-    persona_4_desc: 'የጎንደር ውሃና ፍሳሽ (GWSA)፣ የኤሌክትሪክ ኃይል (EEU) እና የመንገድ ጥገና ቡድኖች። ኢንተርኔት በደከመበት ሁኔታ በስልክ የሚሰሩ፣ የጥገና ሂደትን የሚያዘምኑ እና የጥገና ማረጋገጫ ፎቶ የሚያቀርቡ።',
-    persona_4_channels: 'መተግበሪያ፦ የመስክ ባለሙያዎች ገጽ (Low-Bandwidth Mode)',
+    persona_4_title: 'የመስክ ጥገና ባለሙያዎች',
+    persona_4_am: 'የመስክ ጥገና ባለሙያዎች',
+    persona_4_desc: 'የጥገና ስራዎችን በሞባይል በመቀበል የማረጋገጫ ፎቶዎችን በቀጥታ ያቀርባሉ።',
+    persona_4_channels: 'መተግበሪያ፦ የመስክ ባለሙያዎች ገጽ',
     persona_4_badge: 'በፎቶ ማስረጃ የተረጋገጠ',
-    persona_5_title: 'የዩኒቨርሲቲ ተመራማሪዎችና የከተማ አስተዳደር አመራር',
-    persona_5_am: 'የዩኒቨርሲቲ ተመራማሪዎችና የከተማ አስተዳደር አመራር',
-    persona_5_desc: 'የጎንደር ዩኒቨርሲቲ መምህራን፣ የምርምር ገምጋሚዎች እና የከተማው አመራሮች። የ12ቱን ክፍለ ከተሞች የብልሽት ሁኔታ፣ የመጠገኛ አማካይ ሰዓት እና ክፍት የሲቪክ መረጃዎችን የሚገመግሙ።',
-    persona_5_channels: 'መተግበሪያ፦ የ12ቱ ክ/ከተሞች ስታቲስቲክስና ዳሽቦርድ',
-    persona_5_badge: '100% ክፍት የቴክኖሎጂ ደረጃ',
+    persona_5_title: 'ተመራማሪዎችና የከተማ አመራር',
+    persona_5_am: 'ተመራማሪዎችና የከተማ አመራር',
+    persona_5_desc: 'የ12ቱን ክፍለ-ከተሞች የጥገና ፍጥነት እና የአገልግሎት አሰጣጥ ጥራት ይከታተሉ።',
+    persona_5_channels: 'መተግበሪያ፦ የ12ቱ ክ/ከተሞች ዳሽቦርድ',
+    persona_5_badge: 'ክፍት የስታቲስቲክስ መረጃ',
 
     // 4-Stage Lifecycle Pipeline (Rule 5 & 8)
     lifecycle_tag: 'የቲኬት ሽግግር ስቴት ማሽን',
@@ -394,17 +394,17 @@ const TRANSLATIONS = {
     toll_free_badge: 'ነፃ አገልግሎት (Toll-Free)',
     card_ussd_tag: 'መስመር 1 • የእጅ ባትሪ ስልኮች',
     card_ussd_title: 'የUSSD ፈጣን ሜኑ (*840#)',
-    card_ussd_desc: 'በማንኛውም አዝራር ስልክ *840# ይደውሉ። አማርኛ ወይም እንግሊዝኛ በመምረጥ ከ12ቱ ክፍለ ከተሞች አንዱን ይምረጡና የቲኬት ቁጥር በSMS ይቀበሉ።',
+    card_ussd_desc: 'በማንኛውም ስልክ *840# በመደወል የቲኬት መለያ በSMS ወዲያውኑ ይቀበሉ።',
     zero_data_text: 'ኢንተርኔት አይፈልግም',
     sim_dial_link: 'ደውለው ይሞክሩ →',
-    card_sms_tag: 'መስመር 2 • አጭር የጽሁፍ መልዕክት (SMS)',
+    card_sms_tag: 'መስመር 2 • አጭር መልዕክት (SMS)',
     card_sms_title: 'የSMS አጭር ቁጥር (8065)',
-    card_sms_desc: 'ወደ 8065 በአማርኛ ወይም በእንግሊዝኛ ይላኩ፡\nሪፖርት [የችግሩ_አይነት] [ክፍለ_ከተማ] [የቦታ_መግለጫ]',
+    card_sms_desc: 'ወደ 8065 ነፃ መልዕክት በመላክ የችግሩን ሁኔታ በቀላሉ ያሳውቁ።',
     auto_receipts_text: 'ራስ-ሰር የSMS ማረጋገጫ',
     sim_sms_link: 'SMS ይሞክሩ →',
     card_ivr_tag: 'መስመር 3 • የስልክ ጥሪ መስመር',
     card_ivr_title: 'የድምፅ መስመር (8400)',
-    card_ivr_desc: 'ለማንበብ እና ለመጻፍ ለማይችሉ ነዋሪዎች የተዘጋጀ የድምፅ ጥሪ። በድምፅ መመሪያ ተከትለው 30 ሰከንድ ድምፅዎን በመቅዳት ቅሬታዎን ያስመዝግቡ።',
+    card_ivr_desc: 'ወደ 8400 በመደወል የድምፅ መልዕክት በቀጥታ ለመላኪያ ማዕከሉ ይቅረፁ።',
     voice_note_text: 'የድምፅ ቅጂ ማያያዣ',
     sim_call_link: 'ጥሪ ይሞክሩ →',
 
@@ -744,20 +744,20 @@ function renderLandingSubCities() {
 
   container.innerHTML = SUB_CITIES.map(sc => `
     <div onclick="quickFilterSubCity('${sc.name}')" 
-         class="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-slate-200/90 h-36 sm:h-40 bg-slate-900"
+         class="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 border border-slate-200 h-40 sm:h-48 bg-slate-950"
          title="${currentLang === 'am' ? sc.name_am : sc.name} (${sc.name}) - Click for GIS View">
-      <img src="${sc.image}" alt="${sc.name}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/images/gondar_fasiledes_castle.jpg';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-      <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+      <img src="${sc.image}" alt="${sc.name}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/images/gondar_fasiledes_castle.jpg';" class="w-full h-full object-cover group-hover:scale-108 transition duration-700 ease-out">
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
       
       <!-- Top Zone Badge -->
-      <span class="absolute top-2 left-2 bg-slate-950/80 backdrop-blur text-amber-300 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/10">
+      <span class="absolute top-2.5 left-2.5 bg-slate-950/85 backdrop-blur text-amber-300 font-mono text-[11px] font-black px-2 py-0.5 rounded-md border border-white/15 shadow-sm">
         #${sc.id < 10 ? '0' + sc.id : sc.id}
       </span>
 
-      <!-- Bottom Subcity Name (Clear & Simple, Zero Clutter) -->
-      <div class="absolute bottom-2 left-2.5 right-2.5 text-white">
-        <p class="font-black text-sm drop-shadow leading-tight group-hover:text-amber-300 transition">${currentLang === 'am' ? sc.name_am : sc.name}</p>
-        <p class="text-[10px] text-slate-300 font-medium drop-shadow">${currentLang === 'am' ? sc.name : sc.name_am}</p>
+      <!-- Bottom Subcity Name (Crisp & Clean, Zero Under-Image Clutter) -->
+      <div class="absolute bottom-2.5 left-3 right-3 text-white">
+        <p class="font-black text-sm sm:text-base drop-shadow leading-tight group-hover:text-amber-300 transition">${currentLang === 'am' ? sc.name_am : sc.name}</p>
+        <p class="text-[11px] text-slate-300 font-medium drop-shadow">${currentLang === 'am' ? sc.name : sc.name_am}</p>
       </div>
     </div>
   `).join('');
