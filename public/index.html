@@ -19,6 +19,10 @@
   <!-- Google Fonts: Plus Jakarta Sans, Inter & Noto Sans Ethiopic -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="preload" as="image" href="/images/gondar_fasiledes_castle.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script>
@@ -280,9 +284,50 @@
           <i data-lucide="languages" class="w-3.5 h-3.5 text-emerald-400"></i>
           <span id="current-lang-text">አማርኛ</span>
         </button>
+
+        <!-- Mobile Hamburger Menu Button (Rule 2: Responsive Phone/Tablet) -->
+        <button onclick="toggleMobileMenu()" id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700/80 transition btn-press flex items-center justify-center" aria-label="Toggle Navigation Menu">
+          <i data-lucide="menu" id="mobile-menu-icon" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Slide-Down Mobile Navigation Drawer (Rule 2: Mobile/Tablet Support) -->
+    <div id="mobile-nav-drawer" class="hidden md:hidden bg-slate-950/98 backdrop-blur-2xl border-t border-slate-800/80 px-4 py-4 space-y-2.5 shadow-2xl transition-all duration-300">
+      <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+        <button onclick="navigateTo('landing'); toggleMobileMenu(false);" id="mob-drawer-landing" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-800 text-emerald-400 flex items-center gap-2 border border-slate-700/60 text-left transition">
+          <i data-lucide="home" class="w-4 h-4 text-emerald-400"></i> <span data-i18n="nav_overview">Overview</span>
+        </button>
+        <button onclick="navigateTo('report'); toggleMobileMenu(false);" id="mob-drawer-report" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-slate-200 hover:text-white flex items-center gap-2 border border-slate-800 text-left transition">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> <span data-i18n="nav_report">Report Issue</span>
+        </button>
+        <button onclick="navigateTo('track'); toggleMobileMenu(false);" id="mob-drawer-track" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-slate-200 hover:text-white flex items-center gap-2 border border-slate-800 text-left transition">
+          <i data-lucide="search" class="w-4 h-4 text-amber-400"></i> <span data-i18n="nav_track">Track Ticket</span>
+        </button>
+        <button onclick="navigateTo('dispatch'); toggleMobileMenu(false);" id="mob-drawer-dispatch" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-slate-200 hover:text-white flex items-center gap-2 border border-slate-800 text-left transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-sky-400"></i> <span data-i18n="nav_dispatch">Dispatch Command</span>
+        </button>
+        <button onclick="navigateTo('analytics'); toggleMobileMenu(false);" id="mob-drawer-analytics" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-slate-200 hover:text-white flex items-center gap-2 border border-slate-800 text-left transition">
+          <i data-lucide="bar-chart-3" class="w-4 h-4 text-purple-400"></i> <span data-i18n="nav_analytics">Analytics</span>
+        </button>
+        <button onclick="navigateTo('crew'); toggleMobileMenu(false);" id="mob-drawer-crew" class="mobile-drawer-btn py-2.5 px-3 rounded-xl bg-slate-900/90 text-slate-200 hover:text-white flex items-center gap-2 border border-slate-800 text-left transition">
+          <i data-lucide="wrench" class="w-4 h-4 text-orange-400"></i> <span data-i18n="nav_crew">Field Crew</span>
+        </button>
+      </div>
+      <div class="pt-2 border-t border-slate-800 flex gap-2">
+        <button onclick="openFloodSosModal(); toggleMobileMenu(false);" class="flex-1 bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-300"></i> <span>🚨 FLOOD SOS</span>
+        </button>
+        <button onclick="toggleSimulator(true); toggleMobileMenu(false);" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> <span>*840# Sim</span>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- ======================================================================= -->
+  <!-- MAIN APPLICATION CONTENT CONTAINER -->
+  <main class="flex-1 pb-20 md:pb-6 flex flex-col relative">
 
   <!-- ======================================================================= -->
   <!-- VIEW 1: PUBLIC LANDING PAGE (/)                                         -->
@@ -488,6 +533,223 @@
       </div>
     </div>
 
+    <!-- ======================================================================= -->
+    <!-- TARGET AUDIENCE & UNIVERSAL ACCESSIBILITY MATRIX (Rule 3)               -->
+    <!-- ======================================================================= -->
+    <div id="target-audience" class="space-y-6 pt-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200 pb-4">
+        <div>
+          <div class="inline-flex items-center space-x-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold">
+            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+            <span data-i18n="target_audience_badge">Universal Accessibility Matrix</span>
+          </div>
+          <h2 class="text-2xl font-black text-slate-900 mt-2 tracking-tight" data-i18n="target_audience_header">
+            Defined Target Audience & Inclusive User Matrix
+          </h2>
+          <p class="text-sm text-slate-600 mt-1" data-i18n="target_audience_sub">
+            Built for all 450,000+ residents of Gondar, frontline municipal technicians, and executive dispatchers across every connectivity tier.
+          </p>
+        </div>
+        <span class="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-xl shadow-sm self-start sm:self-auto">5 Key Personas</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Persona 1: General Citizens & Residents -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-500 transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <i data-lucide="user-check" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full">Citizens</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900" data-i18n="persona_1_title">General Citizens & Residents</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5" data-i18n="persona_1_am">የጎንደር ከተማ ነዋሪዎች እና ማህበረሰብ</p>
+            <p class="text-xs text-slate-600 mt-3 leading-relaxed" data-i18n="persona_1_desc">
+              From market traders at Arada to students in Maraki. Regardless of smartphone ownership, residents report broken water mains, blackouts, or flood hazards using zero-data 2G USSD (*840#), SMS (8065), or spoken voice hotline (8400).
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
+            <span data-i18n="persona_1_channels">Channels: USSD, SMS, IVR, Web</span>
+            <span class="text-emerald-600 font-bold" data-i18n="persona_1_badge">100% Free / Toll-Free</span>
+          </div>
+        </div>
+
+        <!-- Persona 2: Municipal Dispatchers & Control Room -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-sky-500 transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider bg-sky-50 text-sky-800 border border-sky-200 px-2.5 py-0.5 rounded-full">Municipal Hub</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900" data-i18n="persona_2_title">Municipal Triage Dispatchers</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5" data-i18n="persona_2_am">የማዘጋጃ ቤት መላኪያ ማዕከል ኃላፊዎች</p>
+            <p class="text-xs text-slate-600 mt-3 leading-relaxed" data-i18n="persona_2_desc">
+              Control room officers operating the central GIS console. Manages 5-tier triage queues, listens to ingested voice calls, routes tickets to GWSA or EEU, and monitors live SLA countdown timers to prevent overdue escalations.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
+            <span data-i18n="persona_2_channels">Interface: GIS Dispatch Console</span>
+            <span class="text-sky-600 font-bold" data-i18n="persona_2_badge">Real-Time PostGIS</span>
+          </div>
+        </div>
+
+        <!-- Persona 3: Emergency Disaster & Rescue Squads -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-red-500 transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <i data-lucide="shield-alert" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider bg-red-50 text-red-800 border border-red-200 px-2.5 py-0.5 rounded-full">Disaster Tier</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900" data-i18n="persona_3_title">Emergency Disaster Responders</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5" data-i18n="persona_3_am">የአደጋ መከላከልና ነፍስ አድን ግብረ-ኃይል</p>
+            <p class="text-xs text-slate-600 mt-3 leading-relaxed" data-i18n="persona_3_desc">
+              Gondar Fire & Emergency Service, Red Cross, and flood rescue units. Receives instant sub-second alarms with trapped persons count, water depth telemetry, and river corridor proximity for life-saving interventions.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
+            <span data-i18n="persona_3_channels">Focus: Angereb/Keha River Flood</span>
+            <span class="text-red-600 font-bold" data-i18n="persona_3_badge">< 4h Emergency SLA</span>
+          </div>
+        </div>
+
+        <!-- Persona 4: Public Works Field Maintenance Crews -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-amber-500 transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <i data-lucide="wrench" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-0.5 rounded-full">Field Teams</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900" data-i18n="persona_4_title">Public Works Field Technicians</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5" data-i18n="persona_4_am">የመስክ ጥገና ባለሙያዎችና ቴክኒሻኖች</p>
+            <p class="text-xs text-slate-600 mt-3 leading-relaxed" data-i18n="persona_4_desc">
+              Rapid response crews from Gondar Water (GWSA), Electric Utility (EEU), and road drainage. Operates in low-bandwidth offline mode, updates job progress, and must upload before-and-after photo verification to close tickets.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
+            <span data-i18n="persona_4_channels">Interface: Field Crew Low-Bandwidth</span>
+            <span class="text-amber-600 font-bold" data-i18n="persona_4_badge">Audit Proof Verified</span>
+          </div>
+        </div>
+
+        <!-- Persona 5: Academic & Institutional Leadership -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-purple-500 transition-all duration-300 flex flex-col justify-between group md:col-span-2 lg:col-span-2">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-black group-hover:scale-105 transition">
+                <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider bg-purple-50 text-purple-800 border border-purple-200 px-2.5 py-0.5 rounded-full">Academic Defense & Governance</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900" data-i18n="persona_5_title">University Researchers & Municipal Leadership</h3>
+            <p class="text-xs text-slate-500 font-semibold mt-0.5" data-i18n="persona_5_am">የዩኒቨርሲቲ ተመራማሪዎችና የከተማ አስተዳደር አመራር</p>
+            <p class="text-xs text-slate-600 mt-3 leading-relaxed" data-i18n="persona_5_desc">
+              University of Gondar faculty, evaluation committee members, and city planners. Analyzes empirical sub-city failure patterns, average repair latency benchmarks, and open civic datasets without costly commercial proprietary licenses.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
+            <span data-i18n="persona_5_channels">Interface: 12 Sub-City Analytics & Scorecard</span>
+            <span class="text-purple-600 font-bold" data-i18n="persona_5_badge">100% Open Standards</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- 4-STEP OMNICHANNEL INCIDENT LIFECYCLE PIPELINE (Rule 5 & 8)             -->
+    <!-- ======================================================================= -->
+    <div id="lifecycle-pipeline" class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-2xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider" data-i18n="lifecycle_tag">Deterministic State Transition Engine</span>
+          <h2 class="text-2xl font-black text-white mt-1" data-i18n="lifecycle_header">Complete Incident Lifecycle & Triage Workflow</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1" data-i18n="lifecycle_sub">
+            From initial multi-channel citizen report to verified field resolution with auditable photographic proof.
+          </p>
+        </div>
+        <span class="font-mono text-xs font-extrabold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-xl self-start sm:self-auto">PostgreSQL State Machine</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Stage 1 -->
+        <div class="bg-slate-850/80 rounded-2xl p-5 border border-slate-700/60 space-y-3 relative overflow-hidden">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/40 flex items-center justify-center font-black text-sm">01</div>
+          <h4 class="font-bold text-white text-base" data-i18n="lifecycle_step_1_title">01. Inbound Ingestion</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="lifecycle_step_1_desc">
+            Captured via USSD (*840#), SMS (8065), IVR Voice Hotline (8400), Web GIS, or One-Touch Flood SOS.
+          </p>
+          <span class="inline-block text-[10px] font-mono bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800 font-bold">STATUS: RECEIVED</span>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="bg-slate-850/80 rounded-2xl p-5 border border-slate-700/60 space-y-3 relative overflow-hidden">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-black text-sm">02</div>
+          <h4 class="font-bold text-white text-base" data-i18n="lifecycle_step_2_title">02. Automated Triage</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="lifecycle_step_2_desc">
+            Rule engine separates life-threatening emergencies (flash flood, live wire) from general complaints. SLA timer initiated.
+          </p>
+          <span class="inline-block text-[10px] font-mono bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800 font-bold">STATUS: UNDER_REVIEW</span>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="bg-slate-850/80 rounded-2xl p-5 border border-slate-700/60 space-y-3 relative overflow-hidden">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/40 flex items-center justify-center font-black text-sm">03</div>
+          <h4 class="font-bold text-white text-base" data-i18n="lifecycle_step_3_title">03. Spatial Dispatch</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="lifecycle_step_3_desc">
+            Dispatched to GWSA, EEU, Sanitation, or Fire & Rescue units based on GIS polygon. Citizen notified by SMS.
+          </p>
+          <span class="inline-block text-[10px] font-mono bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800 font-bold">STATUS: DISPATCHED</span>
+        </div>
+
+        <!-- Stage 4 -->
+        <div class="bg-slate-850/80 rounded-2xl p-5 border border-slate-700/60 space-y-3 relative overflow-hidden">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-black text-sm">04</div>
+          <h4 class="font-bold text-white text-base" data-i18n="lifecycle_step_4_title">04. Verified Resolution</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="lifecycle_step_4_desc">
+            Field crew submits after-repair photo, worker ID, and notes. Citizen receives final SMS confirmation with audit link.
+          </p>
+          <span class="inline-block text-[10px] font-mono bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800 font-bold">STATUS: RESOLVED</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- FLASH FLOOD RESILIENCE & RIVER BASIN HUB (Rule 5 & 6)                    -->
+    <!-- ======================================================================= -->
+    <div id="flood-resilience" class="bg-gradient-to-r from-red-950 via-slate-900 to-slate-950 rounded-3xl p-8 border-2 border-red-500/50 shadow-2xl text-white space-y-6">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-3 max-w-2xl">
+          <div class="inline-flex items-center space-x-2 bg-red-500/20 text-red-300 px-3 py-1 rounded-full text-xs font-bold border border-red-500/30">
+            <span class="w-2 h-2 rounded-full bg-red-400 animate-ping"></span>
+            <span data-i18n="flood_hub_tag">Disaster Risk Reduction (DRR)</span>
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight" data-i18n="flood_hub_title">
+            Gondar Flash Flood Resilience & River Basin Monitoring
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal" data-i18n="flood_hub_desc">
+            Gondar's steep mountainous topography channels monsoon rainfall into the Angereb and Keha river basins. SmartCivic provides real-time telemetry, geofenced SMS warnings, and single-touch emergency SOS.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+          <button onclick="openFloodSosModal()" class="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black px-6 py-3.5 rounded-2xl shadow-xl shadow-red-950/80 flex items-center justify-center space-x-2 border border-red-400/50 animate-pulse transition btn-press">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-amber-300"></i>
+            <span data-i18n="flood_cta_sos">🚨 Emergency SOS Direct Dispatch</span>
+          </button>
+          <button onclick="openEarlyWarningModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-extrabold px-6 py-3.5 rounded-2xl border border-slate-700 flex items-center justify-center space-x-2 transition shadow-lg btn-press">
+            <i data-lucide="radio" class="w-5 h-5 text-amber-400"></i>
+            <span data-i18n="flood_cta_broadcast">📻 Send Mass Warning SMS</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Community Incident Feed with Real Photography -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
@@ -505,12 +767,106 @@
         <div class="text-center py-8 text-slate-400 col-span-full">Loading community reports...</div>
       </div>
     </div>
+
+    <!-- ======================================================================= -->
+    <!-- INTERACTIVE CIVIC FAQ ACCORDION (Rule 8: Scannable & Engaging)          -->
+    <!-- ======================================================================= -->
+    <div id="faq-section" class="bg-white rounded-3xl p-8 border border-slate-200/90 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider" data-i18n="faq_tag">Civic Knowledge Base</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1" data-i18n="faq_header">Frequently Asked Questions</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1" data-i18n="faq_sub">
+            Key operational questions for Gondar citizens, municipal dispatchers, and academic reviewers.
+          </p>
+        </div>
+        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-xl self-start sm:self-auto">5 Core Inquiries</span>
+      </div>
+
+      <div class="space-y-3" id="faq-accordion-container">
+        <!-- FAQ Item 1 -->
+        <div class="faq-item border border-slate-200 rounded-2xl overflow-hidden transition">
+          <button onclick="toggleFaq(1)" class="w-full text-left p-4 sm:p-5 flex items-center justify-between bg-slate-50/50 hover:bg-slate-50 transition">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-xs flex items-center justify-center font-black">1</span>
+              <span data-i18n="faq_q1">Do citizens need mobile internet or airtime credit to report a problem?</span>
+            </span>
+            <i data-lucide="chevron-down" id="faq-icon-1" class="w-4 h-4 text-slate-400 transition-transform"></i>
+          </button>
+          <div id="faq-ans-1" class="hidden p-5 pt-2 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white" data-i18n="faq_a1">
+            No! Gondar SmartCivic is engineered with an omnichannel architecture. Any resident can dial *840# or send an SMS to 8065 from any basic 2G feature phone ("የእጅ ባትሪ ስልክ") with zero mobile data balance. All inbound SMS and USSD requests are toll-free for citizens through Ethio Telecom reverse-billing agreements.
+          </div>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="faq-item border border-slate-200 rounded-2xl overflow-hidden transition">
+          <button onclick="toggleFaq(2)" class="w-full text-left p-4 sm:p-5 flex items-center justify-between bg-slate-50/50 hover:bg-slate-50 transition">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-xs flex items-center justify-center font-black">2</span>
+              <span data-i18n="faq_q2">How does the system distinguish regular municipal complaints from life-threatening emergencies?</span>
+            </span>
+            <i data-lucide="chevron-down" id="faq-icon-2" class="w-4 h-4 text-slate-400 transition-transform"></i>
+          </button>
+          <div id="faq-ans-2" class="hidden p-5 pt-2 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white" data-i18n="faq_a2">
+            The backend triage engine evaluates flags across every channel: keyword analysis (e.g. "FLOOD", "TRAPPED", "ጎርፍ"), water depth telemetry (knee/waist deep), trapped persons count, and emergency shortcodes (*840*911# or the Flood SOS button). Life-threatening incidents are tagged CRITICAL with a 4-hour SLA and trigger loud visual & audio alarms in the dispatch center.
+          </div>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="faq-item border border-slate-200 rounded-2xl overflow-hidden transition">
+          <button onclick="toggleFaq(3)" class="w-full text-left p-4 sm:p-5 flex items-center justify-between bg-slate-50/50 hover:bg-slate-50 transition">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-xs flex items-center justify-center font-black">3</span>
+              <span data-i18n="faq_q3">What prevents a field worker from falsely marking a ticket as 'RESOLVED'?</span>
+            </span>
+            <i data-lucide="chevron-down" id="faq-icon-3" class="w-4 h-4 text-slate-400 transition-transform"></i>
+          </button>
+          <div id="faq-ans-3" class="hidden p-5 pt-2 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white" data-i18n="faq_a3">
+            Tickets cannot be marked RESOLVED without satisfying strict schema requirements: a valid Technician ID (e.g., LEAD-TECH-04), engineering completion notes, and mandatory upload of an 'After' photographic resolution proof. The public tracker displays initial and after photos side-by-side for auditable community oversight.
+          </div>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="faq-item border border-slate-200 rounded-2xl overflow-hidden transition">
+          <button onclick="toggleFaq(4)" class="w-full text-left p-4 sm:p-5 flex items-center justify-between bg-slate-50/50 hover:bg-slate-50 transition">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-xs flex items-center justify-center font-black">4</span>
+              <span data-i18n="faq_q4">What happens if a municipal ticket breaches its Service Level Agreement (SLA)?</span>
+            </span>
+            <i data-lucide="chevron-down" id="faq-icon-4" class="w-4 h-4 text-slate-400 transition-transform"></i>
+          </button>
+          <div id="faq-ans-4" class="hidden p-5 pt-2 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white" data-i18n="faq_a4">
+            If a general ticket remains unaddressed beyond 48 hours (or an emergency beyond 4 hours), the database marks is_sla_breached=true and elevates the status to ESCALATED_UNRESOLVED. The ticket is automatically highlighted in Tab 4 (SLA Overdue Queue) and an alert is sent to municipal department heads.
+          </div>
+        </div>
+
+        <!-- FAQ Item 5 -->
+        <div class="faq-item border border-slate-200 rounded-2xl overflow-hidden transition">
+          <button onclick="toggleFaq(5)" class="w-full text-left p-4 sm:p-5 flex items-center justify-between bg-slate-50/50 hover:bg-slate-50 transition">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-xs flex items-center justify-center font-black">5</span>
+              <span data-i18n="faq_q5">Can this system be scaled to other Ethiopian regional cities (e.g. Bahir Dar, Hawassa, Mekelle)?</span>
+            </span>
+            <i data-lucide="chevron-down" id="faq-icon-5" class="w-4 h-4 text-slate-400 transition-transform"></i>
+          </button>
+          <div id="faq-ans-5" class="hidden p-5 pt-2 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white" data-i18n="faq_a5">
+            Yes! EthioCivic-Hub is architected with a multi-tenant municipal schema. The GIS map already contains spatial coordinates and bounding polygons for Bahir Dar, Addis Ababa, Hawassa, Mekelle, and Dire Dawa. Adding a new municipality requires only uploading its sub-city GIS polygon and linking local utility dispatch hotlines.
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ======================================================================= -->
   <!-- VIEW 2: WEB INCIDENT REPORTING FORM (/report)                           -->
   <!-- ======================================================================= -->
   <section id="view-report" class="view-panel hidden flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
+    <!-- Breadcrumb Navigation (Rule 4: Clear Navigation) -->
+    <div class="mb-4">
+      <button onclick="navigateTo('landing')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-700 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm hover:shadow transition btn-press">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span data-i18n="back_to_overview">← Back to Overview</span>
+      </button>
+    </div>
     <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
       
       <!-- Visual Context Banner for Reporting Page -->
@@ -785,7 +1141,12 @@
   <!-- VIEW 3: LIVE TICKET TRACKING (/track/:ticket_id)                        -->
   <!-- ======================================================================= -->
   <section id="view-track" class="view-panel hidden flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
-    
+    <!-- Breadcrumb Navigation (Rule 4: Clear Navigation) -->
+    <div class="mb-4">
+      <button onclick="navigateTo('landing')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-700 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm hover:shadow transition btn-press">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span data-i18n="back_to_overview">← Back to Overview</span>
+      </button>
+    </div>
     <!-- Context Banner for Tracking View -->
     <div class="relative h-44 rounded-3xl overflow-hidden shadow-lg border border-slate-200">
       <img src="/images/gondar_fasiledes_castle.jpg" 
@@ -936,11 +1297,14 @@
     </div>
 
     <!-- Sub-header bar -->
-    <div class="bg-slate-900 border-b border-slate-800 px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-white">
+    <div class="bg-slate-900 border-b border-slate-800 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-white">
       <div class="flex items-center space-x-3">
-        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-        <h2 class="font-bold text-base tracking-tight" data-i18n="dispatch_title">Gondar & All-Ethiopia GIS Spatial Dispatch Command</h2>
-        <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded border border-slate-700">PostGIS Spatial Engine</span>
+        <button onclick="navigateTo('landing')" class="text-xs font-bold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2.5 py-1 rounded-lg flex items-center gap-1 transition" title="Back to Overview">
+          <i data-lucide="arrow-left" class="w-3 h-3"></i> <span>Overview</span>
+        </button>
+        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse hidden sm:inline-block"></span>
+        <h2 class="font-bold text-sm sm:text-base tracking-tight" data-i18n="dispatch_title">Gondar & All-Ethiopia GIS Spatial Dispatch Command</h2>
+        <span class="text-[11px] bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded border border-slate-700 hidden md:inline-block">PostGIS Spatial Engine</span>
       </div>
 
       <!-- Filters & Perspective Tools -->
@@ -963,10 +1327,20 @@
       </div>
     </div>
 
+    <!-- Mobile Segmented View Toggle (GIS Map vs. Triage Queue) for < lg screens (Rule 2) -->
+    <div class="lg:hidden bg-slate-950 border-b border-slate-800 p-2 flex gap-2 z-30">
+      <button id="mob-dispatch-tab-map" onclick="toggleMobileDispatchView('map')" class="flex-1 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white flex items-center justify-center gap-1.5 shadow transition">
+        <i data-lucide="map" class="w-3.5 h-3.5"></i> <span>GIS Map</span>
+      </button>
+      <button id="mob-dispatch-tab-queue" onclick="toggleMobileDispatchView('queue')" class="flex-1 py-2 text-xs font-bold rounded-xl bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition">
+        <i data-lucide="list" class="w-3.5 h-3.5"></i> <span>Triage Queue</span> <span id="mob-queue-count" class="bg-slate-700 text-white px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+      </button>
+    </div>
+
     <!-- Dispatch Content: Map on Left (60%), Omnichannel Queue on Right (40%) -->
-    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
       <!-- GIS Map Canvas -->
-      <div class="flex-1 relative bg-slate-900">
+      <div id="dispatch-map-container" class="flex-1 relative bg-slate-900 h-full">
         <!-- Map Quick Perspective Bar -->
         <div class="absolute top-4 left-4 z-20 bg-slate-950/90 backdrop-blur text-white text-xs p-2 rounded-xl border border-slate-700 shadow-xl flex flex-wrap items-center gap-1.5">
           <button onclick="setMapPerspective('ethiopia')" class="bg-slate-800 hover:bg-slate-700 px-2 py-1 rounded text-[11px] font-bold">🇪🇹 All Ethiopia</button>
@@ -997,7 +1371,7 @@
       </div>
 
       <!-- Omnichannel 5-Tier Dispatch Queues -->
-      <div class="w-full lg:w-[480px] xl:w-[520px] bg-white border-l border-slate-200 flex flex-col h-full overflow-hidden shadow-lg z-20">
+      <div id="dispatch-queue-container" class="hidden lg:flex w-full lg:w-[480px] xl:w-[520px] bg-white border-l border-slate-200 flex-col h-full overflow-hidden shadow-lg z-20">
         <!-- Queue Header -->
         <div class="p-3.5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div>
@@ -1046,7 +1420,12 @@
   <!-- VIEW 5: SUB-CITY ANALYTICS DASHBOARD (/admin/analytics)                 -->
   <!-- ======================================================================= -->
   <section id="view-analytics" class="view-panel hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-    
+    <!-- Breadcrumb Navigation (Rule 4: Clear Navigation) -->
+    <div class="mb-4">
+      <button onclick="navigateTo('landing')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-700 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm hover:shadow transition btn-press">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span data-i18n="back_to_overview">← Back to Overview</span>
+      </button>
+    </div>
     <!-- Context Banner for Analytics Page -->
     <div class="relative h-44 rounded-3xl overflow-hidden shadow-lg border border-slate-200">
       <img src="/images/gondar_fasil_ghebbi_aerial.jpg" 
@@ -1192,7 +1571,12 @@
   <!-- VIEW 6: FIELD CREW MOBILE WEB VIEW (/crew/tasks)                        -->
   <!-- ======================================================================= -->
   <section id="view-crew" class="view-panel hidden flex-1 max-w-xl w-full mx-auto px-4 py-8 space-y-6">
-    
+    <!-- Breadcrumb Navigation (Rule 4: Clear Navigation) -->
+    <div class="mb-4">
+      <button onclick="navigateTo('landing')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-700 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm hover:shadow transition btn-press">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span data-i18n="back_to_overview">← Back to Overview</span>
+      </button>
+    </div>
     <!-- Context Banner for Field Crew View -->
     <div class="relative h-44 rounded-3xl overflow-hidden shadow-lg border border-slate-200">
       <img src="/images/gondar_fasiledes_castle.jpg" 
@@ -1217,6 +1601,109 @@
       </div>
     </div>
   </section>
+  </main>
+
+  <!-- ======================================================================= -->
+  <!-- AUTHORITATIVE MUNICIPAL FOOTER (Rule 4, Rule 5 & Rule 7)                -->
+  <!-- ======================================================================= -->
+  <footer class="bg-slate-950 text-slate-400 border-t border-slate-800 pt-12 pb-24 md:pb-12 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-slate-800/80">
+        <!-- Col 1: Brand & Heritage -->
+        <div class="space-y-3">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-10 h-10 rounded-xl bg-slate-900 p-0.5 ring-2 ring-amber-400/40 overflow-hidden">
+              <img src="/images/gondar_fasiledes_castle.jpg" alt="Fasilides Castle" class="w-full h-full object-cover rounded-lg" loading="lazy">
+            </div>
+            <div>
+              <h3 class="text-white font-black text-base">Gondar SmartCivic</h3>
+              <p class="text-[11px] text-amber-400 font-semibold">ጎንደር ስማርት ሲቪክ</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="footer_brand_desc">
+            Ethiopia's first inclusive, zero-barrier municipal infrastructure ingestion and spatial dispatch platform. Connecting 12 sub-cities across 2G, SMS, IVR, and Web.
+          </p>
+          <div class="pt-1 flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[11px] text-emerald-300 font-bold">Municipal Grid Operational</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Emergency Hotlines -->
+        <div class="space-y-3">
+          <h4 class="text-white font-extrabold text-sm uppercase tracking-wider" data-i18n="footer_emergency_title">Emergency Hotlines</h4>
+          <ul class="space-y-2 text-xs">
+            <li class="flex items-center justify-between">
+              <span class="text-slate-300">🚨 Gondar Fire & Flood Rescue:</span>
+              <span class="font-mono font-bold text-red-400 bg-red-950/60 px-2 py-0.5 rounded border border-red-800">939 / 8400</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="text-slate-300">💧 Water Outage (GWSA):</span>
+              <span class="font-mono font-bold text-sky-400 bg-sky-950/60 px-2 py-0.5 rounded border border-sky-800">8065 / 058-111</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="text-slate-300">⚡ Electrical Faults (EEU):</span>
+              <span class="font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800">905</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="text-slate-300">🚑 Ethiopian Red Cross Gondar:</span>
+              <span class="font-mono font-bold text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800">907</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="text-slate-300">👮 Gondar City Police:</span>
+              <span class="font-mono font-bold text-slate-200 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">991</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Quick Navigation -->
+        <div class="space-y-3">
+          <h4 class="text-white font-extrabold text-sm uppercase tracking-wider" data-i18n="footer_nav_title">Civic Portals</h4>
+          <ul class="space-y-1.5 text-xs">
+            <li><button onclick="navigateTo('landing')" class="hover:text-emerald-400 transition">Overview & Sub-Cities</button></li>
+            <li><button onclick="navigateTo('report')" class="hover:text-emerald-400 transition">Submit Incident Report</button></li>
+            <li><button onclick="navigateTo('track')" class="hover:text-emerald-400 transition">Public Ticket Resolution Tracker</button></li>
+            <li><button onclick="navigateTo('dispatch')" class="hover:text-emerald-400 transition">Central Dispatch Command Center</button></li>
+            <li><button onclick="navigateTo('analytics')" class="hover:text-emerald-400 transition">12 Sub-City Performance Analytics</button></li>
+            <li><button onclick="navigateTo('crew')" class="hover:text-emerald-400 transition">Field Crew Mobile Work Orders</button></li>
+            <li><button onclick="toggleSimulator(true)" class="hover:text-amber-400 transition">USSD & Two-Way SMS Defense Harness</button></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Municipal Administration -->
+        <div class="space-y-3">
+          <h4 class="text-white font-extrabold text-sm uppercase tracking-wider" data-i18n="footer_admin_title">Municipal Administration</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Gondar City Administration Hall<br>
+            Piazza District, Central Gondar, Amhara Region, Ethiopia
+          </p>
+          <div class="text-xs text-slate-400 space-y-1">
+            <p><span class="text-slate-200 font-semibold">Office Hours:</span> Mon - Fri: 8:30 AM - 5:30 PM EAT</p>
+            <p><span class="text-slate-200 font-semibold">Emergency Triage:</span> 24/7 / 365 Days Active</p>
+          </div>
+          <div class="pt-2 flex items-center space-x-2">
+            <span class="text-[11px] bg-slate-900 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-800">Ethio Telecom USSD: *840#</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <p>© 2026 Gondar City Administration & EthioCivic-Hub Project. Academic Capstone Defense Evaluation Build.</p>
+        <div class="flex items-center space-x-4">
+          <button onclick="toggleLanguage()" class="hover:text-slate-300 font-semibold flex items-center gap-1 transition">
+            <i data-lucide="languages" class="w-3.5 h-3.5"></i>
+            <span>Switch to አማርኛ / English</span>
+          </button>
+          <span>•</span>
+          <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-slate-300 font-semibold flex items-center gap-1 transition">
+            <span>Back to top</span>
+            <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- ======================================================================= -->
   <!-- INTERACTIVE DEFENSE SIMULATOR (MODAL)                                    -->
@@ -1739,6 +2226,30 @@ Press [CALL] or [SEND] to start.</div>
     <i data-lucide="bell" class="w-4 h-4 text-emerald-400"></i>
     <span id="toast-message">Notification</span>
   </div>
+
+  <!-- Fixed Mobile Bottom Navigation Bar (Rule 2 & 6: 1-Thumb Mobile App Control) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800/80 px-2 py-1.5 flex items-center justify-around shadow-2xl" aria-label="Mobile Bottom Navigation">
+    <button onclick="navigateTo('landing')" id="mob-nav-landing" class="mob-nav-btn flex flex-col items-center py-1 px-2 text-emerald-400 transition" aria-label="Home Overview">
+      <i data-lucide="home" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold mt-0.5" data-i18n="nav_overview">Home</span>
+    </button>
+    <button onclick="navigateTo('report')" id="mob-nav-report" class="mob-nav-btn flex flex-col items-center py-1 px-2 text-slate-400 hover:text-white transition" aria-label="Report Municipal Issue">
+      <i data-lucide="plus-circle" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold mt-0.5" data-i18n="nav_report">Report</span>
+    </button>
+    <button onclick="navigateTo('track')" id="mob-nav-track" class="mob-nav-btn flex flex-col items-center py-1 px-2 text-slate-400 hover:text-white transition" aria-label="Track Ticket">
+      <i data-lucide="search" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold mt-0.5" data-i18n="nav_track">Track</span>
+    </button>
+    <button onclick="navigateTo('dispatch')" id="mob-nav-dispatch" class="mob-nav-btn flex flex-col items-center py-1 px-2 text-slate-400 hover:text-white transition" aria-label="Dispatch Command">
+      <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold mt-0.5" data-i18n="nav_dispatch">Dispatch</span>
+    </button>
+    <button onclick="toggleSimulator(true)" class="mob-nav-btn flex flex-col items-center py-1 px-2 text-amber-400 hover:text-amber-300 transition" aria-label="Telecom Simulator">
+      <i data-lucide="smartphone" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold mt-0.5">2G Sim</span>
+    </button>
+  </nav>
 
   <!-- Master Application Logic & Translation Engine -->
   <script src="app.js"></script>

@@ -11,6 +11,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const zlib = require('zlib');
 
 const PORT = process.env.PORT || 5000;
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
@@ -649,7 +650,18 @@ const MIME_TYPES = {
 };
 
 async function handleRequest(req, res) {
-  const parsedUrl = url.parse(req.url, true);
+  const host = req.headers.host || 'localhost:5000';
+  let parsedUrl;
+  try {
+    const fullUrl = new URL(req.url, `http://${host}`);
+    parsedUrl = {
+      pathname: fullUrl.pathname,
+      search: fullUrl.search,
+      query: Object.fromEntries(fullUrl.searchParams.entries())
+    };
+  } catch (e) {
+    parsedUrl = url.parse(req.url, true);
+  }
   const pathname = parsedUrl.pathname;
   const method = req.method;
 
@@ -1608,8 +1620,34 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    res.writeHead(200, { 'Content-Type': contentType });
-    fs.createReadStream(filePath).pipe(res);
+
+    // High performance Cache-Control headers (Rule 1: Fast load speed)
+    let cacheControl = 'public, max-age=3600';
+    if (ext === '.html') {
+      cacheControl = 'no-cache';
+    } else if (['.jpg', '.jpeg', '.png', '.svg', '.wav', '.mp3'].includes(ext)) {
+      cacheControl = 'public, max-age=86400, stale-while-revalidate=604800';
+    } else if (['.js', '.css'].includes(ext)) {
+      cacheControl = 'public, max-age=14400, stale-while-revalidate=86400';
+    }
+
+    const acceptEncoding = req.headers['accept-encoding'] || '';
+    const shouldGzip = ['.html', '.css', '.js', '.json', '.svg'].includes(ext) && acceptEncoding.includes('gzip');
+
+    const headers = {
+      'Content-Type': contentType,
+      'Cache-Control': cacheControl,
+      'Access-Control-Allow-Origin': '*'
+    };
+
+    if (shouldGzip) {
+      headers['Content-Encoding'] = 'gzip';
+      res.writeHead(200, headers);
+      fs.createReadStream(filePath).pipe(zlib.createGzip()).pipe(res);
+    } else {
+      res.writeHead(200, headers);
+      fs.createReadStream(filePath).pipe(res);
+    }
   } else {
     sendJSON(res, 404, { error: 'Not Found' });
   }

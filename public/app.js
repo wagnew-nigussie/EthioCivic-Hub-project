@@ -9,6 +9,78 @@
 const TRANSLATIONS = {
   en: {
     brand_title: 'Gondar SmartCivic',
+    back_to_overview: '← Back to Overview',
+
+    // Target Audience (Rule 3)
+    target_audience_badge: 'Universal Accessibility Matrix',
+    target_audience_header: 'Defined Target Audience & Inclusive User Matrix',
+    target_audience_sub: 'Built for all 450,000+ residents of Gondar, frontline municipal technicians, and executive dispatchers across every connectivity tier.',
+    persona_1_title: 'General Citizens & Residents',
+    persona_1_am: 'የጎንደር ከተማ ነዋሪዎች እና ማህበረሰብ',
+    persona_1_desc: 'From market traders at Arada to students in Maraki. Regardless of smartphone ownership, residents report broken water mains, blackouts, or flood hazards using zero-data 2G USSD (*840#), SMS (8065), or spoken voice hotline (8400).',
+    persona_1_channels: 'Channels: USSD (*840#), SMS (8065), Voice (8400), Web',
+    persona_1_badge: '100% Free / Toll-Free',
+    persona_2_title: 'Municipal Triage Dispatchers',
+    persona_2_am: 'የማዘጋጃ ቤት መላኪያ ማዕከል ኃላፊዎች',
+    persona_2_desc: 'Control room officers operating the central GIS console. Manages 5-tier triage queues, listens to ingested voice calls, routes tickets to GWSA or EEU, and monitors live SLA countdown timers to prevent overdue escalations.',
+    persona_2_channels: 'Interface: GIS Spatial Dispatch Console',
+    persona_2_badge: 'Real-Time PostGIS',
+    persona_3_title: 'Emergency Disaster Responders',
+    persona_3_am: 'የአደጋ መከላከልና ነፍስ አድን ግብረ-ኃይል',
+    persona_3_desc: 'Gondar Fire & Emergency Service, Red Cross, and flood rescue units. Receives instant sub-second alarms with trapped persons count, water depth telemetry, and river corridor proximity for life-saving interventions.',
+    persona_3_channels: 'Focus: Angereb & Keha River Catchments',
+    persona_3_badge: '< 4h Emergency SLA',
+    persona_4_title: 'Public Works Field Technicians',
+    persona_4_am: 'የመስክ ጥገና ባለሙያዎችና ቴክኒሻኖች',
+    persona_4_desc: 'Rapid response crews from Gondar Water (GWSA), Electric Utility (EEU), and road drainage. Operates in low-bandwidth offline mode, updates job progress, and must upload before-and-after photo verification to close tickets.',
+    persona_4_channels: 'Interface: Field Crew Low-Bandwidth Mode',
+    persona_4_badge: 'Audit Proof Verified',
+    persona_5_title: 'University Researchers & Municipal Leadership',
+    persona_5_am: 'የዩኒቨርሲቲ ተመራማሪዎችና የከተማ አስተዳደር አመራር',
+    persona_5_desc: 'University of Gondar faculty, evaluation committee members, and city planners. Analyzes empirical sub-city failure patterns, average repair latency benchmarks, and open civic datasets without costly commercial proprietary licenses.',
+    persona_5_channels: 'Interface: 12 Sub-City Analytics & Scorecard',
+    persona_5_badge: '100% Open Standards',
+
+    // 4-Stage Lifecycle Pipeline (Rule 5 & 8)
+    lifecycle_tag: 'Deterministic State Transition Engine',
+    lifecycle_header: 'Complete Incident Lifecycle & Triage Workflow',
+    lifecycle_sub: 'From initial multi-channel citizen report to verified field resolution with auditable photographic proof.',
+    lifecycle_step_1_title: '01. Inbound Ingestion',
+    lifecycle_step_1_desc: 'Captured via USSD (*840#), SMS (8065), IVR Voice Hotline (8400), Web GIS, or One-Touch Flood SOS.',
+    lifecycle_step_2_title: '02. Automated Triage',
+    lifecycle_step_2_desc: 'Rule engine separates life-threatening emergencies (flash flood, live wire) from general complaints. SLA timer initiated.',
+    lifecycle_step_3_title: '03. Spatial Dispatch',
+    lifecycle_step_3_desc: 'Dispatched to GWSA, EEU, Sanitation, or Fire & Rescue units based on GIS polygon. Citizen notified by SMS.',
+    lifecycle_step_4_title: '04. Verified Resolution',
+    lifecycle_step_4_desc: 'Field crew submits after-repair photo, worker ID, and notes. Citizen receives final SMS confirmation with audit link.',
+
+    // Flash Flood Resilience Hub
+    flood_hub_tag: 'Disaster Risk Reduction (DRR)',
+    flood_hub_title: 'Gondar Flash Flood Resilience & River Basin Monitoring',
+    flood_hub_desc: 'Gondar’s steep mountainous topography channels monsoon rainfall into the Angereb and Keha river basins. SmartCivic provides real-time telemetry, geofenced SMS warnings, and single-touch emergency SOS.',
+    flood_cta_sos: '🚨 Emergency SOS Direct Dispatch',
+    flood_cta_broadcast: '📻 Send Mass Warning SMS',
+
+    // FAQ Accordion (Rule 8)
+    faq_tag: 'Civic Knowledge Base',
+    faq_header: 'Frequently Asked Questions',
+    faq_sub: 'Key operational questions for Gondar citizens, municipal dispatchers, and academic reviewers.',
+    faq_q1: 'Do citizens need mobile internet or airtime credit to report a problem?',
+    faq_a1: 'No! Gondar SmartCivic is engineered with an omnichannel architecture. Any resident can dial *840# or send an SMS to 8065 from any basic 2G feature phone ("የእጅ ባትሪ ስልክ") with zero mobile data balance. All inbound SMS and USSD requests are toll-free for citizens through Ethio Telecom reverse-billing agreements.',
+    faq_q2: 'How does the system distinguish regular municipal complaints from life-threatening emergencies?',
+    faq_a2: 'The backend triage engine evaluates flags across every channel: keyword analysis (e.g. "FLOOD", "TRAPPED", "ጎርፍ"), water depth telemetry (knee/waist deep), trapped persons count, and emergency shortcodes (*840*911# or the Flood SOS button). Life-threatening incidents are tagged CRITICAL with a 4-hour SLA and trigger loud visual & audio alarms in the dispatch center.',
+    faq_q3: "What prevents a field worker from falsely marking a ticket as 'RESOLVED'?",
+    faq_a3: "Tickets cannot be marked RESOLVED without satisfying strict schema requirements: a valid Technician ID (e.g., LEAD-TECH-04), engineering completion notes, and mandatory upload of an 'After' photographic resolution proof. The public tracker displays initial and after photos side-by-side for auditable community oversight.",
+    faq_q4: 'What happens if a municipal ticket breaches its Service Level Agreement (SLA)?',
+    faq_a4: 'If a general ticket remains unaddressed beyond 48 hours (or an emergency beyond 4 hours), the database marks is_sla_breached=true and elevates the status to ESCALATED_UNRESOLVED. The ticket is automatically highlighted in Tab 4 (SLA Overdue Queue) and an alert is sent to municipal department heads.',
+    faq_q5: 'Can this system be scaled to other Ethiopian regional cities (e.g. Bahir Dar, Hawassa, Mekelle)?',
+    faq_a5: 'Yes! EthioCivic-Hub is architected with a multi-tenant municipal schema. The GIS map already contains spatial coordinates and bounding polygons for Bahir Dar, Addis Ababa, Hawassa, Mekelle, and Dire Dawa. Adding a new municipality requires only uploading its sub-city GIS polygon and linking local utility dispatch hotlines.',
+
+    // Footer
+    footer_brand_desc: 'Ethiopia’s first inclusive, zero-barrier municipal infrastructure ingestion and spatial dispatch platform. Connecting 12 sub-cities across 2G, SMS, IVR, and Web.',
+    footer_emergency_title: 'Emergency Hotlines',
+    footer_nav_title: 'Civic Portals',
+    footer_admin_title: 'Municipal Administration',
     brand_badge: 'Gondar',
     brand_subtitle: 'EthioCivic-Hub • All-Ethiopia Municipal Dispatch',
     nav_overview: 'Overview',
@@ -199,6 +271,78 @@ const TRANSLATIONS = {
 
   am: {
     brand_title: 'ጎንደር ስማርት ሲቪክ',
+    back_to_overview: '← ወደ ዋናው ገጽ ተመለስ',
+
+    // Target Audience (Rule 3)
+    target_audience_badge: 'ሁለገብ የአገልግሎት ተደራሽነት',
+    target_audience_header: 'የተጠቃሚዎች ማዕቀፍ እና ሁለገብ የአገልግሎት ተደራሽነት',
+    target_audience_sub: 'ለሁሉም 450,000+ የጎንደር ከተማ ነዋሪዎች፣ የመስክ ጥገና ቴክኒሻኖች እና የማዘጋጃ ቤት መላኪያ ኃላፊዎች የተዘጋጀ።',
+    persona_1_title: 'የከተማው ነዋሪዎች እና ማህበረሰብ',
+    persona_1_am: 'የጎንደር ከተማ ነዋሪዎች እና ማህበረሰብ',
+    persona_1_desc: 'ከአራዳ ገበያ እስከ ማራኪ ዩኒቨርሲቲ ተማሪዎች ድረስ። ስማርትፎን ሳይኖራቸው በማንኛውም የእጅ ባትሪ ስልክ በUSSD (*840#)፣ በSMS (8065) ወይም በድምፅ መስመር (8400) የውሃ፣ የመብራት ወይም የጎርፍ ችግርን ያሳውቃሉ።',
+    persona_1_channels: 'መገናኛ መንገዶች፦ USSD (*840#)፣ SMS (8065)፣ ድምፅ (8400)፣ ዌብ',
+    persona_1_badge: '100% ነፃ (Toll-Free)',
+    persona_2_title: 'የማዘጋጃ ቤት መላኪያ ማዕከል ኃላፊዎች',
+    persona_2_am: 'የማዘጋጃ ቤት መላኪያ ማዕከል ኃላፊዎች',
+    persona_2_desc: 'ማዕከላዊውን የGIS ካርታ የሚቆጣጠሩ የኮማንድ ሴንተር ኃላፊዎች። 5ቱን የቲኬት ክፍሎች ይመራሉ፣ የድምፅ መልዕክቶችን ያዳምጣሉ፣ ለውሃና ለመብራት ተቋማት ይመድባሉ፣ የSLA የጊዜ ቆጣሪዎችን ይከታተላሉ።',
+    persona_2_channels: 'መተግበሪያ፦ የGIS ቁጥጥር ማዕከል (Dispatch Command)',
+    persona_2_badge: 'የቀጥታ PostGIS ካርታ',
+    persona_3_title: 'የአደጋ መከላከልና ነፍስ አድን ግብረ-ኃይል',
+    persona_3_am: 'የአደጋ መከላከልና ነፍስ አድን ግብረ-ኃይል',
+    persona_3_desc: 'የጎንደር እሳትና ድንገተኛ አደጋ፣ ቀይ መስቀል እና የጎርፍ ነፍስ አድን ክፍሎች። የተከበቡ ሰዎችን ቁጥር፣ የውሃ ጥልቀት መረጃ እና የወንዝ ሙላት ማንቂያዎችን በቅጽበት ተቀብለው ፈጣን እርዳታ ያደርጋሉ።',
+    persona_3_channels: 'ትኩረት፦ የአንገረብና የቀሃ ወንዞች ተፋሰስ',
+    persona_3_badge: '< 4 ሰዓት የአስቸኳይ ጊዜ SLA',
+    persona_4_title: 'የመስክ ጥገና ባለሙያዎችና ቴክኒሻኖች',
+    persona_4_am: 'የመስክ ጥገና ባለሙያዎችና ቴክኒሻኖች',
+    persona_4_desc: 'የጎንደር ውሃና ፍሳሽ (GWSA)፣ የኤሌክትሪክ ኃይል (EEU) እና የመንገድ ጥገና ቡድኖች። ኢንተርኔት በደከመበት ሁኔታ በስልክ የሚሰሩ፣ የጥገና ሂደትን የሚያዘምኑ እና የጥገና ማረጋገጫ ፎቶ የሚያቀርቡ።',
+    persona_4_channels: 'መተግበሪያ፦ የመስክ ባለሙያዎች ገጽ (Low-Bandwidth Mode)',
+    persona_4_badge: 'በፎቶ ማስረጃ የተረጋገጠ',
+    persona_5_title: 'የዩኒቨርሲቲ ተመራማሪዎችና የከተማ አስተዳደር አመራር',
+    persona_5_am: 'የዩኒቨርሲቲ ተመራማሪዎችና የከተማ አስተዳደር አመራር',
+    persona_5_desc: 'የጎንደር ዩኒቨርሲቲ መምህራን፣ የምርምር ገምጋሚዎች እና የከተማው አመራሮች። የ12ቱን ክፍለ ከተሞች የብልሽት ሁኔታ፣ የመጠገኛ አማካይ ሰዓት እና ክፍት የሲቪክ መረጃዎችን የሚገመግሙ።',
+    persona_5_channels: 'መተግበሪያ፦ የ12ቱ ክ/ከተሞች ስታቲስቲክስና ዳሽቦርድ',
+    persona_5_badge: '100% ክፍት የቴክኖሎጂ ደረጃ',
+
+    // 4-Stage Lifecycle Pipeline (Rule 5 & 8)
+    lifecycle_tag: 'የቲኬት ሽግግር ስቴት ማሽን',
+    lifecycle_header: 'የሪፖርት የህይወት ዑደትና የፍተሻ ሂደት',
+    lifecycle_sub: 'ከተለያዩ መስመሮች ከሚደርስ ሪፖርት ጀምሮ እስከ ተጨባጭ የመስክ ጥገና እና የፎቶ ማረጋገጫ ድረስ።',
+    lifecycle_step_1_title: '01. ሪፖርት መቀበል (Inbound Ingestion)',
+    lifecycle_step_1_desc: 'በUSSD (*840#)፣ በSMS (8065)፣ በድምፅ (8400)፣ በዌብ ካርታ ወይም በአስቸኳይ የጎርፍ ጥሪ ይገባል።',
+    lifecycle_step_2_title: '02. ቅድሚያ ደረጃ መለየት (Automated Triage)',
+    lifecycle_step_2_desc: 'ለህይወት አስጊ የሆኑ ድንገተኛ አደጋዎችን (ጎርፍ፣ የወደቀ ኃይል መስመር) ከመደበኛ ብልሽት ይለያል። የSLA ሰዓት ይጀምራል።',
+    lifecycle_step_3_title: '03. ባለሙያ መመደብ (Spatial Dispatch)',
+    lifecycle_step_3_desc: 'በGIS ካርታ መሰረት ለውሃ፣ መብራት፣ ፅዳት ወይም እሳት አደጋ ቡድኖች ይመደባል። ለነዋሪው በSMS ማሳወቂያ ይደርሳል።',
+    lifecycle_step_4_title: '04. የተረጋገጠ ጥገና (Verified Resolution)',
+    lifecycle_step_4_desc: 'የመስክ ባለሙያው የተጠገነበትን ፎቶ፣ መታወቂያ እና ቴክኒካል ማስታወሻ ያቀርባል። ለነዋሪው የማረጋገጫ SMS ይደርሳል።',
+
+    // Flash Flood Resilience Hub
+    flood_hub_tag: 'የአደጋ ስጋት ቅነሳ ማዕከል',
+    flood_hub_title: 'የጎንደር የጎርፍ መከላከልና የወንዞች ክትትል ማዕከል',
+    flood_hub_desc: 'የጎንደር ተረተራማ መልክአ-ምድር የጣለውን ዝናብ ወደ አንገረብና ቀሃ ወንዞች ያፈሳል። ስማርት ሲቪክ የቀጥታ ክትትል፣ የጅምላ SMS ማስጠንቀቂያ እና የአንድ አዝራር አስቸኳይ ጥሪ ይሰጣል።',
+    flood_cta_sos: '🚨 አስቸኳይ የነፍስ አድን ጥሪ ላክ',
+    flood_cta_broadcast: '📻 የጅምላ የጥንቃቄ SMS አስተላልፍ',
+
+    // FAQ Accordion (Rule 8)
+    faq_tag: 'የህዝብ መረጃ ማዕከል',
+    faq_header: 'በብዛት የሚጠየቁ ጥያቄዎች (FAQ)',
+    faq_sub: 'ለጎንደር ነዋሪዎች፣ ለማዘጋጃ ቤት ሰራተኞች እና ለዩኒቨርሲቲ ገምጋሚዎች የተዘጋጁ ቁልፍ ምላሾች።',
+    faq_q1: 'ነዋሪዎች ችግር ሪፖርት ለማድረግ የሞባይል ኢንተርኔት ወይም ካርድ ያስፈልጋቸዋል?',
+    faq_a1: 'በጭራሽ! ጎንደር ስማርት ሲቪክ ኢንተርኔት ለማይጠቀሙ ዜጎች ተደራሽ እንዲሆን የተሰራ ነው። ማንኛውም ነዋሪ ያለ ኢንተርኔት ዳታ በእጅ ባትሪ ስልኩ *840# መደወል ወይም ወደ 8065 SMS መላክ ይችላል። አገልግሎቱ ከኢትዮ ቴሌኮም ጋር በተደረገ ስምምነት ለነዋሪዎች ሙሉ በሙሉ ነፃ ነው።',
+    faq_q2: 'ስርዓቱ መደበኛ ቅሬታን ከህይወት አስጊ ድንገተኛ አደጋ እንዴት ይለያል?',
+    faq_a2: 'የማጣሪያ ኢንጂኑ ቁልፍ ቃላትን (ለምሳሌ «ጎርፍ»፣ «ተከበብን»፣ «FLOOD»)፣ የውሃ ጥልቀትን (ጉልበት ወይም ወገብ የደረሰ)፣ የተከበቡ ሰዎችን ብዛት እና የአስቸኳይ ጥሪ ቁጥሮችን (*840*911#) ይመረምራል። አደጋው ወዲያውኑ CRITICAL ተብሎ ተመድቦ በኮማንድ ሴንተሩ የድምፅና ምስል ደወል ያስነሳል።',
+    faq_q3: 'አንድ ሰራተኛ ሳይጠግን «ተጠግኗል» ብሎ እንዳይዘጋ ምን መከላከያ አለ?',
+    faq_a3: 'አንድ ቲኬት ያለ ጥብቅ ማረጋገጫ ሊዘጋ አይችልም፦ የሰራተኛው መታወቂያ (ለምሳሌ LEAD-TECH-04)፣ የጥገና ዝርዝር ማስታወሻ እና የተጠገነበትን የሚያሳይ የ«በኋላ» ፎቶ (Resolution Proof) መጫን ግዴታ ነው። የመጀመሪያውና የጥገናው ፎቶ ጎን ለጎን ለህዝብ ግልጽ ሆኖ ይታያል።',
+    faq_q4: 'የጥገና ጊዜ (SLA) ካለፈ ምን ይከሰታል?',
+    faq_a4: 'አንድ መደበኛ ጥያቄ ከ48 ሰዓት (ወይም ድንገተኛ አደጋ ከ4 ሰዓት) በላይ ሳይመለስ ከቆየ፣ ዳታቤዙ በራስ-ሰር is_sla_breached=true በማድረግ ደረጃውን ወደ ESCALATED_UNRESOLVED ያሳድገዋል። በትርፍ ጊዜ ክፍሉ (Tab 4) በቀይ ጎልቶ ለከተማው አመራሮች ማስጠንቀቂያ ይላካል።',
+    faq_q5: 'ይህ ስርዓት ወደ ሌሎች የኢትዮጵያ ከተሞች (ባህር ዳር፣ ሃዋሳ፣ መቀሌ) ማደግ ይችላል?',
+    faq_a5: 'አዎ! ኢትዮ-ሲቪክ ሀብ የተሰራው ለብዙ ከተሞች እንዲያገለግል (Multi-tenant) ሆኖ ነው። የGIS ካርታው ለአዲስ አበባ፣ ባህር ዳር፣ ሃዋሳ እና መቀሌ ዝግጁ መጋጠሚያዎች አሉት። አዲስ ከተማ ለማስገባት የክፍለ ከተሞቹን የGIS ካርታ መጫንና የአካባቢውን የስልክ መስመር ማገናኘት ብቻ በቂ ነው።',
+
+    // Footer
+    footer_brand_desc: 'የኢትዮጵያ የመጀመሪያው ሁለንተናዊ የማዘጋጃ ቤት መሠረተ ልማት ብልሽት መመዝገቢያና የGIS ቁጥጥር ስርዓት። 12ቱን ክፍለ ከተሞች በ2G፣ SMS፣ ድምፅና ዌብ ያገናኛል።',
+    footer_emergency_title: 'የአስቸኳይ ጊዜ ስልክ ቁጥሮች',
+    footer_nav_title: 'የአገልግሎት ክፍሎች',
+    footer_admin_title: 'የከተማው አስተዳደር ቢሮ',
     brand_badge: 'ጎንደር',
     brand_subtitle: 'ኢትዮ ሲቪክ ሀብ • የመላው ኢትዮጵያ የማዘጋጃ ቤት ቅሬታ መከታተያ',
     nav_overview: 'ዋና ገጽ',
@@ -498,9 +642,23 @@ function applyTranslations() {
 // ============================================================================
 function navigateTo(viewId) {
   document.querySelectorAll('.view-panel').forEach(panel => panel.classList.add('hidden'));
+  
+  // Desktop Nav highlight
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.remove('text-emerald-400', 'bg-slate-800');
     btn.classList.add('text-slate-300');
+  });
+
+  // Mobile Bottom Nav highlight
+  document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+    btn.classList.remove('text-emerald-400');
+    btn.classList.add('text-slate-400');
+  });
+
+  // Mobile Drawer buttons highlight
+  document.querySelectorAll('.mobile-drawer-btn').forEach(btn => {
+    btn.classList.remove('bg-slate-800', 'text-emerald-400');
+    btn.classList.add('bg-slate-900/90', 'text-slate-200');
   });
 
   const activePanel = document.getElementById(`view-${viewId}`);
@@ -511,6 +669,21 @@ function navigateTo(viewId) {
     activeBtn.classList.add('text-emerald-400', 'bg-slate-800');
     activeBtn.classList.remove('text-slate-300');
   }
+
+  const activeMobBtn = document.getElementById(`mob-nav-${viewId}`);
+  if (activeMobBtn) {
+    activeMobBtn.classList.add('text-emerald-400');
+    activeMobBtn.classList.remove('text-slate-400');
+  }
+
+  const activeDrawerBtn = document.getElementById(`mob-drawer-${viewId}`);
+  if (activeDrawerBtn) {
+    activeDrawerBtn.classList.add('bg-slate-800', 'text-emerald-400');
+    activeDrawerBtn.classList.remove('bg-slate-900/90', 'text-slate-200');
+  }
+
+  // Auto-close mobile drawer if open
+  toggleMobileMenu(false);
 
   if (viewId === 'report' && mapReport) {
     setTimeout(() => mapReport.invalidateSize(), 200);
@@ -563,7 +736,7 @@ function renderLandingSubCities() {
     <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-950/10 hover:-translate-y-1.5 transition-all duration-300 group flex flex-col justify-between">
       <!-- Sub-City Authentic Photographic Showcase -->
       <div class="h-32 overflow-hidden relative">
-        <img src="${sc.image}" alt="${sc.name}" onerror="this.onerror=null; this.src='/images/gondar_fasiledes_castle.jpg';" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
+        <img src="${sc.image}" alt="${sc.name}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/images/gondar_fasiledes_castle.jpg';" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
         
         <!-- #01 .. #12 Index & Zone Code Badge -->
@@ -2272,3 +2445,90 @@ async function handleBroadcastSubmit(e) {
   }
 }
 
+
+
+// ============================================================================
+// MOBILE RESPONSIVENESS & ACCORDION HELPERS (Rules 2, 4, 8)
+// ============================================================================
+let isMobileMenuOpen = false;
+
+function toggleMobileMenu(forceState) {
+  const drawer = document.getElementById('mobile-nav-drawer');
+  const icon = document.getElementById('mobile-menu-icon');
+  if (!drawer) return;
+
+  if (typeof forceState === 'boolean') {
+    isMobileMenuOpen = forceState;
+  } else {
+    isMobileMenuOpen = !isMobileMenuOpen;
+  }
+
+  if (isMobileMenuOpen) {
+    drawer.classList.remove('hidden');
+    if (icon) icon.setAttribute('data-lucide', 'x');
+  } else {
+    drawer.classList.add('hidden');
+    if (icon) icon.setAttribute('data-lucide', 'menu');
+  }
+  if (window.lucide) lucide.createIcons();
+}
+
+let activeMobileDispatchTab = 'map';
+
+function toggleMobileDispatchView(view) {
+  activeMobileDispatchTab = view;
+  const mapContainer = document.getElementById('dispatch-map-container');
+  const queueContainer = document.getElementById('dispatch-queue-container');
+  const tabMap = document.getElementById('mob-dispatch-tab-map');
+  const tabQueue = document.getElementById('mob-dispatch-tab-queue');
+
+  if (view === 'map') {
+    if (mapContainer) {
+      mapContainer.classList.remove('hidden');
+      mapContainer.classList.add('flex-1');
+    }
+    if (queueContainer) {
+      queueContainer.classList.add('hidden');
+      queueContainer.classList.remove('flex');
+    }
+    if (tabMap) {
+      tabMap.className = 'flex-1 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white flex items-center justify-center gap-1.5 shadow transition';
+    }
+    if (tabQueue) {
+      tabQueue.className = 'flex-1 py-2 text-xs font-bold rounded-xl bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition';
+    }
+    if (mapDispatch) {
+      setTimeout(() => mapDispatch.invalidateSize(), 150);
+    }
+  } else {
+    if (mapContainer) {
+      mapContainer.classList.add('hidden');
+      mapContainer.classList.remove('flex-1');
+    }
+    if (queueContainer) {
+      queueContainer.classList.remove('hidden');
+      queueContainer.classList.add('flex');
+    }
+    if (tabMap) {
+      tabMap.className = 'flex-1 py-2 text-xs font-bold rounded-xl bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition';
+    }
+    if (tabQueue) {
+      tabQueue.className = 'flex-1 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white flex items-center justify-center gap-1.5 shadow transition';
+    }
+  }
+}
+
+function toggleFaq(index) {
+  const ans = document.getElementById(`faq-ans-${index}`);
+  const icon = document.getElementById(`faq-icon-${index}`);
+  if (!ans) return;
+
+  const isClosed = ans.classList.contains('hidden');
+  if (isClosed) {
+    ans.classList.remove('hidden');
+    if (icon) icon.classList.add('rotate-180');
+  } else {
+    ans.classList.add('hidden');
+    if (icon) icon.classList.remove('rotate-180');
+  }
+}
