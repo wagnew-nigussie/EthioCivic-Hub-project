@@ -16,11 +16,12 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 const TEST_PORT = 5066;
-const BASE_URL = `http://localhost:${TEST_PORT}`;
+let currentPort = TEST_PORT;
+const getBaseUrl = () => `http://127.0.0.1:${currentPort}`;
 
 function httpRequest(method, endpoint, payload = null, headers = {}) {
   return new Promise((resolve, reject) => {
-    const url = `${BASE_URL}${endpoint}`;
+    const url = `${getBaseUrl()}${endpoint}`;
     const parsed = new URL(url);
     const bodyStr = payload ? JSON.stringify(payload) : null;
 
@@ -70,7 +71,20 @@ async function runTestSuite() {
     stdio: 'pipe'
   });
 
-  await new Promise((res) => setTimeout(res, 1200));
+  await new Promise((resolve) => {
+    serverProcess.stdout.on('data', (d) => {
+      const match = d.toString().match(/Running on Port (\d+)/);
+      if (match) {
+        currentPort = Number(match[1]);
+        resolve();
+      }
+    });
+    serverProcess.stderr.on('data', (d) => {
+      const s = d.toString();
+      if (!s.includes('ExperimentalWarning')) process.stderr.write(s);
+    });
+    setTimeout(resolve, 2500);
+  });
 
   try {
     // ------------------------------------------------------------------------
@@ -219,7 +233,7 @@ async function runTestSuite() {
     // OBJECTIVE 5: DASHBOARD & WEB INTEGRATION (SERVER-SENT EVENTS STREAM)
     // ------------------------------------------------------------------------
     console.log('\n[TEST 5] Dashboard Real-Time Integration (Server-Sent Events Stream)');
-    const sseReq = http.request(`${BASE_URL}/api/v1/events/stream`, (sseRes) => {
+    const sseReq = http.request(`${getBaseUrl()}/api/v1/events/stream`, (sseRes) => {
       assert.strictEqual(sseRes.statusCode, 200);
       assert.strictEqual(sseRes.headers['content-type'], 'text/event-stream');
       console.log('  ✓ Real-Time SSE Stream established with keep-alive connection');

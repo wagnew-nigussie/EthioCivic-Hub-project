@@ -80,20 +80,20 @@ async function runTests() {
     cwd: path.join(__dirname)
   });
 
-  serverProc.stdout.on('data', d => {
-    const s = d.toString();
-    const match = s.match(/Running on Port (\d+)/);
-    if (match) {
-      activePort = Number(match[1]);
-    }
+  await new Promise((resolve) => {
+    serverProc.stdout.on('data', d => {
+      const match = d.toString().match(/Running on Port (\d+)/);
+      if (match) {
+        activePort = Number(match[1]);
+        resolve();
+      }
+    });
+    serverProc.stderr.on('data', d => {
+      const s = d.toString();
+      if (!s.includes('ExperimentalWarning')) console.error(`[Server stderr]`, s);
+    });
+    setTimeout(resolve, 2500);
   });
-
-  serverProc.stderr.on('data', d => {
-    console.error(`[Server stderr]`, d.toString());
-  });
-
-  // Wait 1.5s for server boot
-  await new Promise(r => setTimeout(r, 1500));
 
   try {
     // ------------------------------------------------------------------------
