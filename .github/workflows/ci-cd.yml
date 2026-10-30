@@ -84,6 +84,9 @@ jobs:
     needs: [validate-and-test, docker-build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    environment:
+      name: Production
+      url: https://ethiocivic-hub-project.onrender.com
 
     steps:
       - name: Deployment Summary & Verification Notice
@@ -96,3 +99,11 @@ jobs:
           echo "Repository:             https://github.com/wagnew-nigussie/EthioCivic-Hub-project"
           echo "Status:                 All 5 verification suites PASSED (100%)"
           echo "=================================================================="
+
+      - name: Trigger Render Deploy Hook (if configured)
+        if: env.RENDER_DEPLOY_HOOK_URL != ''
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          echo "Pinging Render Deploy Hook..."
+          curl -s -X POST "$RENDER_DEPLOY_HOOK_URL" || true
