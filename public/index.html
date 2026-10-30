@@ -3811,15 +3811,21 @@ Press [CALL] or [SEND] to start.</div>
           </div>
 
           <!-- Channel Simulator Tabs -->
-          <div class="mt-4 flex space-x-2 border-b border-slate-200">
-            <button onclick="setSimTab('ussd')" id="tab-sim-ussd" class="sim-tab pb-2 text-xs font-bold text-emerald-600 border-b-2 border-emerald-600 flex items-center gap-1.5 transition">
+          <div class="mt-4 flex flex-wrap gap-1 border-b border-slate-200">
+            <button onclick="setSimTab('ussd')" id="tab-sim-ussd" class="sim-tab pb-2 px-2 text-xs font-bold text-emerald-600 border-b-2 border-emerald-600 flex items-center gap-1.5 transition">
               <i data-lucide="hash" class="w-3.5 h-3.5"></i> USSD (*840#)
             </button>
-            <button onclick="setSimTab('sms')" id="tab-sim-sms" class="sim-tab pb-2 text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+            <button onclick="setSimTab('sms')" id="tab-sim-sms" class="sim-tab pb-2 px-2 text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
               <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Two-Way SMS (8065)
             </button>
-            <button onclick="setSimTab('ivr')" id="tab-sim-ivr" class="sim-tab pb-2 text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+            <button onclick="setSimTab('ivr')" id="tab-sim-ivr" class="sim-tab pb-2 px-2 text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
               <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> IVR Voice Hotline (8400)
+            </button>
+            <button onclick="setSimTab('otp')" id="tab-sim-otp" class="sim-tab pb-2 px-2 text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> SMS OTP Auth
+            </button>
+            <button onclick="setSimTab('gateways')" id="tab-sim-gateways" class="sim-tab pb-2 px-2 text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+              <i data-lucide="server" class="w-3.5 h-3.5"></i> Telco Gateways
             </button>
           </div>
 
@@ -3945,6 +3951,86 @@ Press [CALL] or [SEND] to start.</div>
               <i data-lucide="mic" class="w-4 h-4"></i> Simulate 30s Caller Voice Note & Ingest Ticket
             </button>
             <div id="ivr-result-box" class="p-3.5 bg-purple-50 border border-purple-200 rounded-2xl text-purple-900 text-xs hidden space-y-1"></div>
+          </div>
+
+          <!-- Sub-panel OTP Authentication -->
+          <div id="sim-panel-otp" class="py-4 space-y-4 text-xs text-slate-600 hidden">
+            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+              <p class="font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                <span>SMS One-Time Password (OTP) Verification Engine</span>
+              </p>
+              <p class="text-[11px] text-slate-500">
+                Tests 6-digit cryptographic token generation, rate limiting (max 5/10min), and single-use validation over AfroMessage/Africa's Talking gateways.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="space-y-1.5">
+                <label class="block font-bold text-slate-700">Phone Number:</label>
+                <div class="flex gap-2">
+                  <input type="text" id="sim-otp-phone" value="+251918112233" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-mono">
+                  <button onclick="requestSimulatedOtp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-2 rounded-xl transition shrink-0">Send OTP</button>
+                </div>
+              </div>
+              <div class="space-y-1.5">
+                <label class="block font-bold text-slate-700">Enter Received 6-Digit Code:</label>
+                <div class="flex gap-2">
+                  <input type="text" id="sim-otp-input" placeholder="e.g. 123456" maxlength="6" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-mono">
+                  <button onclick="verifySimulatedOtp()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3 py-2 rounded-xl transition shrink-0">Verify</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="sim-otp-result" class="p-3.5 bg-slate-900 text-slate-100 rounded-2xl font-mono text-[11px] space-y-1 hidden"></div>
+          </div>
+
+          <!-- Sub-panel Telco Gateways Live Status -->
+          <div id="sim-panel-gateways" class="py-4 space-y-4 text-xs text-slate-600 hidden">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <span class="font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="server" class="w-4 h-4 text-sky-600"></i>
+                <span>Telco Communication Gateways & Circuit Breaker</span>
+              </span>
+              <button onclick="refreshGatewayStatus()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-lg transition border">Refresh</button>
+            </div>
+
+            <div id="gateways-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <!-- AfroMessage -->
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-slate-900 text-[11px]">AfroMessage</span>
+                  <span class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">PRIMARY</span>
+                </div>
+                <p class="text-[10px] text-slate-500">Direct Ethiopia SMS & OTP</p>
+                <p class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">● Circuit: CLOSED (Healthy)</p>
+              </div>
+
+              <!-- Africa's Talking -->
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-slate-900 text-[11px]">Africa's Talking</span>
+                  <span class="text-[9px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">ACTIVE</span>
+                </div>
+                <p class="text-[10px] text-slate-500">USSD *840# & Voice 8400</p>
+                <p class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">● Circuit: CLOSED (Healthy)</p>
+              </div>
+
+              <!-- eSMS Africa -->
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-slate-900 text-[11px]">eSMS Africa</span>
+                  <span class="text-[9px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">STANDBY</span>
+                </div>
+                <p class="text-[10px] text-slate-500">Pan-African Bulk Fallback</p>
+                <p class="text-[10px] text-amber-600 font-semibold flex items-center gap-1">● Circuit: STANDBY</p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-slate-950 text-slate-200 font-mono text-[11px] space-y-1">
+              <p class="text-emerald-400 font-bold">Multi-Gateway Failover Rule:</p>
+              <p class="text-slate-400">AfroMessage (Ethiopian direct) &rarr; Fallback to Africa's Talking &rarr; Fallback to eSMS Africa &rarr; Local Ledger</p>
+            </div>
           </div>
         </div>
 

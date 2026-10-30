@@ -1102,6 +1102,13 @@ document.addEventListener('DOMContentLoaded', () => {
   loadIncidents();
   loadAnalytics();
 
+  // Initialize Real-time Server-Sent Events (SSE) Stream
+  try {
+    initRealtimeEventStream();
+  } catch (e) {
+    console.warn('Real-time SSE init:', e);
+  }
+
   try {
     window.addEventListener('online', () => updateNetworkStatus(true));
     window.addEventListener('offline', () => updateNetworkStatus(false));
@@ -1123,6 +1130,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+function initRealtimeEventStream() {
+  if (typeof window.EventSource === 'undefined') return;
+  try {
+    const sse = new EventSource('/api/v1/events/stream');
+    sse.addEventListener('ticket:created', (e) => {
+      try {
+        const ticket = JSON.parse(e.data);
+        showToast(`🔔 New ${ticket.channel_origin} Ticket #${ticket.ticket_code} Ingested (${ticket.sub_city})`);
+        loadIncidents();
+      } catch(err) {}
+    });
+
+    sse.addEventListener('ticket:emergency', (e) => {
+      try {
+        const ticket = JSON.parse(e.data);
+        showToast(`🚨 CRITICAL ${ticket.channel_origin} SOS #${ticket.ticket_code} for ${ticket.sub_city}!`, 'error');
+        loadIncidents();
+      } catch(err) {}
+    });
+  } catch (err) {
+    console.warn('Realtime SSE fallback:', err);
+  }
+}
 
 function toggleLanguage() {
   currentLang = currentLang === 'en' ? 'am' : 'en';
@@ -2646,9 +2677,126 @@ function setSimTab(tab) {
     activeBtn.classList.remove('text-slate-500');
   }
 
-  ['ussd', 'sms', 'ivr'].forEach(t => {
-    document.getElementById(`sim-panel-${t}`).classList.toggle('hidden', t !== tab);
+  ['ussd', 'sms', 'ivr', 'otp', 'gateways'].forEach(t => {
+    const p = document.getElementById(`sim-panel-${t}`);
+    if (p) p.classList.toggle('hidden', t !== tab);
   });
+
+  if (tab === 'gateways') {
+    refreshGatewayStatus();
+  }
+}
+
+async function requestSimulatedOtp() {
+  const phone = document.getElementById('sim-otp-phone')?.value.trim() || '+251918112233';
+  const resultBox = document.getElementById('sim-otp-result');
+  if (resultBox) {
+    resultBox.classList.remove('hidden');
+    resultBox.innerHTML = '<span class="text-amber-400 animate-pulse">Transmitting OTP via Multi-Gateway (AfroMessage / Africa\'s Talking)...</span>';
+  }
+
+  try {
+    const res = await fetch('/api/v1/auth/otp/request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phoneNumber: phone })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      if (data.testOtpHint) {
+        const input = document.getElementById('sim-otp-input');
+        if (input) input.value = data.testOtpHint;
+      }
+      if (resultBox) {
+        resultBox.innerHTML = `<span class="text-emerald-400 font-bold">✓ OTP DISPATCHED</span>\nPhone: ${data.phoneNumber}\nGateway: ${data.provider}\nExpires in: 300s\nCode: <span class="text-amber-300 font-extrabold text-sm underline">${data.testOtpHint || 'Sent to SMS'}</span>`;
+      }
+      showToast(`SMS OTP sent to ${phone}`);
+    } else {
+      if (resultBox) resultBox.innerHTML = `<span class="text-red-400">Error: ${data.message || data.error}</span>`;
+      showToast(data.message || 'OTP request failed', 'error');
+    }
+  } catch (err) {
+    if (resultBox) resultBox.innerHTML = `<span class="text-red-400">Connection error: ${err.message}</span>`;
+  }
+}
+
+async function verifySimulatedOtp() {
+  const phone = document.getElementById('sim-otp-phone')?.value.trim() || '+251918112233';
+  const otp = document.getElementById('sim-otp-input')?.value.trim();
+  const resultBox = document.getElementById('sim-otp-result');
+
+  if (!otp) {
+    showToast('Please enter the 6-digit verification code', 'warning');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/v1/auth/otp/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phoneNumber: phone, otp })
+    });
+    const data = await res.json();
+    if (res.ok && data.valid) {
+      if (resultBox) {
+        resultBox.innerHTML = `<span class="text-emerald-400 font-extrabold">🎉 100% VERIFIED AUTHENTIC CITIZEN</span>\nPhone: ${phone}\nVerified At: ${data.verifiedAt}\nSecurity Token: Single-use burned.`;
+      }
+      showToast('✓ Phone successfully verified via SMS OTP');
+    } else {
+      if (resultBox) {
+        resultBox.innerHTML = `<span class="text-red-400 font-bold">❌ Verification Failed</span>\nReason: ${data.message || data.reason}`;
+      }
+      showToast('Invalid or expired OTP code', 'error');
+    }
+  } catch (err) {
+    if (resultBox) resultBox.innerHTML = `<span class="text-red-400">Verification error: ${err.message}</span>`;
+  }
+}
+
+async function refreshGatewayStatus() {
+  const container = document.getElementById('gateways-cards-container');
+  if (!container) return;
+
+  try {
+    const res = await fetch('/api/v1/gateways/status');
+    const data = await res.json();
+    if (res.ok && data.gateways) {
+      const g = data.gateways;
+      container.innerHTML = `
+        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-900 text-[11px]">${g.afromessage.name}</span>
+            <span class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">PRIMARY</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Direct Ethiopia SMS & OTP</p>
+          <p class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">● Circuit: ${g.afromessage.circuit_state} (${g.afromessage.status})</p>
+          <p class="text-[9px] text-slate-400">Dispatched: ${g.afromessage.success_count} msgs</p>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-900 text-[11px]">${g.africas_talking.name}</span>
+            <span class="text-[9px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">ACTIVE</span>
+          </div>
+          <p class="text-[10px] text-slate-500">USSD *840# & Voice 8400</p>
+          <p class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">● Circuit: ${g.africas_talking.circuit_state} (${g.africas_talking.status})</p>
+          <p class="text-[9px] text-slate-400">Dispatched: ${g.africas_talking.success_count} msgs</p>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-900 text-[11px]">${g.esms_africa.name}</span>
+            <span class="text-[9px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">STANDBY</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Pan-African Bulk Fallback</p>
+          <p class="text-[10px] text-amber-600 font-semibold flex items-center gap-1">● Circuit: ${g.esms_africa.circuit_state} (${g.esms_africa.status})</p>
+          <p class="text-[9px] text-slate-400">Dispatched: ${g.esms_africa.success_count} msgs</p>
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.warn('refreshGatewayStatus:', err);
+  }
 }
 
 function openPhoneSimulator(tab) {

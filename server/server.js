@@ -21,6 +21,24 @@ const AUDIO_DIR = path.join(UPLOADS_DIR, 'audio');
 const PHOTO_DIR = path.join(UPLOADS_DIR, 'photos');
 const AUTH_FILE = path.join(__dirname, '.admin_auth.json');
 
+// Omnichannel Communication Integration Engine
+const {
+  GATEWAYS,
+  smsOutbox,
+  registerSseClient,
+  broadcastEvent,
+  checkRateLimit,
+  verifyWebhookHmac,
+  requestPhoneOtp,
+  verifyPhoneOtp,
+  dispatchOutboundSms,
+  generateVoiceXmlGreeting,
+  generateVoiceXmlCategoryMenu,
+  generateVoiceXmlRecordingPrompt,
+  generateVoiceXmlCompletion,
+  getOpenApiSpecification
+} = require('./communicationEngine');
+
 // Session storage: token -> { id, email, name, role, expiresAt }
 const adminSessions = new Map();
 
@@ -1083,7 +1101,7 @@ let incidents = [
   }
 ];
 
-let smsOutbox = [];
+// Note: smsOutbox is managed by communicationEngine.js
 
 function getDistanceMeters(lat1, lon1, lat2, lon2) {
   const R = 6371e3;
@@ -1167,6 +1185,15 @@ function sendText(res, statusCode, text) {
   res.end(text);
 }
 
+// Helper: Send Voice XML response
+function sendXML(res, statusCode, xml) {
+  res.writeHead(statusCode, {
+    'Content-Type': 'application/xml; charset=utf-8',
+    'Access-Control-Allow-Origin': '*'
+  });
+  res.end(xml);
+}
+
 // MIME Types Map
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -1208,8 +1235,183 @@ async function handleRequest(req, res) {
   }
 
   // ==========================================================================
-  // API ROUTING
+  // API ROUTING & OMNICHANNEL COMMUNICATION INFRASTRUCTURE
   // ==========================================================================
+
+  // 0A. Health & System Status
+  if (pathname === '/api/v1/health' && method === 'GET') {
+    return sendJSON(res, 200, {
+      status: 'HEALTHY',
+      timestamp: new Date().toISOString(),
+      uptime_seconds: Math.floor(process.uptime()),
+      channels: {
+        ussd: { code: '*840#', gateway: "Africa's Talking / Ethio Telecom" },
+        sms: { shortcode: '8065', gateway: 'AfroMessage / eSMS Africa' },
+        voice: { hotline: '8400', gateway: "Africa's Talking Voice XML" }
+      },
+      gateways: GATEWAYS
+    });
+  }
+
+  // 0B. OpenAPI 3.0 Architecture Documentation
+  if (pathname === '/api/v1/docs' && method === 'GET') {
+    return sendJSON(res, 200, getOpenApiSpecification());
+  }
+
+  // 0C. Communication Gateways Live Status & Circuit Breaker Metrics
+  if (pathname === '/api/v1/gateways/status' && method === 'GET') {
+    return sendJSON(res, 200, {
+      status: 'SUCCESS',
+      timestamp: new Date().toISOString(),
+      gateways: GATEWAYS,
+      outbox_metrics: {
+        total_dispatched: smsOutbox.filter(m => m.status === 'DISPATCHED').length,
+        total_queued: smsOutbox.filter(m => m.status === 'QUEUED').length,
+        recent_messages: smsOutbox.slice(0, 10)
+      }
+    });
+  }
+
+  // 0D. Real-time Server-Sent Events (SSE) Stream
+  if (pathname === '/api/v1/events/stream' && method === 'GET') {
+    registerSseClient(res);
+    return;
+  }
+
+  // 0E. Outbound SMS API (Multi-Gateway with Circuit Breaker Failover)
+  if (pathname === '/api/v1/sms/send' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { to, message, senderId, priority = 'NORMAL', channel = 'SMS' } = body;
+    if (!to || !message) {
+      return sendJSON(res, 400, { error: 'MISSING_FIELDS', message: 'Fields "to" and "message" are required.' });
+    }
+    const result = await dispatchOutboundSms({ to, message, senderId, priority, channel });
+    return sendJSON(res, 200, { status: 'DISPATCHED', result });
+  }
+
+  // 0F. SMS Outbox Query
+  if (pathname === '/api/v1/sms/outbox' && method === 'GET') {
+    return sendJSON(res, 200, {
+      total: smsOutbox.length,
+      messages: smsOutbox
+    });
+  }
+
+  // 0G. SMS Delivery Report Callback (Telco DLR)
+  if (pathname === '/api/v1/sms/delivery-report' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { id, status = 'DeliveredToTerminal', failureReason } = body;
+    const msg = smsOutbox.find(m => m.id === id);
+    if (msg) {
+      msg.delivery_status = status;
+      msg.delivery_failure_reason = failureReason || null;
+      msg.updated_at = new Date().toISOString();
+    }
+    return sendJSON(res, 200, { status: 'ACKNOWLEDGED' });
+  }
+
+  // 0H. Africa's Talking Voice XML: Inbound Call Hook
+  if (pathname === '/api/v1/voice/call' && method === 'POST') {
+    const baseUrl = `http://${req.headers.host || 'localhost:5000'}`;
+    const xml = generateVoiceXmlGreeting(baseUrl);
+    return sendXML(res, 200, xml);
+  }
+
+  // 0I. Africa's Talking Voice XML: Language Menu DTMF
+  if (pathname === '/api/v1/voice/language' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { dtmfDigits = '1' } = body;
+    const lang = dtmfDigits === '2' ? 'am' : 'en';
+    const baseUrl = `http://${req.headers.host || 'localhost:5000'}`;
+    const xml = generateVoiceXmlCategoryMenu(lang, baseUrl);
+    return sendXML(res, 200, xml);
+  }
+
+  // 0J. Africa's Talking Voice XML: Category Menu DTMF & Record Trigger
+  if (pathname === '/api/v1/voice/category' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { dtmfDigits = '1' } = body;
+    const lang = parsedUrl.query.lang || 'en';
+    const catMap = { '1': 'WATER_LEAK', '2': 'POWER_OUTAGE', '3': 'SOLID_WASTE', '4': 'ROAD_DAMAGE', '0': 'FLOOD_EMERGENCY' };
+    const category = catMap[dtmfDigits] || 'GENERAL';
+    const baseUrl = `http://${req.headers.host || 'localhost:5000'}`;
+    const xml = generateVoiceXmlRecordingPrompt(category, lang, baseUrl);
+    return sendXML(res, 200, xml);
+  }
+
+  // 0K. Africa's Talking Voice XML: Audio Recording Callback
+  if (pathname === '/api/v1/voice/recording-callback' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { recordingUrl = '/uploads/audio/sample_ivr.wav', callerNumber = '+251918444555', durationInSeconds = 25 } = body;
+    const category = parsedUrl.query.category || 'CIVIC_VOICE_NOTE';
+    const lang = parsedUrl.query.lang || 'en';
+    const ticketCode = `GDR-IVR-${Math.floor(1000 + Math.random() * 9000)}`;
+    const isEmerg = category === 'FLOOD_EMERGENCY';
+
+    const newTicket = {
+      id: String(incidents.length + 1),
+      ticket_code: ticketCode,
+      title: `🎙️ Voice Hotline 8400: ${category} (${callerNumber})`,
+      description: `30-second caller voice note received via automated municipal hotline. Duration: ${durationInSeconds}s.`,
+      category,
+      urgency: isEmerg ? 'CRITICAL' : 'HIGH',
+      is_emergency: isEmerg,
+      emergency_severity: isEmerg ? 'CRITICAL' : 'HIGH',
+      status: 'RECEIVED',
+      channel_origin: 'IVR_VOICE',
+      caller_phone: callerNumber,
+      is_anonymous: false,
+      is_life_threatening: isEmerg,
+      latitude: 12.6075 + (Math.random() - 0.5) * 0.005,
+      longitude: 37.4625 + (Math.random() - 0.5) * 0.005,
+      landmark_description: `Recorded audio proof via 8400 Hotline. Caller: ${callerNumber}`,
+      sub_city: 'Maraki',
+      sub_city_am: 'ማራኪ',
+      department: category === 'WATER_LEAK' ? 'Gondar Water & Sewerage Authority' : 'Central Municipal Dispatch',
+      department_id: 1,
+      assigned_crew: null,
+      photo_before: '/images/categories/water_leak.svg',
+      audio_path: recordingUrl,
+      voice_transcript: lang === 'am' ? 'የውሃ መስመር ብልሽት በስልክ ተናግሬያለሁ' : 'Water leak reported via voice recording',
+      created_at: new Date().toISOString(),
+      sla_deadline: calculateSlaDeadline(isEmerg, isEmerg ? 'CRITICAL' : 'HIGH'),
+      is_sla_breached: false
+    };
+
+    incidents.unshift(newTicket);
+    broadcastEvent(isEmerg ? 'ticket:emergency' : 'ticket:created', newTicket);
+
+    const xml = generateVoiceXmlCompletion(ticketCode, lang);
+    return sendXML(res, 200, xml);
+  }
+
+  // 0L. Security: Request Phone Verification OTP
+  if (pathname === '/api/v1/auth/otp/request' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { phoneNumber } = body;
+    if (!phoneNumber) {
+      return sendJSON(res, 400, { error: 'MISSING_PHONE', message: 'Field "phoneNumber" is required.' });
+    }
+    const result = await requestPhoneOtp(phoneNumber);
+    if (!result.success) {
+      return sendJSON(res, 429, result);
+    }
+    return sendJSON(res, 200, result);
+  }
+
+  // 0M. Security: Verify Phone OTP
+  if (pathname === '/api/v1/auth/otp/verify' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { phoneNumber, otp } = body;
+    if (!phoneNumber || !otp) {
+      return sendJSON(res, 400, { error: 'MISSING_FIELDS', message: 'Fields "phoneNumber" and "otp" are required.' });
+    }
+    const result = verifyPhoneOtp(phoneNumber, otp);
+    if (!result.valid) {
+      return sendJSON(res, 400, result);
+    }
+    return sendJSON(res, 200, result);
+  }
 
   // 1. USSD (*840#)
   if (pathname === '/api/v1/ussd' && method === 'POST') {
@@ -1281,6 +1483,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
         is_sla_breached: false
       };
       incidents.unshift(newTicket);
+      broadcastEvent('ticket:emergency', newTicket);
 
       smsOutbox.push({
         to: phoneNumber,
@@ -1373,6 +1576,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
           is_sla_breached: false
         };
         incidents.unshift(newTicket);
+        broadcastEvent('ticket:emergency', newTicket);
 
         smsOutbox.push({
           to: phoneNumber,
@@ -1506,6 +1710,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
       };
 
       incidents.unshift(newTicket);
+      broadcastEvent('ticket:created', newTicket);
       smsOutbox.push({
         to: phoneNumber,
         message: `Gondar SmartCivic: Incident #${ticketCode} registered. Track via *840#.`,
@@ -1599,6 +1804,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
         is_sla_breached: false
       };
       incidents.unshift(newTicket);
+      broadcastEvent('ticket:emergency', newTicket);
 
       const confirmMsg = isFlood
         ? `🚨 GONDAR DISASTER RESCUE #${ticketCode}: Flood Emergency received for ${subCityObj.name}. Taskforce notified. Shut off electricity and move to high ground!`
@@ -1676,6 +1882,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
       is_sla_breached: false
     };
     incidents.unshift(newTicket);
+    broadcastEvent('ticket:created', newTicket);
 
     const confirmMsg = `Gondar SmartCivic: Incident #${ticketCode} registered for ${subCityObj.name}. Track via: TRACK ${ticketCode} to 8065.`;
     smsOutbox.push({ to: from, message: confirmMsg, timestamp: new Date().toISOString() });
@@ -1730,6 +1937,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
     };
 
     incidents.unshift(newTicket);
+    broadcastEvent(isEmerg ? 'ticket:emergency' : 'ticket:created', newTicket);
     return sendJSON(res, 201, { status: 'SUCCESS', ticketCode, ticket: newTicket });
   }
 
@@ -1790,6 +1998,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
     };
 
     incidents.unshift(newTicket);
+    broadcastEvent(isEmerg ? 'ticket:emergency' : 'ticket:created', newTicket);
     return sendJSON(res, 201, { status: 'SUCCESS', ticketCode, ticket: newTicket });
   }
 

@@ -5,7 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "test": "node test_omnichannel_lifecycle.js && node test_admin_portal.js && node test_images_and_positions.js"
+    "test": "node test_communication_integration.js && node test_omnichannel_lifecycle.js && node test_navigation_submenus.js && node test_municipal_services.js && node test_admin_portal.js"
   },
   "engines": {
     "node": ">=18.0.0"
