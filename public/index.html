@@ -6,7 +6,7 @@
   <title>Gondar SmartCivic (ጎንደር ስማርት ሲቪክ) | Ethiopian Municipal Ingestion & Spatial Dispatch</title>
   
   <!-- Compiled Local Tailwind CSS (Instant 0ms Load & 100% Offline Resilience) -->
-  <link rel="stylesheet" href="/app.css?v=2.6.0">
+  <link rel="stylesheet" href="/app.css?v=2.7.0">
 
   <!-- Tailwind CSS CDN Fallback & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -285,35 +285,35 @@
     <!-- Ethiopian National Tricolor Accent Ribbon -->
     <div class="ethio-ribbon"></div>
 
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4">
+    <div class="w-full max-w-[1700px] mx-auto px-2.5 sm:px-4 lg:px-6 py-2 flex items-center justify-between gap-2">
       <!-- Brand Logo -->
-      <div class="flex items-center space-x-2.5 cursor-pointer group shrink-0" onclick="navigateTo('landing')">
-        <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-800 p-0.5 ring-2 ring-amber-400/60 shadow-lg shadow-emerald-950/40 overflow-hidden shrink-0">
+      <div class="flex items-center space-x-2 sm:space-x-2.5 cursor-pointer group shrink-0" onclick="navigateTo('landing')">
+        <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 p-0.5 ring-2 ring-amber-400/60 shadow-lg shadow-emerald-950/40 overflow-hidden shrink-0">
           <img src="/images/gondar_fasiledes_castle.jpg" alt="Fasilides Castle" class="w-full h-full object-cover rounded-lg group-hover:scale-110 transition duration-500">
         </div>
         <div>
-          <div class="font-black text-xs sm:text-base tracking-tight flex items-center space-x-1.5">
-            <span data-i18n="brand_title" class="text-white font-extrabold">Gondar SmartCivic</span>
-            <span class="text-[9px] bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black px-1.5 py-0.5 rounded-full shadow-sm" data-i18n="brand_badge">ጎንደር</span>
+          <div class="font-black text-xs sm:text-sm tracking-tight flex items-center space-x-1.5 leading-none">
+            <span data-i18n="brand_title" class="text-white font-extrabold whitespace-nowrap">Gondar SmartCivic</span>
+            <span class="text-[9px] bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black px-1.5 py-0.5 rounded-full shadow-sm shrink-0" data-i18n="brand_badge">ጎንደር</span>
           </div>
-          <p class="text-[8px] sm:text-[10px] text-emerald-400/90 font-medium tracking-wide flex items-center gap-1" data-i18n="brand_subtitle">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>EthioCivic-Hub • Municipal Operations</span>
+          <p class="text-[8px] sm:text-[9px] text-emerald-400/90 font-medium tracking-wide flex items-center gap-1 mt-0.5 whitespace-nowrap" data-i18n="brand_subtitle">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            <span>EthioCivic-Hub • Operations</span>
           </p>
         </div>
       </div>
 
-      <!-- Navigation Links (Qualitized & Resized for Desktop & Tablet) -->
-      <nav id="main-desktop-nav" class="flex items-center space-x-1 text-xs font-semibold shrink-0" style="display: flex !important;">
+      <!-- Navigation Links (Responsive Desktop Nav) -->
+      <nav id="main-desktop-nav" class="hidden xl:flex items-center space-x-1 text-xs font-semibold shrink">
         <!-- 1. Overview -->
-        <button onclick="navigateTo('landing')" id="nav-landing" class="nav-btn px-2.5 py-1.5 rounded-xl text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 transition flex items-center gap-1.5 font-bold shadow-sm" data-i18n="nav_overview">
+        <button onclick="navigateTo('landing')" id="nav-landing" class="nav-btn px-2 py-1.5 rounded-xl text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 transition flex items-center gap-1 font-bold shadow-sm whitespace-nowrap" data-i18n="nav_overview">
           <i data-lucide="home" class="w-3.5 h-3.5"></i>
           <span>Overview</span>
         </button>
         
         <!-- 2. Services Mega Dropdown Trigger with Submenus -->
         <div class="relative group" id="services-dropdown-wrap">
-          <button type="button" onclick="toggleServicesDropdown(event)" id="nav-services-btn" class="nav-btn px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center gap-1.5 transition font-bold" aria-haspopup="true" aria-expanded="false">
+          <button type="button" onclick="toggleServicesDropdown(event)" id="nav-services-btn" class="nav-btn px-2 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center gap-1 transition font-bold whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
             <i data-lucide="layers" class="w-3.5 h-3.5 text-sky-400"></i>
             <span data-i18n="nav_services">Services</span>
             <i data-lucide="chevron-down" id="nav-services-chevron" class="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform duration-200"></i>
@@ -394,60 +394,60 @@
         </div>
 
         <!-- 3. Report Issue -->
-        <button onclick="navigateTo('report')" id="nav-report" class="nav-btn px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition flex items-center gap-1.5 font-bold" data-i18n="nav_report">
+        <button onclick="navigateTo('report')" id="nav-report" class="nav-btn px-2 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition flex items-center gap-1 font-bold whitespace-nowrap" data-i18n="nav_report">
           <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
           <span>Report Issue</span>
         </button>
 
         <!-- 4. Track Ticket -->
-        <button onclick="navigateTo('track')" id="nav-track" class="nav-btn px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition flex items-center gap-1.5 font-bold" data-i18n="nav_track">
+        <button onclick="navigateTo('track')" id="nav-track" class="nav-btn px-2 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition flex items-center gap-1 font-bold whitespace-nowrap" data-i18n="nav_track">
           <i data-lucide="search" class="w-3.5 h-3.5 text-amber-400"></i>
           <span>Track Ticket</span>
         </button>
 
         <!-- 5. Dispatch Command -->
-        <button onclick="navigateTo('dispatch')" id="nav-dispatch" class="nav-btn px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center gap-1.5 transition font-bold">
+        <button onclick="navigateTo('dispatch')" id="nav-dispatch" class="nav-btn px-2 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center gap-1 transition font-bold whitespace-nowrap">
           <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-sky-400"></i>
           <span data-i18n="nav_dispatch">Dispatch Command</span>
         </button>
 
         <!-- 6. Recent Actions -->
-        <button onclick="navigateTo('actions')" id="nav-actions" class="nav-btn px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center gap-1.5 transition font-bold">
+        <button onclick="navigateTo('actions')" id="nav-actions" class="nav-btn px-2 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center gap-1 transition font-bold whitespace-nowrap hidden 2xl:flex">
           <i data-lucide="activity" class="w-3.5 h-3.5 text-teal-400"></i>
           <span data-i18n="nav_actions">Recent Actions</span>
         </button>
 
         <!-- 7. Admin Portal -->
-        <button onclick="navigateTo('admin')" id="nav-admin" class="nav-btn px-2.5 py-1.5 rounded-xl text-amber-300 hover:text-amber-200 hover:bg-amber-500/20 flex items-center gap-1.5 transition border border-amber-500/40 font-bold bg-amber-500/10 shadow-sm">
+        <button onclick="navigateTo('admin')" id="nav-admin" class="nav-btn px-2 py-1.5 rounded-xl text-amber-300 hover:text-amber-200 hover:bg-amber-500/20 flex items-center gap-1 transition border border-amber-500/40 font-bold bg-amber-500/10 shadow-sm whitespace-nowrap">
           <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i>
           <span data-i18n="nav_admin">Admin Portal</span>
         </button>
       </nav>
 
-      <!-- Right Action Tools -->
-      <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+      <!-- Right Action Tools (GUARANTEED VISIBLE ON BOTH MAXIMIZED & MINIMIZED SCREENS!) -->
+      <div id="header-right-tools" class="flex items-center space-x-1.5 sm:space-x-2 shrink-0 ml-auto z-10">
         <!-- Quick Search Modal Trigger -->
-        <button onclick="openOmnisearchModal()" class="px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/80 text-slate-300 hover:text-white transition flex items-center gap-1.5 text-xs font-bold" title="Search Municipal Grid (Ctrl+K)">
+        <button onclick="openOmnisearchModal()" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700/80 text-slate-300 hover:text-white transition flex items-center justify-center text-xs font-bold shrink-0 shadow-sm" title="Search Municipal Grid (Ctrl+K)">
           <i data-lucide="search" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span class="hidden xl:inline">Search</span>
         </button>
 
-        <!-- Prominent Flash Flood & Disaster SOS Button -->
-        <button onclick="openFloodSosModal()" class="bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white font-black px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1.5 shadow-lg shadow-red-950/60 border border-red-400/50 animate-pulse transition btn-press">
-          <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-300"></i>
-          <span data-i18n="header_flood_sos">🚨 FLOOD SOS</span>
+        <!-- Prominent Flash Flood & Disaster SOS Button (Exact styling from user image) -->
+        <button onclick="openFloodSosModal()" id="header-flood-sos-btn" class="bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white font-extrabold px-3 sm:px-3.5 py-1.5 rounded-full text-xs flex items-center space-x-1.5 shadow-lg shadow-red-950/60 border border-red-400/50 transition btn-press shrink-0 whitespace-nowrap animate-pulse" title="Flash Flood & Disaster Emergency SOS">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-300 shrink-0"></i>
+          <span class="text-xs shrink-0">🚨</span>
+          <span data-i18n="header_flood_sos" class="font-extrabold tracking-wide text-xs text-white">FLOOD SOS</span>
         </button>
 
-        <!-- Interactive Telecom Simulator Modal Button -->
-        <button onclick="toggleSimulator(true)" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1.5 shadow-md shadow-amber-950/30 transition btn-press hidden sm:flex">
+        <!-- Interactive Telecom Simulator Modal Button (Visible on wide screens) -->
+        <button onclick="toggleSimulator(true)" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold px-2.5 py-1.5 rounded-full text-xs items-center space-x-1 shadow-md shadow-amber-950/30 transition btn-press shrink-0 whitespace-nowrap hidden 2xl:flex" title="Telecom Defense Simulator">
           <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
           <span>*840# Sim</span>
         </button>
 
-        <!-- Navigation Menu Toggle Button (ALWAYS FUNCTIONAL on both Maximized & Minimized screens!) -->
-        <button onclick="toggleMobileMenu()" id="mobile-menu-btn" class="px-3 py-1.5 rounded-xl text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700/80 transition btn-press flex items-center gap-1.5 shrink-0 shadow-sm" aria-label="Toggle Navigation Menu">
-          <i data-lucide="menu" id="mobile-menu-icon" class="w-4 h-4 text-emerald-400"></i>
-          <span id="mobile-menu-label" class="text-xs font-bold">Menu</span>
+        <!-- Universal Navigation Menu Toggle Button (Exact styling from user image) -->
+        <button onclick="toggleMobileMenu()" id="mobile-menu-btn" class="px-3.5 py-1.5 rounded-full text-slate-100 hover:text-white bg-slate-800/95 hover:bg-slate-700/95 border border-slate-700/80 transition btn-press flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-md cursor-pointer" aria-label="Toggle Navigation Menu">
+          <i data-lucide="menu" id="mobile-menu-icon" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+          <span id="mobile-menu-label" class="text-xs font-bold text-white">Menu</span>
         </button>
       </div>
     </div>
@@ -4747,6 +4747,6 @@ Press [CALL] or [SEND] to start.</div>
   </nav>
 
   <!-- Master Application Logic & Translation Engine -->
-  <script src="app.js?v=2.6.0"></script>
+  <script src="app.js?v=2.7.0"></script>
 </body>
 </html>

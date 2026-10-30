@@ -14,7 +14,7 @@ const http = require('http');
 const { spawn } = require('child_process');
 const path = require('path');
 
-const TEST_PORT = 5055;
+const TEST_PORT = 5057;
 let serverProc = null;
 
 function request(path, options = {}, body = null) {
