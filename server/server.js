@@ -1804,7 +1804,8 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
   // 2. TWO-WAY SMS (8065)
   if (pathname === '/api/v1/sms/inbound' && method === 'POST') {
     const body = await parseRequestBody(req);
-    const { from = '+251918000000', text = '' } = body;
+    const from = body.from || body.phone || body.sender || body.phoneNumber || body.From || '+251918000000';
+    const text = (body.text || body.message || body.body || body.content || body.Body || '').trim();
     const clean = text.trim();
 
     const trackMatch = clean.match(/^(?:TRACK|ተከታተል|STATUS)\s+([A-Za-z0-9\-]+)/i);
