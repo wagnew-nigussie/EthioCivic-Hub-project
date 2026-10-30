@@ -32,6 +32,10 @@ const {
   requestPhoneOtp,
   verifyPhoneOtp,
   dispatchOutboundSms,
+  testAfroMessageGateway,
+  testAfricasTalkingGateway,
+  testEsmsAfricaGateway,
+  toggleGatewayCircuit,
   generateVoiceXmlGreeting,
   generateVoiceXmlCategoryMenu,
   generateVoiceXmlRecordingPrompt,
@@ -1272,6 +1276,66 @@ async function handleRequest(req, res) {
     });
   }
 
+  // 0C-1. Gateway Interactive Test: AfroMessage (Direct Ethiopia SMS/OTP)
+  if (pathname === '/api/v1/gateways/test/afromessage' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const result = await testAfroMessageGateway(body);
+    const statusCode = result.status === 'CIRCUIT_OPEN' ? 503 : 200;
+    return sendJSON(res, statusCode, result);
+  }
+
+  // 0C-2. Gateway Interactive Test: Africa's Talking (USSD, Voice XML & SMS)
+  if (pathname === '/api/v1/gateways/test/africas-talking' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const baseUrl = `http://${req.headers.host || 'localhost:5000'}`;
+    const result = await testAfricasTalkingGateway(body, baseUrl);
+    const statusCode = result.status === 'CIRCUIT_OPEN' ? 503 : 200;
+    return sendJSON(res, statusCode, result);
+  }
+
+  // 0C-3. Gateway Interactive Test: eSMS Africa (Pan-African Fallback Dispatch)
+  if (pathname === '/api/v1/gateways/test/esms-africa' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const result = await testEsmsAfricaGateway(body);
+    const statusCode = result.status === 'CIRCUIT_OPEN' ? 503 : 200;
+    return sendJSON(res, statusCode, result);
+  }
+
+  // 0C-4. Circuit Breaker Toggle Endpoint (CLOSED <-> OPEN)
+  if (pathname === '/api/v1/gateways/circuit/toggle' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const { gatewayId, forceState } = body;
+    if (!gatewayId || !GATEWAYS[gatewayId]) {
+      return sendJSON(res, 400, { error: 'INVALID_GATEWAY_ID', message: 'Valid IDs: afromessage, africas_talking, esms_africa' });
+    }
+    const updated = toggleGatewayCircuit(gatewayId, forceState);
+    return sendJSON(res, 200, { status: 'SUCCESS', gateway: updated });
+  }
+
+  // 0C-5. Comprehensive Omnichannel Gateways Test Suite (Benchmark All Gateways)
+  if (pathname === '/api/v1/gateways/run-all-tests' && method === 'POST') {
+    const body = await parseRequestBody(req);
+    const baseUrl = `http://${req.headers.host || 'localhost:5000'}`;
+    const afroRes = await testAfroMessageGateway(body);
+    const atRes = await testAfricasTalkingGateway(body, baseUrl);
+    const esmsRes = await testEsmsAfricaGateway(body);
+
+    return sendJSON(res, 200, {
+      status: 'SUCCESS',
+      timestamp: new Date().toISOString(),
+      summary: {
+        total_gateways_tested: 3,
+        all_passed: afroRes.status === 'SUCCESS' && atRes.status === 'SUCCESS' && esmsRes.status === 'SUCCESS',
+        average_latency_ms: Math.round((afroRes.latency_ms + atRes.latency_ms + esmsRes.latency_ms) / 3)
+      },
+      results: {
+        afromessage: afroRes,
+        africas_talking: atRes,
+        esms_africa: esmsRes
+      }
+    });
+  }
+
   // 0D. Real-time Server-Sent Events (SSE) Stream
   if (pathname === '/api/v1/events/stream' && method === 'GET') {
     registerSseClient(res);
@@ -1414,12 +1478,19 @@ async function handleRequest(req, res) {
   }
 
   // 1. USSD (*840#)
-  if (pathname === '/api/v1/ussd' && method === 'POST') {
-    const body = await parseRequestBody(req);
-    const { text = '', phoneNumber = '+251918000000' } = body;
-    let cleanText = text.replace(/#/g, '').replace(/^\*+/, '').replace(/^840\*/, '');
-    if (cleanText.startsWith('*')) cleanText = cleanText.substring(1);
+  if (pathname === '/api/v1/ussd' && (method === 'POST' || method === 'GET')) {
+    let body = {};
+    if (method === 'POST') {
+      body = await parseRequestBody(req);
+    }
+    const rawText = (body.text !== undefined ? body.text : (parsedUrl.query.text || '')).trim();
+    const phoneNumber = body.phoneNumber || parsedUrl.query.phoneNumber || '+251918000000';
+    
+    // Normalize USSD codes: *840#, 840, *840*1*1#, 911, *840*911#
+    let cleanText = rawText.replace(/#/g, '').replace(/^\*+/, '');
     if (cleanText === '840') cleanText = '';
+    else if (cleanText.startsWith('840*')) cleanText = cleanText.substring(4);
+    if (cleanText.startsWith('*')) cleanText = cleanText.substring(1);
 
     const inputs = cleanText ? cleanText.split('*').filter(Boolean) : [];
     let response = '';
@@ -1497,7 +1568,7 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
       return sendText(res, 200, response);
     }
 
-    if (text === '') {
+    if (cleanText === '' || inputs.length === 0) {
       response = `CON Welcome to Gondar SmartCivic
 እንኳን ወደ ጎንደር ስማርት ሲቪክ በደህና መጡ
 1. አማርኛ (Amharic)
@@ -1722,6 +1793,12 @@ Select Sub-City (ክፍለ ከተማ ይምረጡ 1-12):
         : `END Report submitted!\nTicket ID: #${ticketCode}\nConfirmation SMS sent.`;
       return sendText(res, 200, response);
     }
+
+    // Safe USSD fallback for any unhandled option (never falls through to 404)
+    response = (lang === 'en')
+      ? `END Gondar SmartCivic: Selection processed. Dial *840# to start again.`
+      : `END ጎንደር ስማርት ሲቪክ፡ ምርጫዎ ተስተናግዷል። እባክዎ ዳግም *840# ደውለው ይሞክሩ።`;
+    return sendText(res, 200, response);
   }
 
   // 2. TWO-WAY SMS (8065)

@@ -101,6 +101,30 @@ async function runTestSuite() {
     console.log('  ✓ Africa\'s Talking (USSD, Voice, SMS) gateway active and verified');
     console.log('  ✓ eSMS Africa (Pan-African Fallback) standby and verified');
 
+    // Interactive Gateways Verification Testbed
+    const testAfro = await httpRequest('POST', '/api/v1/gateways/test/afromessage', { to: '+251918123456' });
+    assert.strictEqual(testAfro.statusCode, 200);
+    assert.strictEqual(testAfro.json.status, 'SUCCESS');
+    assert(testAfro.json.latency_ms > 0, 'AfroMessage test must report positive latency');
+    console.log(`  ✓ AfroMessage Direct SMS & OTP interactive test verified (${testAfro.json.latency_ms}ms)`);
+
+    const testAT = await httpRequest('POST', '/api/v1/gateways/test/africas-talking', {});
+    assert.strictEqual(testAT.statusCode, 200);
+    assert.strictEqual(testAT.json.status, 'SUCCESS');
+    assert(testAT.json.voice_xml_sample.includes('<Response>'), 'Africa\'s Talking must return valid VoiceXML');
+    console.log(`  ✓ Africa's Talking USSD & Voice XML interactive test verified (${testAT.json.latency_ms}ms)`);
+
+    const testEsms = await httpRequest('POST', '/api/v1/gateways/test/esms-africa', { to: '+251918123456' });
+    assert.strictEqual(testEsms.statusCode, 200);
+    assert.strictEqual(testEsms.json.status, 'SUCCESS');
+    assert(testEsms.json.routing_pipeline.includes('eSMS Africa'), 'Must verify Pan-African fallback pipeline');
+    console.log(`  ✓ eSMS Africa Pan-African fallback interactive test verified (${testEsms.json.latency_ms}ms)`);
+
+    const testAll = await httpRequest('POST', '/api/v1/gateways/run-all-tests', {});
+    assert.strictEqual(testAll.statusCode, 200);
+    assert.strictEqual(testAll.json.summary.all_passed, true);
+    console.log(`  ✓ Full Multi-Gateway Benchmark Suite verified (avg latency: ${testAll.json.summary.average_latency_ms}ms)`);
+
     // ------------------------------------------------------------------------
     // OBJECTIVE 2: TWO-WAY SMS (Inbound Parsing, Outbound Messaging, Failover)
     // ------------------------------------------------------------------------
@@ -162,6 +186,26 @@ async function runTestSuite() {
     assert.strictEqual(ussdRoot.statusCode, 200);
     assert(ussdRoot.raw.startsWith('CON'), 'Root menu must begin with CON');
     console.log('  ✓ USSD Level 0 (Root Welcome Screen) verified');
+
+    // Direct Dial *840# (resilient input handling)
+    const ussdDirectDial = await httpRequest('POST', '/api/v1/ussd', {
+      sessionId: 'sess_dial',
+      phoneNumber: '+251918112233',
+      text: '*840#'
+    });
+    assert.strictEqual(ussdDirectDial.statusCode, 200, 'Direct dial *840# must return 200');
+    assert(ussdDirectDial.raw.startsWith('CON'), 'Direct dial must return root menu with CON');
+    console.log('  ✓ USSD Direct Code Dialing (*840#) verified (never 404)');
+
+    // Direct Dial *840*911#
+    const ussdDirectSosDial = await httpRequest('POST', '/api/v1/ussd', {
+      sessionId: 'sess_sos_direct',
+      phoneNumber: '+251918112233',
+      text: '*840*911#'
+    });
+    assert.strictEqual(ussdDirectSosDial.statusCode, 200, 'Direct dial *840*911# must return 200');
+    assert(ussdDirectSosDial.raw.includes('FLASH FLOOD SOS'), 'Direct dial *840*911# must prompt flood SOS');
+    console.log('  ✓ USSD Direct Emergency Dialing (*840*911#) verified');
 
     // Fast-Track Emergency Flood SOS: *840*911#
     const ussdFastSos = await httpRequest('POST', '/api/v1/ussd', {
