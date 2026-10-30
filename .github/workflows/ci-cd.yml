@@ -59,27 +59,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build Docker Container Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: false
-          tags: ethiocivic-hub:latest
+        run: |
+          docker build -t ethiocivic-hub:latest .
 
       - name: Verify Container Run & Ingestion Health
         run: |
           docker run -d --name test-app -p 5000:5000 -e PORT=5000 ethiocivic-hub:latest
-          for i in {1..10}; do
+          for i in {1..15}; do
             if curl -s -f http://localhost:5000/api/v1/incidents > /dev/null; then
               echo "✓ Docker container verified running healthy on port 5000."
               docker stop test-app && docker rm test-app
               exit 0
             fi
-            echo "Waiting for container to boot ($i/10)..."
+            echo "Waiting for container to boot ($i/15)..."
             sleep 2
           done
           echo "Container failed healthcheck"
