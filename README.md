@@ -3,6 +3,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-10b981?style=for-the-badge&logo=render&logoColor=white)](https://ethiocivic-hub-project.onrender.com)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/wagnew-nigussie/EthioCivic-Hub-project)
+[![CI/CD Validation](https://github.com/wagnew-nigussie/EthioCivic-Hub-project/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/wagnew-nigussie/EthioCivic-Hub-project/actions)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PostGIS](https://img.shields.io/badge/PostGIS-Spatial%20GIS-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgis.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
@@ -184,8 +185,44 @@ Runs the application on `http://localhost:5000` and PostGIS spatial database on 
 
 ---
 
-## 7. License & Credits
+## 7. Core Header Navigation & Municipal Views
 
-- **Author:** Wagnew Nigussie (Final-Year B.Sc. Software Engineering Capstone Project)
+The platform includes dedicated portals accessible across desktop, tablet, and mobile:
+
+1. **About Us (`/about`):** Detailed overview of Gondar SmartCivic, municipal mission & vision, 4 architectural pillars, 12 administrative sub-cities, and 5 public works utilities (GWSA, EEU, Rescue, Waste, Roads).
+2. **Contact Us & Leadership Desk (`/contact`):**
+   - **System Architect & Municipal Operations Director:** **Wagnew Nigussie**
+   - **Email:** `wagnewnigussie569@gmail.com`
+   - **LinkedIn:** [`wagnew-nigussie-tech`](https://www.linkedin.com/in/wagnew-nigussie-tech)
+   - **GitHub:** [`wagnew-nigussie`](https://github.com/wagnew-nigussie)
+   - **Interactive Citizen Feedback Desk:** Real-time form with instant ticket generation (`#INQ-XXXX`).
+   - **Emergency Hotlines:** 911 / 8400 (Fire & Flood), 8065 (Water), 905 (Electric), 058-111-0422 (Sanitation).
+3. **Citizen Service Guide & FAQ (`/guide`):** 4-channel step-by-step reporting guide (USSD `*840#`, SMS `8065`, Voice `8400`, Web GPS), municipal SLA time guarantees, and interactive searchable FAQ accordion.
+4. **Municipal Transparency & Projects Tracker (`/transparency`):** Real-time civic health metrics, 5 active capital works infrastructure projects in Gondar, and downloadable open CSV data.
+
+---
+
+## 8. Automated Verification & Test Suites (100% Pass)
+
+Run all 5 automated test suites with:
+```bash
+npm test
+```
+
+- `test_communication_integration.js`: AfroMessage, Africa's Talking, eSMS Africa, USSD session state machine, SMS, IVR Voice XML, SSE, and OTP verification (100% Pass).
+- `test_omnichannel_lifecycle.js`: Omnichannel ingestion & 5-tier queue triage (100% Pass).
+- `test_navigation_submenus.js`: Universal submenus drawer, 4 new core menus, and Wagnew Nigussie leadership dossier (100% Pass).
+- `test_municipal_services.js`: 5 Municipal Agencies (GWSA, EEU, Rescue, Waste, Roads) (100% Pass).
+- `test_admin_portal.js`: PBKDF2-SHA512 administrator portal & audit trail (100% Pass).
+
+---
+
+## 9. License & Credits
+
+- **Author:** Wagnew Nigussie (Lead System Architect & Municipal Operations Director)
+- **Email:** `wagnewnigussie569@gmail.com`
+- **LinkedIn:** [wagnew-nigussie-tech](https://www.linkedin.com/in/wagnew-nigussie-tech)
+- **GitHub:** [wagnew-nigussie](https://github.com/wagnew-nigussie)
 - **Target Municipality:** Gondar City Administration, Amhara Region, Ethiopia
+- **License:** MIT License
 - **License:** [MIT License](https://opensource.org/licenses/MIT)
