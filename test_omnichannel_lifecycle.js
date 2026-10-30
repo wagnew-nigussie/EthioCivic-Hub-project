@@ -14,14 +14,15 @@ const http = require('http');
 const { spawn } = require('child_process');
 const path = require('path');
 
-const TEST_PORT = 5057;
+const TEST_PORT = 5085;
 let serverProc = null;
+let activePort = TEST_PORT;
 
 function request(path, options = {}, body = null) {
   return new Promise((resolve, reject) => {
     const reqOptions = {
       hostname: '127.0.0.1',
-      port: TEST_PORT,
+      port: activePort,
       path,
       method: options.method || 'GET',
       headers: options.headers || {}
@@ -81,8 +82,9 @@ async function runTests() {
 
   serverProc.stdout.on('data', d => {
     const s = d.toString();
-    if (s.includes('Running on Port')) {
-      // server is up
+    const match = s.match(/Running on Port (\d+)/);
+    if (match) {
+      activePort = Number(match[1]);
     }
   });
 

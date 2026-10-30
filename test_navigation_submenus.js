@@ -80,4 +80,57 @@ assert(js.includes('nav_menu:'), 'nav_menu must exist in TRANSLATIONS');
 assert(js.includes('nav_close:'), 'nav_close must exist in TRANSLATIONS');
 console.log('   ✅ All navigation functions and bilingual translations confirmed in public/app.js.');
 
+// 6. Check 4 New Core Header Menus (About Us, Contact Us, Guide & FAQ, Projects & Open Data)
+console.log('\n6. Checking 4 New Core Header Navigation Menus & Sections...');
+// 6A. Header Navigation Buttons
+assert(html.includes('id="nav-about"'), 'Desktop nav must include nav-about button');
+assert(html.includes('id="nav-contact"'), 'Desktop nav must include nav-contact button');
+assert(html.includes('id="nav-guide"'), 'Desktop nav must include nav-guide button');
+assert(html.includes('id="nav-transparency"'), 'Desktop nav must include nav-transparency button');
+
+// 6B. Mobile Drawer Navigation Buttons
+assert(html.includes('id="mob-drawer-about"'), 'Drawer must include mob-drawer-about button');
+assert(html.includes('id="mob-drawer-contact"'), 'Drawer must include mob-drawer-contact button');
+assert(html.includes('id="mob-drawer-guide"'), 'Drawer must include mob-drawer-guide button');
+assert(html.includes('id="mob-drawer-transparency"'), 'Drawer must include mob-drawer-transparency button');
+
+// 6C. View Panels
+assert(html.includes('id="view-about"'), 'View panel view-about must exist');
+assert(html.includes('id="view-contact"'), 'View panel view-contact must exist');
+assert(html.includes('id="view-guide"'), 'View panel view-guide must exist');
+assert(html.includes('id="view-transparency"'), 'View panel view-transparency must exist');
+
+// 6D. Contact Us Credentials for Wagnew Nigussie
+assert(html.includes('Wagnew Nigussie'), 'Contact Us must feature Wagnew Nigussie');
+assert(html.includes('wagnewnigussie569@gmail.com'), 'Contact Us must include wagnewnigussie569@gmail.com');
+assert(html.includes('wagnew-nigussie-tech'), 'Contact Us must link to wagnew-nigussie-tech LinkedIn');
+assert(html.includes('wagnew-nigussie'), 'Contact Us must link to wagnew-nigussie GitHub');
+assert(html.includes('id="citizen-contact-form"'), 'Citizen contact form must exist');
+assert(html.includes('id="contact-submit-btn"'), 'Contact submit button must exist');
+
+// 6E. Guide & FAQ Content & SLA Table
+assert(html.includes('USSD *840#'), 'Guide must explain USSD *840#');
+assert(html.includes('SMS Shortcode 8065'), 'Guide must explain SMS Shortcode 8065');
+assert(html.includes('Voice Hotline 8400'), 'Guide must explain Voice Hotline 8400');
+assert(html.includes('id="faq-search-input"'), 'FAQ search input must exist');
+
+// 6F. Projects & Open Data Content
+assert(html.includes('id="projects-grid"'), 'Projects grid must exist');
+assert(html.includes('downloadPublicData('), 'Download buttons must trigger downloadPublicData');
+
+// 6G. Interactive JS Controllers in app.js
+assert(js.includes('function handleCitizenContactSubmit('), 'handleCitizenContactSubmit must exist in app.js');
+assert(js.includes('function copyContactEmail('), 'copyContactEmail must exist in app.js');
+assert(js.includes('function toggleFaqItem('), 'toggleFaqItem must exist in app.js');
+assert(js.includes('function filterFaqQuestions('), 'filterFaqQuestions must exist in app.js');
+assert(js.includes('function filterProjectsByCategory('), 'filterProjectsByCategory must exist in app.js');
+assert(js.includes('function downloadPublicData('), 'downloadPublicData must exist in app.js');
+
+// 6H. Bilingual Translations
+assert(js.includes('nav_about:'), 'nav_about must exist in TRANSLATIONS');
+assert(js.includes('nav_contact:'), 'nav_contact must exist in TRANSLATIONS');
+assert(js.includes('nav_guide:'), 'nav_guide must exist in TRANSLATIONS');
+assert(js.includes('nav_transparency:'), 'nav_transparency must exist in TRANSLATIONS');
+console.log('   ✅ All 4 New Core Menus (About Us, Contact Us [Wagnew Nigussie], Guide & FAQ, Projects & Open Data) verified with 100% precision.');
+
 console.log('\n🎉 ALL NAVIGATION & SUBMENUS VERIFICATION TESTS PASSED (100%)!\n');
