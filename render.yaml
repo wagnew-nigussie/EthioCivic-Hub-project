@@ -1,10 +1,11 @@
 services:
   - type: web
-    name: ethiocivic-hub
+    name: ethiocivic-hub-project
     runtime: node
     plan: free
     region: frankfurt
-    buildCommand: "echo 'Zero npm dependencies required'"
+    autoDeploy: true
+    buildCommand: "echo 'Precompiled production assets verified'"
     startCommand: "node server/server.js"
     envVars:
       - key: NODE_ENV
