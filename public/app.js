@@ -121,6 +121,8 @@ const TRANSLATIONS = {
     nav_crew: 'Field Crew',
     nav_actions: 'Recent Actions',
     nav_admin: 'Admin Portal',
+    nav_menu: 'Menu',
+    nav_close: 'Close',
     simulator_btn: 'Defense Simulator (*840# / SMS / IVR)',
 
     // Hero Section
@@ -385,6 +387,8 @@ const TRANSLATIONS = {
     nav_crew: 'የመስክ ባለሙያዎች',
     nav_actions: 'የማዘጋጃ ቤት እርምጃዎች',
     nav_admin: 'አስተዳዳሪ (Admin)',
+    nav_menu: 'ሜኑ',
+    nav_close: 'ዝጋ',
     simulator_btn: 'የሞካሪ ስልክ (*840# / SMS / IVR)',
 
     // Hero Section
@@ -1102,6 +1106,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('online', () => updateNetworkStatus(true));
     window.addEventListener('offline', () => updateNetworkStatus(false));
   } catch (e) {}
+
+  // Outside click listener to dismiss Services dropdown
+  document.addEventListener('click', (event) => {
+    const wrap = document.getElementById('services-dropdown-wrap');
+    if (wrap && !wrap.contains(event.target)) {
+      if (typeof closeServicesDropdown === 'function') closeServicesDropdown();
+    }
+  });
+
+  // Global escape key to dismiss dropdowns and drawers
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (typeof closeServicesDropdown === 'function') closeServicesDropdown();
+      if (typeof toggleMobileMenu === 'function') toggleMobileMenu(false);
+    }
+  });
 });
 
 function toggleLanguage() {
@@ -1143,6 +1163,12 @@ function applyTranslations() {
   if (toggleBtnText) {
     toggleBtnText.innerText = currentLang === 'en' ? 'አማርኛ' : 'English';
   }
+
+  // Update mobile menu label
+  const menuLabel = document.getElementById('mobile-menu-label');
+  if (menuLabel) {
+    menuLabel.innerText = isMobileMenuOpen ? (dict['nav_close'] || 'Close') : (dict['nav_menu'] || 'Menu');
+  }
 }
 
 // ============================================================================
@@ -1151,9 +1177,13 @@ function applyTranslations() {
 function navigateTo(viewId) {
   document.querySelectorAll('.view-panel').forEach(panel => panel.classList.add('hidden'));
   
-  // Desktop Nav highlight
+  // Close navigation overlays automatically
+  if (typeof closeServicesDropdown === 'function') closeServicesDropdown();
+  if (typeof toggleMobileMenu === 'function') toggleMobileMenu(false);
+
+  // Desktop Nav highlight reset
   document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.classList.remove('text-emerald-400', 'bg-slate-800');
+    btn.classList.remove('text-emerald-400', 'bg-emerald-500/15', 'border-emerald-500/40', 'bg-slate-800', 'text-amber-300', 'bg-amber-500/25', 'border-amber-400', 'ring-1', 'ring-amber-400/40');
     btn.classList.add('text-slate-300');
   });
 
@@ -1165,7 +1195,7 @@ function navigateTo(viewId) {
 
   // Mobile Drawer buttons highlight
   document.querySelectorAll('.mobile-drawer-btn').forEach(btn => {
-    btn.classList.remove('bg-slate-800', 'text-emerald-400');
+    btn.classList.remove('bg-slate-800', 'text-emerald-400', 'border-emerald-500/40');
     btn.classList.add('bg-slate-900/90', 'text-slate-200');
   });
 
@@ -1174,8 +1204,12 @@ function navigateTo(viewId) {
 
   const activeBtn = document.getElementById(`nav-${viewId}`);
   if (activeBtn) {
-    activeBtn.classList.add('text-emerald-400', 'bg-slate-800');
     activeBtn.classList.remove('text-slate-300');
+    if (viewId === 'admin') {
+      activeBtn.classList.add('text-amber-300', 'bg-amber-500/25', 'border-amber-400', 'ring-1', 'ring-amber-400/40');
+    } else {
+      activeBtn.classList.add('text-emerald-400', 'bg-emerald-500/15', 'border', 'border-emerald-500/40');
+    }
   }
 
   const activeMobBtn = document.getElementById(`mob-nav-${viewId}`);
@@ -1186,12 +1220,9 @@ function navigateTo(viewId) {
 
   const activeDrawerBtn = document.getElementById(`mob-drawer-${viewId}`);
   if (activeDrawerBtn) {
-    activeDrawerBtn.classList.add('bg-slate-800', 'text-emerald-400');
+    activeDrawerBtn.classList.add('bg-emerald-500/20', 'text-emerald-400', 'border-emerald-500/40');
     activeDrawerBtn.classList.remove('bg-slate-900/90', 'text-slate-200');
   }
-
-  // Auto-close mobile drawer if open
-  toggleMobileMenu(false);
 
   if (viewId === 'report' && mapReport) {
     setTimeout(() => mapReport.invalidateSize(), 200);
@@ -3109,13 +3140,15 @@ async function handleBroadcastSubmit(e) {
 
 
 // ============================================================================
-// MOBILE RESPONSIVENESS & ACCORDION HELPERS (Rules 2, 4, 8)
+// MOBILE & DESKTOP NAVIGATION HELPERS (Rules 2, 4, 8)
 // ============================================================================
 let isMobileMenuOpen = false;
 
 function toggleMobileMenu(forceState) {
   const drawer = document.getElementById('mobile-nav-drawer');
   const icon = document.getElementById('mobile-menu-icon');
+  const label = document.getElementById('mobile-menu-label');
+  const btn = document.getElementById('mobile-menu-btn');
   if (!drawer) return;
 
   if (typeof forceState === 'boolean') {
@@ -3125,13 +3158,72 @@ function toggleMobileMenu(forceState) {
   }
 
   if (isMobileMenuOpen) {
+    if (typeof closeServicesDropdown === 'function') closeServicesDropdown();
     drawer.classList.remove('hidden');
     if (icon) icon.setAttribute('data-lucide', 'x');
+    if (label) {
+      label.textContent = (typeof currentLang !== 'undefined' && currentLang === 'am') ? 'ዝጋ' : 'Close';
+    }
+    if (btn) {
+      btn.classList.add('bg-emerald-500/20', 'text-emerald-400', 'border-emerald-500/50');
+      btn.classList.remove('text-slate-200');
+    }
   } else {
     drawer.classList.add('hidden');
     if (icon) icon.setAttribute('data-lucide', 'menu');
+    if (label) {
+      label.textContent = (typeof currentLang !== 'undefined' && currentLang === 'am') ? 'ሜኑ' : 'Menu';
+    }
+    if (btn) {
+      btn.classList.remove('bg-emerald-500/20', 'text-emerald-400', 'border-emerald-500/50');
+      btn.classList.add('text-slate-200');
+    }
   }
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
+}
+
+function toggleServicesDropdown(e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  const menu = document.getElementById('services-dropdown-menu');
+  const chevron = document.getElementById('nav-services-chevron');
+  const btn = document.getElementById('nav-services-btn');
+  if (!menu) return;
+
+  const isOpen = menu.classList.contains('services-menu-open') || !menu.classList.contains('hidden');
+  if (isOpen) {
+    closeServicesDropdown();
+  } else {
+    toggleMobileMenu(false);
+    menu.classList.remove('hidden');
+    menu.classList.add('services-menu-open', '!block');
+    if (chevron) chevron.classList.add('rotate-180');
+    if (btn) {
+      btn.setAttribute('aria-expanded', 'true');
+      btn.classList.add('text-white', 'bg-slate-800');
+    }
+  }
+}
+
+function closeServicesDropdown() {
+  const menu = document.getElementById('services-dropdown-menu');
+  const chevron = document.getElementById('nav-services-chevron');
+  const btn = document.getElementById('nav-services-btn');
+  if (!menu) return;
+
+  menu.classList.remove('services-menu-open', '!block');
+  menu.classList.add('hidden');
+  if (chevron) chevron.classList.remove('rotate-180');
+  if (btn) {
+    btn.setAttribute('aria-expanded', 'false');
+    btn.classList.remove('text-white', 'bg-slate-800');
+  }
+}
+
+function filterBySubCity(subcityName) {
+  toggleMobileMenu(false);
+  jumpToSubCity(subcityName);
 }
 
 let activeMobileDispatchTab = 'map';
